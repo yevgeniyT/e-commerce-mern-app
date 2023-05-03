@@ -3,8 +3,6 @@ import express, { Application, Request, Response } from 'express'
 
 // import dependencies
 import cors from 'cors'
-// import nodemon from "nodemon";
-// import dotenv from "dotenv";
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
