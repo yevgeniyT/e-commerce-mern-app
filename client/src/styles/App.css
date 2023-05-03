@@ -8,17 +8,11 @@
     font-family: "Teko", sans-serif;
 }
 
-/* html,
+html,
 body {
     height: 100%;
 }
-
+/* 
 main {
     flex: 1;
-}
-
-.main-app {
-    display: grid;
-    grid-template-rows: auto 1fr auto;
-    height: 100vh;
 } */

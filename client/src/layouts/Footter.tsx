@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-
 import { AppBar, Box, IconButton, Toolbar } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import HomeIcon from "@mui/icons-material/Home";
@@ -8,8 +7,19 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 
 const Footer = () => {
     return (
-        <Box sx={{ flexGrow: 1 }}>
-            <AppBar position='sticky'>
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+            }}
+        >
+            <Box
+                sx={{
+                    flexGrow: 1,
+                }}
+            ></Box>
+            <AppBar position='sticky' sx={{ bgcolor: "#413d58" }}>
                 <Box
                     sx={{
                         display: "flex",

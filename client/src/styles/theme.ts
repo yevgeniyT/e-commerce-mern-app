@@ -1,3 +1,5 @@
+// Create global colorse to be used in MUI app
+
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -17,6 +19,7 @@ const theme = createTheme({
         success: {
             main: "#413d58",
         },
+
         // You can also set other colors like `error`, `warning`, `info`, and `success`
     },
 });

@@ -34,9 +34,9 @@ const Navbar: React.FC = () => {
                 <Box>
                     <Button
                         color='inherit'
-                        onClick={() => goTo("/admin-dashboard")}
+                        onClick={() => goTo("/customer/account/login")}
                     >
-                        Admin Dashboard
+                        Sign in
                     </Button>
 
                     <Button
