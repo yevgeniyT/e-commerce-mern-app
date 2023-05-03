@@ -1,50 +1,46 @@
-import express from 'express'
-import dotenv from 'dotenv'
+// import express server, and types
+import express, { Application, Request, Response } from 'express'
+
+// import dependencies
 import cors from 'cors'
-// import session from 'express-session'
-// import cookieParser from 'cookie-parser'
-// import passport from 'passport'
+// import nodemon from "nodemon";
+// import dotenv from "dotenv";
+import morgan from 'morgan'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+// import cloudinary from "./config/setCloudinary";
 
-import apiErrorHandler from './middlewares/apiErrorHandler'
-import apiContentType from './middlewares/apiContentType'
-import movieRouter from './routers/movie.router'
+//other components imports
+import connectDB from './config/db'
+import dev from './config'
+import customerRouter from './routers/customersRoutes'
 
-dotenv.config({ path: '.env' })
-const app = express()
+// use Application type from express
+const app: Application = express()
 
-// Express configuration
-app.set('port', process.env.PORT)
-
-// Global middleware
+//to use dependencies
 app.use(
   cors({
-    origin: '*',
+    origin: 'http://localhost:3000',
+    credentials: true,
   })
 )
-app.use(apiContentType)
-app.use(express.json())
-/** using passport also requires to ass session and cookieParser middlewares to express
- * To be activated later
+app.use(morgan('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      secure: true,
-      maxAge: 60 * 60 * 24,
-    },
-    secret: 'secret',
+
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    message: 'Server is running ',
   })
-)
-app.use(passport.initialize())
-app.use(passport.session())
-*/
+})
 
-// Set up routers
-app.use('/api/v1/movies', movieRouter)
+app.use('/api/v1/customers', customerRouter)
 
-// Custom API error handler
-app.use(apiErrorHandler)
+const PORT = dev.app.serverPort
 
-export default app
+app.listen(PORT, async () => {
+  console.log('Server is OK')
+  await connectDB()
+})

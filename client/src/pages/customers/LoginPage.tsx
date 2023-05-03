@@ -80,7 +80,7 @@ const LoginPage: React.FC = () => {
                                 variant='contained'
                                 color='primary'
                             >
-                                Log In
+                                Sign In
                             </Button>
                         </Box>
                         <Box

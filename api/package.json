@@ -8,12 +8,11 @@
   "author": "Bowden Kelly",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/server.ts",
-    "start:dev": "nodemon",
-    "build": "tsc",
-    "watch-ts": "tsc -w",
-    "test": "jest --watchAll --detectOpenHandles",
-    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix"
+    "watch": "tsc --watch",
+    "start": "node ./dist/app.js",
+    "start-dev": "nodemon ./dist/app.js",
+    "dev": "npm-run-all --parallel watch start-dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
@@ -24,7 +23,7 @@
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
@@ -38,6 +37,7 @@
     "mongodb": "^4.10.0",
     "mongodb-memory-server": "^8.8.0",
     "mongoose": "^6.6.1",
+    "morgan": "^1.10.0",
     "passport": "^0.6.0",
     "ts-jest": "^28.0.7",
     "winston": "^3.2.1"
@@ -51,6 +51,7 @@
     "@types/express-session": "^1.17.5",
     "@types/jest": "^28.1.6",
     "@types/lodash": "^4.14.149",
+    "@types/morgan": "^1.9.4",
     "@types/node": "^18.7.5",
     "@types/node-sass": "^4.11.0",
     "@types/nodemailer": "^6.4.0",
@@ -62,6 +63,7 @@
     "@typescript-eslint/parser": "^2.21.0",
     "eslint": "^6.8.0",
     "nodemon": "^2.0.19",
+    "npm-run-all": "^4.1.5",
     "supertest": "^6.2.4",
     "ts-node": "^8.6.2",
     "typescript": "^4.7.4"
