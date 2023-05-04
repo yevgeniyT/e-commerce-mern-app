@@ -25,7 +25,7 @@ export interface ICustomer extends Document {
 }
 
 //The Schema type in Mongoose, when used with TypeScript, is a way to define a schema programmatically while benefiting from type checking and autocompletion. It helps you to ensure that the structure of the schema you create is consistent with Mongoose's expected format.
-const userSchema: Schema = new mongoose.Schema(
+const customerSchema: Schema = new mongoose.Schema(
   {
     firstName: {
       type: String,
@@ -57,6 +57,7 @@ const userSchema: Schema = new mongoose.Schema(
     },
     phone: {
       type: String,
+      default: '',
     },
     address: {
       street: { type: String, default: '' },
@@ -77,6 +78,6 @@ const userSchema: Schema = new mongoose.Schema(
   { timestamps: true }
 )
 
-const Customer = model<ICustomer>('UsersData', userSchema)
+const Customer = model<ICustomer>('CustomerData', customerSchema)
 
 export default Customer

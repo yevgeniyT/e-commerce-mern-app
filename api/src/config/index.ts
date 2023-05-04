@@ -15,7 +15,12 @@ const dev = {
   },
   //Use || "", or "localhost..."  ensures that the url property of the db object will always have a value of type string. If process.env.DB_URL is not undefined, it will use the value of process.env.DB_URL. If it is undefined, it will use an empty string "" as the default value.
   db: { url: process.env.DB_URL || '' },
-}
 
+  cloudinary: {
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRETE,
+  },
+}
 //export to use in app.ts to run serverport and db.ts to run DB
 export default dev
