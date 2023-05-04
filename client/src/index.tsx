@@ -8,6 +8,7 @@ import { store } from "redux/store";
 
 import "./styles/index.css";
 import "./styles/App.css";
+import "react-toastify/dist/ReactToastify.css";
 
 const container = document.getElementById("root")!;
 const root = createRoot(container);

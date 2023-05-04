@@ -9,6 +9,7 @@ import dev from '../config'
 import { CustomerType } from '../@types/customerType'
 import { getToken } from '../helpers/tokenHandler'
 import sendEmailWithNodeMailer from '../util/emailSend'
+import { isStrongPassword } from '../validations/authValidators'
 
 const createCustomer = async (req: Request, res: Response) => {
   try {
@@ -21,14 +22,22 @@ const createCustomer = async (req: Request, res: Response) => {
     if (isExist) {
       return errorHandler(res, 404, 'User is alredy exist, please sign in')
     }
-    // 3. Hash the password
+    // 3. Check if the password is strong
+    if (!isStrongPassword(password)) {
+      return errorHandler(
+        res,
+        400,
+        'Password is not strong enough. Please use a stronger password.'
+      )
+    }
+    // 4. Hash the password
     const hashPassword = await encryptPassword(password)
-    // 4. Create token
+    // 5. Create token
     const token = getToken(
       { email, hashPassword, firstName, lastName, avatarImage }, //Paylod
       ['email', 'hashPassword', 'firstName', 'lastName'] // chek of fileds to be passed
     )
-    // 5. Create email message
+    // 6. Create email message
     const emailData = {
       email,
       subject: 'Account Activation Email',
@@ -36,10 +45,10 @@ const createCustomer = async (req: Request, res: Response) => {
       <h2> Hello ${firstName} ${lastName} ! </h2>
       <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/users/activate/${token}" target="_blank"> activate your account </a> </p>`,
     }
-    // 6. Send email to cutomer
+    // 7. Send email to cutomer
     sendEmailWithNodeMailer(emailData)
 
-    return successHandler(res, 201, 'Link has been sent seccussfuly')
+    return successHandler(res, 201, 'Verification email sent')
   } catch (error: unknown) {
     if (typeof error === 'string') {
       console.log('An unknown error occurred.')

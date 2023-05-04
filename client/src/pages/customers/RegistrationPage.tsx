@@ -2,6 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "redux/hooks";
 
 // MUI  import
 import {
@@ -12,10 +13,12 @@ import {
     Button,
     Box,
 } from "@mui/material";
+import { createNewCustomer } from "features/customers/customersThunk";
 
 const RegistrationPage: React.FC = () => {
     //Use hooks
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     // 1. Set nedded states
     // 1.1 Set state to get and store users data from input
     const [newUser, setNewUser] = useState({
@@ -27,7 +30,7 @@ const RegistrationPage: React.FC = () => {
     // 1.2 Set state to get and strore avatar image
     const [avatar, setAvatar] = useState<File | null>(null);
 
-    // 1.2 Set state to store readAsDataURL
+    // 1.2 Set state to be able priview uploaded file directly in component without getting from backend
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
     // 2. Actions handelers
@@ -43,6 +46,7 @@ const RegistrationPage: React.FC = () => {
             if (avatar) {
                 newUserFormData.append("avatarImage", avatar);
             }
+            dispatch(createNewCustomer(newUserFormData));
         } catch (error) {
             //To avoid TypeScript error in catch block and to access the message property of the error, first check if the error is an instance of Error.
             if (error instanceof Error) {

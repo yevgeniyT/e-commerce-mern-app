@@ -1,5 +1,6 @@
 import Index from "routers";
 
+import { ToastContainer } from "react-toastify";
 //MUI imports
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -12,6 +13,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <div>
                 <Index />
+                <ToastContainer hideProgressBar autoClose={3000} />
             </div>
         </ThemeProvider>
     );
