@@ -4,10 +4,14 @@ import { Request, Response } from 'express'
 //other components imports
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import Customer from '../models/customersSchems'
-import { encryptPassword } from '../helpers/securePassword'
+import { checkPassword, encryptPassword } from '../helpers/securePassword'
 import dev from '../config'
-import { CustomerPayload, CustomerType } from '../@types/customerType'
-import { getToken, verifyToken } from '../helpers/tokenHandler'
+import {
+  BaseCustomer,
+  CustomerPayload,
+  CustomerType,
+} from '../@types/customerType'
+import { createAuthToken, getToken, verifyToken } from '../helpers/tokenHandler'
 import sendEmailWithNodeMailer from '../util/emailSend'
 import { isStrongPassword } from '../validations/authValidators'
 
@@ -123,4 +127,68 @@ const verifyCustomer = async (req: Request, res: Response) => {
     })
   }
 }
-export { createCustomer, verifyCustomer }
+const loginCustomer = async (req: Request, res: Response) => {
+  try {
+    // 1. Get email and password
+    const { email, password }: BaseCustomer = req.body
+
+    //2 Chek if the user exist already
+    const customer = await Customer.findOne({ email: email })
+    if (!customer) {
+      return errorHandler(
+        res,
+        400,
+        'Customer is not exist, please sing in first'
+      )
+    }
+    // 3. Chect if the password match using helper/securePassword
+    // use await as without it user will pass varification with any password!!!!!
+    // password as string used to define type as sting because without that we have type error. That is because password can be undefined. But as we use validation as middleware in routers we can say for sure it 's a string
+    const isPasswordMatched = await checkPassword(
+      password as string,
+      //String in scheama has String type, while password from payload string primitive. To meet TS requirments toString() is used
+      customer.password.toString()
+    )
+
+    if (!isPasswordMatched) {
+      return errorHandler(res, 400, 'Incorrect data. Please try again')
+    }
+
+    // 4. Create an authentication token containing the user's ID and role
+    const authToken = createAuthToken(customer._id)
+
+    // 5. Reset cookie of there is one for some reason already exists
+
+    if (req.cookies[authToken]) {
+      req.cookies[authToken] = ''
+    }
+
+    // 6. Set the authToken as an HttpOnly cookie, "authToken" - name of cookie, can be anyname
+    res.cookie('authToken', authToken, {
+      // Set "secure" to true if using HTTPS
+      httpOnly: true,
+
+      //Setting the path attribute to "/" means that the cookie will be sent with requests to all paths within the domain
+      path: '/',
+      //This attribute ensures that the cookie is only sent over HTTPS connections, adding an extra layer of security.
+      secure: false,
+
+      // sets the cookie to expire in 4 minutes from the time it is created.
+      expires: new Date(Date.now() + 1000 * 30 * 60),
+
+      // Set the SameSite attribute to protect against CSRF attacks
+      sameSite: 'lax',
+    })
+    return successHandler(res, 200, 'You successfully logged in. Welcome!')
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    return res.status(500).json({
+      message: 'An unknown error occurred.',
+    })
+  }
+}
+export { createCustomer, verifyCustomer, loginCustomer }
