@@ -10,9 +10,9 @@ import Navbar from "layouts/Navbar";
 import HomePage from "pages/HomePage";
 import Error from "components/common/Error";
 import Footer from "layouts/Footter";
-import StickyFooter from "components/common/StickyFotter";
 import LoginPage from "pages/customers/LoginPage";
 import RegistrationPage from "pages/customers/RegistrationPage";
+import AccountActivation from "components/customers/AccountActivation";
 
 const Index = () => {
     return (
@@ -31,6 +31,10 @@ const Index = () => {
                         <Route
                             path='/customer/account/login'
                             element={<LoginPage />}
+                        />
+                        <Route
+                            path='/api/v1/customers/account/activate/:token'
+                            element={<AccountActivation />}
                         />
 
                         <Route path='*' element={<Error />} />

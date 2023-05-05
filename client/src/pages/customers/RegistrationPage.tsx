@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 // MUI  import
 import {
@@ -14,11 +14,13 @@ import {
     Box,
 } from "@mui/material";
 import { createNewCustomer } from "features/customers/customersThunk";
+import Loading from "components/common/Loading";
 
 const RegistrationPage: React.FC = () => {
     //Use hooks
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const { loading } = useAppSelector((state) => state.customerR);
     // 1. Set nedded states
     // 1.1 Set state to get and store users data from input
     const [newUser, setNewUser] = useState({
@@ -83,7 +85,9 @@ const RegistrationPage: React.FC = () => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
     });
-
+    if (loading) {
+        return <Loading />;
+    }
     return (
         <Container maxWidth='sm'>
             <Box sx={{ mt: 8 }}>
@@ -195,6 +199,7 @@ const RegistrationPage: React.FC = () => {
                                 >
                                     Back
                                 </Button>
+                                {/* TODO disable btn after sending request  */}
                                 <Button
                                     sx={{ textTransform: "none" }}
                                     type='submit'
@@ -212,5 +217,4 @@ const RegistrationPage: React.FC = () => {
         </Container>
     );
 };
-
 export default RegistrationPage;

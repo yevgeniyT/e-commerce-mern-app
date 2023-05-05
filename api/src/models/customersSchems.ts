@@ -10,7 +10,14 @@ export interface ICustomer extends Document {
   email: string
   password: string
   phone: string
-  address: {
+  billingAddress: {
+    street: string
+    city: string
+    state: string
+    zip: string
+    country: string
+  }
+  shippingAddress: {
     street: string
     city: string
     state: string
@@ -59,7 +66,14 @@ const customerSchema: Schema = new mongoose.Schema(
       type: String,
       default: '',
     },
-    address: {
+    billingAddress: {
+      street: { type: String, default: '' },
+      city: { type: String, default: '' },
+      state: { type: String, default: '' },
+      zip: { type: String, default: '' },
+      country: { type: String, default: '' },
+    },
+    shippingAddress: {
       street: { type: String, default: '' },
       city: { type: String, default: '' },
       state: { type: String, default: '' },

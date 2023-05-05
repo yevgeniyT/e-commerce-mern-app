@@ -1,6 +1,9 @@
 // dependencies import
 import { Router } from 'express'
-import { createCustomer } from '../controllers/customerController'
+import {
+  createCustomer,
+  verifyCustomer,
+} from '../controllers/customerController'
 import { avatarUpload } from '../util/upload'
 
 const customerRouter = Router()
@@ -11,4 +14,5 @@ customerRouter.post(
   createCustomer
 )
 
+customerRouter.post('/verify-customer', verifyCustomer)
 export default customerRouter

@@ -12,7 +12,8 @@ export interface BaseCustomer {
   email: string
   password: string
   phone: string
-  address: Address
+  billingAddress: Address
+  shippingAddress: Address
   avatarImage: string
 }
 
