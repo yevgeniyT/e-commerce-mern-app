@@ -162,7 +162,7 @@ const loginCustomer = async (req: Request, res: Response) => {
     if (req.cookies[authToken]) {
       req.cookies[authToken] = ''
     }
-
+    //todo Create refresh token
     // 6. Set the authToken as an HttpOnly cookie, "authToken" - name of cookie, can be anyname
     res.cookie('authToken', authToken, {
       // Set "secure" to true if using HTTPS
@@ -191,4 +191,29 @@ const loginCustomer = async (req: Request, res: Response) => {
     })
   }
 }
-export { createCustomer, verifyCustomer, loginCustomer }
+const getCustomerProfile = async (req: Request, res: Response) => {
+  try {
+    // Here we pass id directly without using pair key-value by using findById methon insted of findByOne and data from session
+    const user = await Customer.findById(req.user.userId)
+    if (!user) {
+      return res.status(404).json({
+        message: 'Can not find user with such id',
+      })
+    }
+
+    return res.status(200).json({
+      User: user,
+      message: 'Successful operation',
+    })
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    return res.status(500).json({
+      message: 'An unknown error occurred.',
+    })
+  }
+}
+export { createCustomer, verifyCustomer, loginCustomer, getCustomerProfile }

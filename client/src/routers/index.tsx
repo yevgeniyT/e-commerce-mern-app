@@ -13,6 +13,7 @@ import Footer from "layouts/Footter";
 import LoginPage from "pages/customers/LoginPage";
 import RegistrationPage from "pages/customers/RegistrationPage";
 import AccountActivation from "components/customers/AccountActivation";
+import CustomerAccount from "pages/customers/AccountPage";
 
 const Index = () => {
     return (
@@ -37,6 +38,10 @@ const Index = () => {
                             element={<AccountActivation />}
                         />
 
+                        <Route
+                            path='customers/account'
+                            element={<CustomerAccount />}
+                        />
                         <Route path='*' element={<Error />} />
                     </Routes>
                 </main>

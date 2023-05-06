@@ -2,6 +2,7 @@
 import { Router } from 'express'
 import {
   createCustomer,
+  getCustomerProfile,
   loginCustomer,
   verifyCustomer,
 } from '../controllers/customerController'
@@ -19,4 +20,9 @@ customerRouter.post(
 customerRouter.post('/verify-customer', verifyCustomer)
 
 customerRouter.post('/login', signInValidation, loginCustomer)
+
+customerRouter.route('/profile').get(isLoggedIn, getCustomerProfile)
+// .put(isLoggedIn, updateUserProfile)
+// .delete(isLoggedIn, deleteUserProfile);
+
 export default customerRouter
