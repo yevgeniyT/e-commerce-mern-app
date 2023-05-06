@@ -4,7 +4,7 @@ import { Response } from 'express'
 
 const errorHandler = (res: Response, statusCode: number, message: string) => {
   return res.status(statusCode).json({
-    success: true,
+    success: false,
     message: message,
   })
 }

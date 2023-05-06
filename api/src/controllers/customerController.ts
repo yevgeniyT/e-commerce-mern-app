@@ -64,7 +64,6 @@ const createCustomer = async (req: Request, res: Response) => {
     })
   }
 }
-
 const verifyCustomer = async (req: Request, res: Response) => {
   try {
     // 1. Get token from body from frontend
@@ -194,8 +193,6 @@ const loginCustomer = async (req: Request, res: Response) => {
 const getCustomerProfile = async (req: Request, res: Response) => {
   try {
     // Here we pass id directly without using pair key-value by using findById methon insted of findByOne and data from session
-    console.log(req.customer?.customerId)
-
     const customer = await Customer.findById(
       (req.customer as { customerId: string }).customerId
     )
@@ -221,4 +218,117 @@ const getCustomerProfile = async (req: Request, res: Response) => {
     })
   }
 }
-export { createCustomer, verifyCustomer, loginCustomer, getCustomerProfile }
+const requestPasswordReset = async (req: Request, res: Response) => {
+  try {
+    // 1. Check for missing required fields. firstName and lastName are used in email message
+    const { email }: CustomerType = req.body
+    if (!email) {
+      return errorHandler(res, 400, 'Email is required')
+    }
+
+    // 2. Chek if the user exist already
+    const customer = await Customer.findOne({ email: email })
+    if (!customer) {
+      return errorHandler(res, 400, 'User is not exist')
+    }
+
+    // 3. Place email to token to use it after confirmation that will be send by email. getToken recieves 2 parameters, first is object and the second is array of keys
+    const token = getToken({ email }, ['email'])
+
+    // 4. Store email text to be sent by email in variable
+    const emailData = {
+      email,
+      subject: 'Reset password Email',
+      html: `
+          <h2> Hello ${customer.firstName} ${customer.lastName} ! </h2>
+          <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/customers/account/verify-password/${token}" target="_blank"> reset your password  </a> </p>`,
+    }
+
+    // 5. Send email useing fuction from emailService to sent varification email>
+    sendEmailWithNodeMailer(emailData)
+
+    return successHandler(
+      res,
+      200,
+      'Link to reset password has been sent to your email'
+    )
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    res.status(500).json({
+      message: 'An unknown error occurred.',
+    })
+  }
+}
+const validatePasswordResetToken = async (req: Request, res: Response) => {
+  try {
+    // 1. Get token from params
+    const { token } = req.body
+
+    // 2. Check if the token exist
+    if (!token) {
+      return errorHandler(res, 404, 'Token is missing')
+    }
+    // 3. Varifying token
+    verifyToken(token, async (err, decodedData) => {
+      // email is passed to frontend to be passed back to backend to next step
+      const email = decodedData.email
+      if (err) {
+        console.log('An error occurred:', err.message)
+
+        return errorHandler(res, 401, 'Token can be expired')
+      }
+      return successHandler(res, 200, 'Please enter new password', { email })
+    })
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    res.status(500).json({
+      message: 'An unknown error occurred.',
+    })
+  }
+}
+const resetPassword = async (req: Request, res: Response) => {
+  try {
+    // 1. Get data from front end. Important that user is not passing email, it passed as successful massege when user varify token. Just need to store it and pass back to use it to find user in db
+    const { email, password } = req.body
+
+    // 2. Encrypt password before saving to db
+    const hashPassword = await encryptPassword(password)
+
+    // 4. Update the user in the database using the email
+    await Customer.updateOne(
+      { email: email },
+      {
+        $set: {
+          password: hashPassword,
+        },
+      }
+    )
+    return successHandler(res, 200, 'Password updated successfully')
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    res.status(500).json({
+      message: 'An unknown error occurred while reseting password',
+    })
+  }
+}
+export {
+  createCustomer,
+  verifyCustomer,
+  loginCustomer,
+  getCustomerProfile,
+  requestPasswordReset,
+  validatePasswordResetToken,
+  resetPassword,
+}

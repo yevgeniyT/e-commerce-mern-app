@@ -4,10 +4,16 @@ import {
   createCustomer,
   getCustomerProfile,
   loginCustomer,
+  requestPasswordReset,
+  resetPassword,
+  validatePasswordResetToken,
   verifyCustomer,
 } from '../controllers/customerController'
 import { avatarUpload } from '../util/upload'
-import { signInValidation } from '../middlewares/inputValidations'
+import {
+  resetPasswordValidation,
+  signInValidation,
+} from '../middlewares/inputValidations'
 import { isLoggedIn } from '../middlewares/isLoggedIn'
 
 const customerRouter = Router()
@@ -24,6 +30,9 @@ customerRouter.post('/login', signInValidation, loginCustomer)
 
 customerRouter.route('/profile').get(isLoggedIn, getCustomerProfile)
 // .put(isLoggedIn, updateUserProfile)
-// .delete(isLoggedIn, deleteUserProfile);
+// .delete(isLoggedIn, deleteUserProfile)
 
+customerRouter.post('/forgot-password', requestPasswordReset)
+customerRouter.post('/verify-password', validatePasswordResetToken)
+customerRouter.put('/set-newpassword', resetPasswordValidation, resetPassword)
 export default customerRouter
