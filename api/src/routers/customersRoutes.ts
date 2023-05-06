@@ -8,6 +8,7 @@ import {
 } from '../controllers/customerController'
 import { avatarUpload } from '../util/upload'
 import { signInValidation } from '../middlewares/inputValidations'
+import { isLoggedIn } from '../middlewares/isLoggedIn'
 
 const customerRouter = Router()
 //todo add input validation

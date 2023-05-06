@@ -153,7 +153,7 @@ const loginCustomer = async (req: Request, res: Response) => {
     if (!isPasswordMatched) {
       return errorHandler(res, 400, 'Incorrect data. Please try again')
     }
-
+    const customerId = customer._id
     // 4. Create an authentication token containing the user's ID and role
     const authToken = createAuthToken(customer._id)
 
@@ -194,15 +194,20 @@ const loginCustomer = async (req: Request, res: Response) => {
 const getCustomerProfile = async (req: Request, res: Response) => {
   try {
     // Here we pass id directly without using pair key-value by using findById methon insted of findByOne and data from session
-    const user = await Customer.findById(req.user.userId)
-    if (!user) {
+    console.log(req.customer?.customerId)
+
+    const customer = await Customer.findById(
+      (req.customer as { customerId: string }).customerId
+    )
+
+    if (!customer) {
       return res.status(404).json({
         message: 'Can not find user with such id',
       })
     }
 
     return res.status(200).json({
-      User: user,
+      Customer: customer,
       message: 'Successful operation',
     })
   } catch (error: unknown) {
