@@ -85,6 +85,54 @@ const loginCustomer = createAsyncThunk(
         }
     }
 );
+// 4. Post reqiest to send email to reset password
+const forgotPassword = createAsyncThunk(
+    "customer/forgotpassword",
+    async (email: string) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/forgot-password`, {
+                email,
+            });
+            console.log(response.data.message);
+            return response.data;
+        } catch (error) {
+            // use type of error from axios to type error massege from backend
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                const errorData = axiosError.response.data as ErrorResponseData;
+                //When an error is thrown in the async thunk, Redux Toolkit automatically triggers the rejected case in the slice. The error object thrown in the thunk is passed to the rejected case through the action.error object.
+                console.log(errorData.message);
+
+                throw new Error(errorData.message);
+            }
+            throw new Error("Error on reseting password");
+        }
+    }
+);
+// 5 Post reqiest to verify email to reset password
+const resetPasswordVarification = createAsyncThunk(
+    "auth/resetPasswordVarification",
+    async (token: string) => {
+        try {
+            const response = await axios.post(`${BASE_URL}/verify-password`, {
+                token,
+            });
+            console.log(response.data.message);
+            return response.data;
+        } catch (error) {
+            // use type of error from axios to type error massege from backend
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                const errorData = axiosError.response.data as ErrorResponseData;
+                //When an error is thrown in the async thunk, Redux Toolkit automatically triggers the rejected case in the slice. The error object thrown in the thunk is passed to the rejected case through the action.error object.
+                console.log(errorData);
+
+                throw new Error(errorData.message);
+            }
+            throw new Error("Error on reseting password");
+        }
+    }
+);
 const getCustomerProfile = createAsyncThunk(
     "customer/getCustomerProfile",
     async () => {
@@ -112,4 +160,6 @@ export {
     verifyNewCustomer,
     getCustomerProfile,
     loginCustomer,
+    forgotPassword,
+    resetPasswordVarification,
 };

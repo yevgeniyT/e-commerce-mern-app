@@ -2,8 +2,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import { CustomerType } from "../../types/customerType";
 import {
     createNewCustomer,
+    forgotPassword,
     getCustomerProfile,
     loginCustomer,
+    resetPasswordVarification,
     verifyNewCustomer,
 } from "./customersThunk";
 
@@ -119,6 +121,52 @@ export const customerSlice = createSlice({
                     "Unable to login. Please try again.";
                 toast.error(action.error.message);
                 console.log(state.message);
+            });
+
+        // 5. Reset ppassword request
+        builder
+            .addCase(forgotPassword.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = false;
+                state.success = true;
+                toast.success(action.payload.message);
+                state.message = action.payload.message;
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.message =
+                    action.error.message ||
+                    "Unable to login. Please try again.";
+                toast.error(action.error.message);
+            });
+
+        // 6. Reset passowrd varification
+        builder
+            .addCase(resetPasswordVarification.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(resetPasswordVarification.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = false;
+                state.success = true;
+                toast.success(action.payload.message);
+                state.message = action.payload.message;
+            })
+            .addCase(resetPasswordVarification.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.message =
+                    action.error.message ||
+                    "Unable to reset password. Please try again.";
+                toast.error(action.error.message);
             });
     },
 });
