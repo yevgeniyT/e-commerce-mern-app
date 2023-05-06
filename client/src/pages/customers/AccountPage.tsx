@@ -1,5 +1,9 @@
 // UserCard.tsx
-import React from "react";
+import React, { useEffect, useRef } from "react";
+
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+
+//MUI import
 import {
     Card,
     CardContent,
@@ -14,10 +18,26 @@ import {
 
 import { BaseCustomer } from "types/customerType";
 
+import { getCustomerProfile } from "features/customers/customersThunk";
+
 const onEdit = () => {};
 
 const onChangePassword = () => {};
+
 const CustomerAccount: React.FC = () => {
+    //use hooks
+    const dispatch = useAppDispatch();
+    const dispatched = useRef(false);
+
+    const customerData = useAppSelector((state) => state.customerR.customer);
+
+    useEffect(() => {
+        if (!dispatched.current) {
+            dispatch(getCustomerProfile());
+            dispatched.current = true;
+        }
+    }, [dispatch]);
+
     return (
         <Grid container spacing={4} direction='column'>
             <Grid item xs={12}>
@@ -32,8 +52,8 @@ const CustomerAccount: React.FC = () => {
                                 }}
                             >
                                 <Avatar
-                                    alt={"Full Name"}
-                                    src={"/"}
+                                    alt={`${customerData?.firstName} ${customerData?.lastName}`}
+                                    src={customerData?.avatarImage}
                                     sx={{
                                         width: 150,
                                         height: 150,
@@ -45,19 +65,18 @@ const CustomerAccount: React.FC = () => {
                         </Grid>
                         <Grid item xs={12} md={8}>
                             <CardHeader
-                                title={"Account Information"}
-                                subheader={
-                                    <Typography component='span'>
-                                        Full Name
-                                    </Typography>
-                                }
+                                title={`${customerData?.firstName} ${customerData?.lastName}`}
                             />
                             <CardContent>
                                 <Typography variant='body1' gutterBottom>
-                                    email: {""}
+                                    <strong>email: </strong>{" "}
+                                    {`${customerData?.email}`}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    phone: {"city"}
+                                    <strong>phone: </strong>
+                                    {customerData?.phone
+                                        ? customerData.phone
+                                        : "No phone number available"}
                                 </Typography>
                             </CardContent>
                             <CardActions
@@ -85,43 +104,38 @@ const CustomerAccount: React.FC = () => {
             <Grid item xs={12} sm={6}>
                 <Card sx={{ width: "100%", maxWidth: 600 }}>
                     <Grid container>
-                        <Grid item xs={12} md={4}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    p: 2,
-                                }}
-                            >
-                                <Avatar
-                                    alt={"Default Billing Address"}
-                                    src={"/"}
-                                    sx={{
-                                        width: 150,
-                                        height: 150,
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                    }}
-                                />
-                            </Box>
-                        </Grid>
                         <Grid item xs={12} md={8}>
                             <CardHeader title={"Default Billing Address"} />
                             <CardContent>
                                 <Typography variant='body1' gutterBottom>
-                                    Street: {""}
+                                    <strong>Street:</strong>{" "}
+                                    {customerData?.billingAddress.street
+                                        ? customerData.billingAddress.street
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    City: {"city"}
+                                    <strong>City:</strong>{" "}
+                                    {customerData?.billingAddress.city
+                                        ? customerData.billingAddress.city
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    State: {"state"}
+                                    <strong>State:</strong>{" "}
+                                    {customerData?.billingAddress.state
+                                        ? customerData.billingAddress.state
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    Zip: {"zip"}
+                                    <strong>Zip:</strong>{" "}
+                                    {customerData?.billingAddress.zip
+                                        ? customerData.billingAddress.zip
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    Country: {"country"}
+                                    <strong>Country:</strong>{" "}
+                                    {customerData?.billingAddress.country
+                                        ? customerData.billingAddress.country
+                                        : "Not available"}
                                 </Typography>
                             </CardContent>
 
@@ -143,45 +157,41 @@ const CustomerAccount: React.FC = () => {
             <Grid item xs={12} sm={6}>
                 <Card sx={{ width: "100%", maxWidth: 600 }}>
                     <Grid container>
-                        <Grid item xs={12} md={4}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    p: 2,
-                                }}
-                            >
-                                <Avatar
-                                    alt={"Default Billing Address"}
-                                    src={"/"}
-                                    sx={{
-                                        width: 150,
-                                        height: 150,
-                                        borderRadius: "50%",
-                                        objectFit: "cover",
-                                    }}
-                                />
-                            </Box>
-                        </Grid>
                         <Grid item xs={12} md={8}>
                             <CardHeader title={"Default Shipping Address"} />
-                            <CardContent>
+                            <CardContent sx={{ width: "100%" }}>
                                 <Typography variant='body1' gutterBottom>
-                                    Street: {""}
+                                    <strong>Street:</strong>{" "}
+                                    {customerData?.billingAddress.street
+                                        ? customerData.billingAddress.street
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    City: {"city"}
+                                    <strong>City:</strong>{" "}
+                                    {customerData?.billingAddress.city
+                                        ? customerData.billingAddress.city
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    State: {"state"}
+                                    <strong>State:</strong>{" "}
+                                    {customerData?.billingAddress.state
+                                        ? customerData.billingAddress.state
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    Zip: {"zip"}
+                                    <strong>Zip:</strong>{" "}
+                                    {customerData?.billingAddress.zip
+                                        ? customerData.billingAddress.zip
+                                        : "Not available"}
                                 </Typography>
                                 <Typography variant='body1' gutterBottom>
-                                    Country: {"country"}
+                                    <strong>Country:</strong>{" "}
+                                    {customerData?.billingAddress.country
+                                        ? customerData.billingAddress.country
+                                        : "Not available"}
                                 </Typography>
                             </CardContent>
+
                             <CardActions
                                 sx={{
                                     display: "flex",
@@ -201,3 +211,7 @@ const CustomerAccount: React.FC = () => {
     );
 };
 export default CustomerAccount;
+
+//todo Update shipping adress from state
+// todo make contend of dellivery cards take 100% width
+// todo check when click return btn and come backe to login page again it goes to profile by defualt

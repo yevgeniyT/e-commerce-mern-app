@@ -9,7 +9,6 @@ import { Container, Typography, Box, Button } from "@mui/material";
 
 // Other component import
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import Loading from "components/common/Loading";
 import { verifyNewCustomer } from "features/customers/customersThunk";
 
 const AccountActivation: React.FC = () => {

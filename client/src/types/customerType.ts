@@ -12,11 +12,17 @@ export interface BaseCustomer {
     email: string;
     password: string;
     phone: string;
-    address: Address;
+    billingAddress: Address;
+    shippingAdress: Address;
     avatarImage: string;
 }
 
 export interface CustomerType extends BaseCustomer {
     customerId: string;
     isBanned: boolean;
+}
+
+export interface UserCredentials {
+    email: string;
+    password: string;
 }

@@ -1,6 +1,7 @@
 //Dependencies imports
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 // MUI imports
 import {
@@ -12,12 +13,18 @@ import {
     Link,
     Grid,
 } from "@mui/material";
+import { loginCustomer } from "features/customers/customersThunk";
 
 //Components
 
 const LoginPage: React.FC = () => {
     //Use hooks
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    // todo check if useRef here make sence
+    const hasNavigated = useRef(false);
+
+    const { success } = useAppSelector((state) => state.customerR);
 
     const [credentials, setCredentials] = useState({
         email: "",
@@ -26,7 +33,17 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
+        dispatch(loginCustomer(credentials));
     };
+
+    useEffect(() => {
+        if (success && !hasNavigated.current) {
+            hasNavigated.current = true;
+            setTimeout(() => {
+                navigate("/customers/account");
+            }, 2000);
+        }
+    }, [success, navigate]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({
