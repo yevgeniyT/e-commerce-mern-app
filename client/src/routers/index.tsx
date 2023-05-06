@@ -14,6 +14,9 @@ import LoginPage from "pages/customers/LoginPage";
 import RegistrationPage from "pages/customers/RegistrationPage";
 import AccountActivation from "components/customers/AccountActivation";
 import CustomerAccount from "pages/customers/AccountPage";
+import ForgotPasswordPage from "pages/customers/ForgotPasswordPage";
+import ResetPasswordActivation from "components/customers/ResetPassowrdActivation";
+import ResetPasswordPage from "pages/customers/ResetPasswordPage";
 
 const Index = () => {
     return (
@@ -34,14 +37,27 @@ const Index = () => {
                             element={<LoginPage />}
                         />
                         <Route
-                            path='/api/v1/customers/account/activate/:token'
+                            path='/api/v1/customer/account/activate/:token'
                             element={<AccountActivation />}
                         />
-
+                        <Route
+                            path='/customer/account/forgotpassword'
+                            element={<ForgotPasswordPage />}
+                        />
                         <Route
                             path='customers/account'
                             element={<CustomerAccount />}
                         />
+                        <Route
+                            // make sure to set full route!!!
+                            path='/api/v1/customer/account/verify-password/:token'
+                            element={<ResetPasswordActivation />}
+                        />
+                        <Route
+                            path='/customer/account/resetpassword'
+                            element={<ResetPasswordPage />}
+                        />
+
                         <Route path='*' element={<Error />} />
                     </Routes>
                 </main>

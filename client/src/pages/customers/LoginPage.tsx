@@ -105,7 +105,17 @@ const LoginPage: React.FC = () => {
                             display='flex'
                             justifyContent='space-between'
                         >
-                            <Link href='#' variant='body2'>
+                            <Link
+                                onClick={() =>
+                                    window.open(
+                                        "/customer/account/forgotpassword",
+                                        "_blank",
+                                        "noreferrer"
+                                    )
+                                }
+                                variant='body2'
+                                sx={{ cursor: "pointer" }}
+                            >
                                 Forgot Password?
                             </Link>
                         </Box>

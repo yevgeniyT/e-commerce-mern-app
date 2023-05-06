@@ -47,7 +47,7 @@ const createCustomer = async (req: Request, res: Response) => {
       subject: 'Account Activation Email',
       html: `
       <h2> Hello ${firstName} ${lastName} ! </h2>
-      <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/customers/account/activate/${token}" target="_blank"> activate your account </a> </p>`,
+      <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/customer/account/activate/${token}" target="_blank"> activate your account </a> </p>`,
     }
     // 7. Send email to cutomer
     sendEmailWithNodeMailer(emailData)
@@ -241,7 +241,7 @@ const requestPasswordReset = async (req: Request, res: Response) => {
       subject: 'Reset password Email',
       html: `
           <h2> Hello ${customer.firstName} ${customer.lastName} ! </h2>
-          <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/customers/account/verify-password/${token}" target="_blank"> reset your password  </a> </p>`,
+          <p> Please click here to <a href="${dev.app.clientUrl}/api/v1/customer/account/verify-password/${token}" target="_blank"> reset your password  </a> </p>`,
     }
 
     // 5. Send email useing fuction from emailService to sent varification email>
@@ -276,6 +276,7 @@ const validatePasswordResetToken = async (req: Request, res: Response) => {
     verifyToken(token, async (err, decodedData) => {
       // email is passed to frontend to be passed back to backend to next step
       const email = decodedData.email
+      // todo in case of wrong token server breaks but not handle error
       if (err) {
         console.log('An error occurred:', err.message)
 

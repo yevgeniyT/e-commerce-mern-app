@@ -6,6 +6,7 @@ import {
     getCustomerProfile,
     loginCustomer,
     resetPasswordVarification,
+    setNewPassword,
     verifyNewCustomer,
 } from "./customersThunk";
 
@@ -167,6 +168,23 @@ export const customerSlice = createSlice({
                     action.error.message ||
                     "Unable to reset password. Please try again.";
                 toast.error(action.error.message);
+            });
+        // 7. Set new password
+        builder
+            .addCase(setNewPassword.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(setNewPassword.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = false;
+                state.message = action.payload.message;
+            })
+            .addCase(setNewPassword.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.message =
+                    action.error.message ||
+                    "Unable to reset password. Please try again.";
             });
     },
 });

@@ -3,26 +3,19 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
-import {
-    Container,
-    Box,
-    Typography,
-    TextField,
-    Button,
-    Alert,
-} from "@mui/material";
+import { Container, Box, Typography, TextField, Button } from "@mui/material";
 
-import { forgotPassword } from "../features/auth/authThanks";
-import Loading from "../components/Loading";
+import { forgotPassword } from "../../features/customers/customersThunk";
+import Loading from "../../components/common/Loading";
 
 const ForgotPasswordPage: React.FC = () => {
     //  Hooks to dispatch actions and access state from the Redux store
     const dispatch = useAppDispatch();
     // get data from state to handle conditional rendering based on lodaing status
-    const { loading, error, message } = useAppSelector((state) => state.authR);
-
+    const { loading, success } = useAppSelector((state) => state.customerR);
     // Local state for the email input field and requestSent status
     const [email, setEmail] = useState("");
+
     // Add a new state variable to track if the reset link was sent
     const [requestSent, setRequestSent] = useState(false);
 
@@ -33,33 +26,22 @@ const ForgotPasswordPage: React.FC = () => {
     };
     // useEffect to update the requestSent state when the request is successful
     useEffect(() => {
-        if (!loading && !error && message) {
+        if (success) {
             setRequestSent(true);
         }
-    }, [loading, error, message]);
-
+    }, [success]);
+    if (loading) {
+        return <Loading />;
+    }
     return (
         <Container maxWidth='sm'>
-            {/* Show a loading indicator when the request is being processed */}
-            {loading && <Loading />}
-
-            {/* Show an error message if there's an error */}
-            {error && (
-                <Box sx={{ mb: 2 }}>
-                    <Alert severity='error'>{message}</Alert>
-                </Box>
-            )}
-
-            {/* Show a success message if there's no error and a message is present */}
-            {!error && message && (
-                <Box sx={{ mb: 2 }}>
-                    <Alert severity='success'>{message}</Alert>
-                </Box>
-            )}
-
             <Box sx={{ mt: 8 }}>
                 <Typography variant='h4' align='center'>
                     Forgot Password
+                </Typography>
+                <Typography variant='body1' align='center'>
+                    Please enter your email address below to receive a password
+                    reset link
                 </Typography>
                 <form onSubmit={handleSubmit}>
                     <Box mt={2}>
