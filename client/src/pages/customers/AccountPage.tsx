@@ -212,6 +212,7 @@ const CustomerAccount: React.FC = () => {
 };
 export default CustomerAccount;
 
-//todo Update shipping adress from state
-// todo make contend of dellivery cards take 100% width
-// todo check when click return btn and come backe to login page again it goes to profile by defualt
+//TODO Update shipping adress from state
+// TODO make contend of dellivery cards take 100% width
+// TODO check when click return btn and come backe to login page again it goes to profile by defualt
+// TODO Add drop down shiping data by clicking icon

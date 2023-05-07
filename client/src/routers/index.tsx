@@ -17,6 +17,7 @@ import CustomerAccount from "pages/customers/AccountPage";
 import ForgotPasswordPage from "pages/customers/ForgotPasswordPage";
 import ResetPasswordActivation from "components/customers/ResetPassowrdActivation";
 import ResetPasswordPage from "pages/customers/ResetPasswordPage";
+import EditAccountPage from "pages/customers/EditAccountPage";
 
 const Index = () => {
     return (
@@ -56,6 +57,10 @@ const Index = () => {
                         <Route
                             path='/customer/account/resetpassword'
                             element={<ResetPasswordPage />}
+                        />
+                        <Route
+                            path='/customer/account/edit'
+                            element={<EditAccountPage />}
                         />
 
                         <Route path='*' element={<Error />} />

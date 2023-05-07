@@ -92,6 +92,8 @@ const loginCustomer = createAsyncThunk(
         }
     }
 );
+// 3.1 Log out customer
+// todo logout customer
 // 4. Post reqiest to send email to reset password
 const forgotPassword = createAsyncThunk(
     "customer/forgotpassword",
@@ -165,6 +167,7 @@ const setNewPassword = createAsyncThunk<
         throw new Error("Error on reseting password");
     }
 });
+// 7.Read customer Profile
 const getCustomerProfile = createAsyncThunk(
     "customer/getCustomerProfile",
     async () => {
@@ -187,6 +190,7 @@ const getCustomerProfile = createAsyncThunk(
         }
     }
 );
+
 export {
     createNewCustomer,
     verifyNewCustomer,
@@ -196,3 +200,5 @@ export {
     resetPasswordVarification,
     setNewPassword,
 };
+
+// Update customer profile

@@ -1,3 +1,4 @@
 {
-    "editor.fontFamily": "'Source Code Pro', Consolas, 'Courier New', monospace"
+    "editor.fontFamily": "'Source Code Pro', Consolas, 'Courier New', monospace",
+    "todo-tree.tree.scanMode": "workspace"
 }

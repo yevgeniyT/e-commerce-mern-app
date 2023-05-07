@@ -17,7 +17,7 @@ const AccountActivation: React.FC = () => {
     const dispatch = useAppDispatch();
 
     //Whhen you use useRef, updating the ref does not trigger a re-render. This means that the useEffect only runs when its dependencies (dispatch and token) change. while both useState and useRef can be used to store values across renders, updating a state variable with useState triggers a re-render, whereas updating a ref with useRef does not.
-    //todo how useRef works and how it differ from useState
+    //TODO how useRef works and how it differ from useState
     const dispatched = useRef(false);
 
     // 1. Get token from the URL
