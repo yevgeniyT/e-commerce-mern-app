@@ -324,6 +324,65 @@ const resetPassword = async (req: Request, res: Response) => {
     })
   }
 }
+const updateCustomerProfile = async (req: Request, res: Response) => {
+  try {
+    // 1. Check if the user with id stored in session exist in DB
+    const customer = await Customer.findById(
+      (req.customer as { customerId: string }).customerId
+    )
+
+    if (!customer) {
+      return res.status(404).json({
+        message: 'Can not find customer with such id',
+      })
+    }
+    // 2 Check if a password is provided in the request body
+    const { password, ...otherFields } = req.body
+    // 3. Save other fields except password
+    let updateData = otherFields
+    // 4. Chech if password meets requirments
+    if (password) {
+      // Validate password strength
+      if (!isStrongPassword(password)) {
+        return res.status(400).json({
+          message: 'The provided password is not strong enough',
+        })
+      }
+      // Hash the password before updating
+      const hashedPassword = await encryptPassword(password)
+      // save password in variable
+      updateData = { ...otherFields, password: hashedPassword }
+    }
+    // 5.Use findByIdAndUpdate mpngoose method to find user and update using spred operator (whatever we have in body - update)
+    const updatedCustomer = await Customer.findByIdAndUpdate(
+      (req.customer as { customerId: string }).customerId,
+      updateData,
+      //new: true: By default, the findByIdAndUpdate method returns the original document before the update. When you set the new option to true, it will return the updated document instead.
+      //runValidators: true: Mongoose schemas can have validation rules defined, such as required fields, minlength, maxlength, etc. By default, these validation rules are applied when creating new documents, but not when updating existing ones. Setting the runValidators option to true ensures that the update operation follows the schema validation rules, so any updates that don't meet the criteria will result in an error.
+      { new: true, runValidators: true }
+    )
+
+    if (!updatedCustomer) {
+      return errorHandler(
+        res,
+        500,
+        'An error occurred while updating the user profile.'
+      )
+    }
+    return successHandler(res, 200, 'Customer data updated successfuly', {
+      updatedCustomer,
+    })
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    res.status(500).json({
+      message: 'An unknown error occurred.',
+    })
+  }
+}
 export {
   createCustomer,
   verifyCustomer,
@@ -332,4 +391,5 @@ export {
   requestPasswordReset,
   validatePasswordResetToken,
   resetPassword,
+  updateCustomerProfile,
 }

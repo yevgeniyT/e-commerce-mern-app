@@ -6,6 +6,7 @@ import {
   loginCustomer,
   requestPasswordReset,
   resetPassword,
+  updateCustomerProfile,
   validatePasswordResetToken,
   verifyCustomer,
 } from '../controllers/customerController'
@@ -28,9 +29,10 @@ customerRouter.post('/verify-customer', verifyCustomer)
 
 customerRouter.post('/login', signInValidation, loginCustomer)
 
-customerRouter.route('/profile').get(isLoggedIn, getCustomerProfile)
-// .put(isLoggedIn, updateUserProfile)
-// .delete(isLoggedIn, deleteUserProfile)
+customerRouter
+  .route('/profile')
+  .get(isLoggedIn, getCustomerProfile)
+  .put(isLoggedIn, updateCustomerProfile)
 
 customerRouter.post('/forgot-password', requestPasswordReset)
 customerRouter.post('/verify-password', validatePasswordResetToken)
