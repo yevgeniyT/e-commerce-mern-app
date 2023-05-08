@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
-import { UserCredentials } from "types/customerType";
+import { UserCredentials, CustomerPayload } from "types/customerType";
 
 interface ErrorResponseData {
     message: string;
@@ -93,7 +93,7 @@ const loginCustomer = createAsyncThunk(
     }
 );
 // 3.1 Log out customer
-// todo logout customer
+// TODO logout customer
 // 4. Post reqiest to send email to reset password
 const forgotPassword = createAsyncThunk(
     "customer/forgotpassword",
@@ -191,6 +191,32 @@ const getCustomerProfile = createAsyncThunk(
     }
 );
 
+// 8. Update customer Profile
+
+const updateCustomerProfile = createAsyncThunk(
+    "customer/updateCustomerProfile",
+    async (updatedCustomerData: CustomerPayload) => {
+        try {
+            const response = await axios.put(
+                `${BASE_URL}/profile`,
+                updatedCustomerData,
+                {
+                    withCredentials: true,
+                }
+            );
+            return response.data;
+        } catch (error) {
+            // use type of error from axios to type error massege from backend
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                const errorData = axiosError.response.data as ErrorResponseData;
+                //When an error is thrown in the async thunk, Redux Toolkit automatically triggers the rejected case in the slice. The error object thrown in the thunk is passed to the rejected case through the action.error object.
+                throw new Error(errorData.message);
+            }
+            throw new Error("Failed to update customer profile");
+        }
+    }
+);
 export {
     createNewCustomer,
     verifyNewCustomer,
@@ -199,6 +225,7 @@ export {
     forgotPassword,
     resetPasswordVarification,
     setNewPassword,
+    updateCustomerProfile,
 };
 
 // Update customer profile

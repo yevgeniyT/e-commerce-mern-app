@@ -26,3 +26,5 @@ export interface UserCredentials {
     email: string;
     password: string;
 }
+
+export interface CustomerPayload extends Partial<BaseCustomer> {}

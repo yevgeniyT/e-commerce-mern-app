@@ -18,6 +18,7 @@ import {
     Alert,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { updateCustomerProfile } from "features/customers/customersThunk";
 
 const EditAccountPage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -90,11 +91,11 @@ const EditAccountPage: React.FC = () => {
     // Handle submit
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        if (password !== passwordConfirm) {
+        if (showPasswordSection && password !== passwordConfirm) {
             setErrorMessage("Passwords do not match");
             return;
         }
-        console.log(updatedCustomerData);
+        dispatch(updateCustomerProfile(updatedCustomerData));
     };
 
     return (
@@ -192,7 +193,7 @@ const EditAccountPage: React.FC = () => {
                                 placeholder='+49 (123) 456-7890'
                                 inputProps={{
                                     pattern:
-                                        "\\+49 \\([1-9][0-9]{2}\\) [0-9]{3}-[0-9]{4}",
+                                        "\\+49\\([1-9][0-9]{2}\\)[0-9]{3}-[0-9]{4}",
                                 }}
                                 onChange={handleChange}
                             />
@@ -330,3 +331,5 @@ const EditAccountPage: React.FC = () => {
 };
 
 export default EditAccountPage;
+
+// TODO Fill input fileds with deta from current state. make sure fileds with password are empty

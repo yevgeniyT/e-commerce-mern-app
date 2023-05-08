@@ -7,6 +7,7 @@ import {
     loginCustomer,
     resetPasswordVarification,
     setNewPassword,
+    updateCustomerProfile,
     verifyNewCustomer,
 } from "./customersThunk";
 
@@ -172,6 +173,7 @@ export const customerSlice = createSlice({
         // 7. Set new password
         builder
             .addCase(setNewPassword.pending, (state) => {
+                state.success = false;
                 state.loading = true;
             })
             .addCase(setNewPassword.fulfilled, (state, action) => {
@@ -185,6 +187,30 @@ export const customerSlice = createSlice({
                 state.message =
                     action.error.message ||
                     "Unable to reset password. Please try again.";
+                toast.error(action.error.message);
+            });
+
+        // 8. Update customer profile
+        builder
+            .addCase(updateCustomerProfile.pending, (state) => {
+                state.success = false;
+                state.loading = true;
+            })
+            .addCase(updateCustomerProfile.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = false;
+                state.success = true;
+                console.log(action.payload);
+                toast.success(action.payload.message);
+                state.message = action.payload.message;
+            })
+            .addCase(updateCustomerProfile.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.message =
+                    action.error.message ||
+                    "Unable to reset password. Please try again.";
+                toast.error(action.error.message);
             });
     },
 });

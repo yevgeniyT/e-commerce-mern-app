@@ -46,7 +46,7 @@ const Index = () => {
                             element={<ForgotPasswordPage />}
                         />
                         <Route
-                            path='customers/account'
+                            path='customer/account'
                             element={<CustomerAccount />}
                         />
                         <Route

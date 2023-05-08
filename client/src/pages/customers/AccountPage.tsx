@@ -1,5 +1,6 @@
 // UserCard.tsx
 import React, { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
@@ -16,18 +17,15 @@ import {
     Grid,
 } from "@mui/material";
 
-import { BaseCustomer } from "types/customerType";
-
 import { getCustomerProfile } from "features/customers/customersThunk";
 
 const onEdit = () => {};
-
-const onChangePassword = () => {};
 
 const CustomerAccount: React.FC = () => {
     //use hooks
     const dispatch = useAppDispatch();
     const dispatched = useRef(false);
+    const navigate = useNavigate();
 
     const customerData = useAppSelector((state) => state.customerR.customer);
 
@@ -88,12 +86,10 @@ const CustomerAccount: React.FC = () => {
                             >
                                 <Button
                                     size='small'
-                                    onClick={onChangePassword}
-                                    color='error'
+                                    onClick={() =>
+                                        navigate("/customer/account/edit")
+                                    }
                                 >
-                                    Change password
-                                </Button>
-                                <Button size='small' onClick={onEdit}>
                                     Edit
                                 </Button>
                             </CardActions>
@@ -212,7 +208,7 @@ const CustomerAccount: React.FC = () => {
 };
 export default CustomerAccount;
 
-//TODO Update shipping adress from state
+// TODO Update shipping adress from state
 // TODO make contend of dellivery cards take 100% width
 // TODO check when click return btn and come backe to login page again it goes to profile by defualt
 // TODO Add drop down shiping data by clicking icon
