@@ -393,3 +393,5 @@ export {
   resetPassword,
   updateCustomerProfile,
 }
+
+//TODO Update catch block in all controllers like in category controllers

@@ -28,6 +28,7 @@
     "errorhandler": "^1.5.1",
     "express": "^4.17.1",
     "express-session": "^1.17.3",
+    "express-validator": "^7.0.1",
     "http-proxy-middleware": "^2.0.6",
     "husky": "^4.2.3",
     "jest": "^28.1.3",
@@ -43,6 +44,7 @@
     "multer-storage-cloudinary": "^4.0.0",
     "nodemailer": "^6.9.1",
     "passport": "^0.6.0",
+    "slugify": "^1.6.6",
     "ts-jest": "^28.0.7",
     "validator": "^13.9.0",
     "winston": "^3.2.1"

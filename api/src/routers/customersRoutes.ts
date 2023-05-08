@@ -1,5 +1,7 @@
 // dependencies import
 import { Router } from 'express'
+
+//other components import
 import {
   createCustomer,
   getCustomerProfile,

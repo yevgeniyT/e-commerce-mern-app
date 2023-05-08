@@ -2,7 +2,12 @@
 
 import { Response } from 'express'
 
-const errorHandler = (res: Response, statusCode: number, message: string) => {
+const errorHandler = (
+  res: Response,
+  // Use default values for status code and message
+  statusCode: number = 500,
+  message: string = 'Internal Server Error'
+) => {
   return res.status(statusCode).json({
     success: false,
     message: message,
@@ -11,8 +16,8 @@ const errorHandler = (res: Response, statusCode: number, message: string) => {
 
 const successHandler = (
   res: Response,
-  statusCode: number,
-  message: string,
+  statusCode: number = 200,
+  message: string = 'Success operation',
   payload: any = {}
 ) => {
   return res.status(statusCode).json({

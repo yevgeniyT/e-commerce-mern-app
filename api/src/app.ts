@@ -12,6 +12,7 @@ import cookieParser from 'cookie-parser'
 import connectDB from './config/db'
 import dev from './config'
 import customerRouter from './routers/customersRoutes'
+import categoryRouter from './routers/catigoriesRoutes'
 
 // use Application type from express
 const app: Application = express()
@@ -35,6 +36,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use('/api/v1/customers', customerRouter)
+app.use('/api/v1/categories', categoryRouter)
 
 const PORT = dev.app.serverPort
 
@@ -42,3 +44,5 @@ app.listen(PORT, async () => {
   console.log('Server is OK')
   await connectDB()
 })
+
+// TODO use express-rate-limit lesson 56. time 10.30
