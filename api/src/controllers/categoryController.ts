@@ -1,6 +1,7 @@
 // dependencies import
 import { Request, Response } from 'express'
 import slugify from 'slugify'
+import { Types } from 'mongoose'
 
 //other components import
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
@@ -29,7 +30,7 @@ const createCategory = async (req: Request, res: Response) => {
       console.error('An unknown error occurred.')
     }
     // Send the error response
-    return errorHandler(res, 500, 'Error while fetching all categories')
+    return errorHandler(res, 500, 'Error while  creating category')
   }
 }
 // 2.  Get all categories
@@ -63,6 +64,11 @@ const getSingleCategory = async (req: Request, res: Response) => {
     // 1. Get id from req.params (assuming id is a route parameter)
     const { id } = req.params
 
+    // Check if the provided id is a valid ObjectID
+    if (!Types.ObjectId.isValid(id)) {
+      return errorHandler(res, 400, 'Invalid Product ID')
+    }
+
     // 2. Fetch the category with the given id from the database
     const category = await Category.findById(id)
       .select('name slug description')
@@ -94,15 +100,17 @@ const deleteCategory = async (req: Request, res: Response) => {
     // 1. Get id from req.params (assuming id is a route parameter)
     const { id } = req.params
 
+    // Check if the provided id is a valid ObjectID
+    if (!Types.ObjectId.isValid(id)) {
+      return errorHandler(res, 400, 'Invalid Product ID')
+    }
     // 2. Check if the category with the given id exists
     const category = await Category.findByIdAndDelete(id)
 
+    // 3. Check if the category was deleted
     if (!category) {
       return errorHandler(res, 404, 'Category not found')
     }
-
-    // 3. Delete the category with the given id from the database
-    await Category.findByIdAndDelete(id)
 
     // 4. Send the successful response after deleting the category
     return successHandler(res, 200, 'Category deleted successfully')
@@ -118,6 +126,7 @@ const deleteCategory = async (req: Request, res: Response) => {
   }
 }
 // 5. Update category
+// TODO add udpade image
 const updateCategory = async (req: Request, res: Response) => {
   try {
     // 1.  Get name and description from req.body

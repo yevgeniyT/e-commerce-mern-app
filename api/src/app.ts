@@ -13,6 +13,7 @@ import connectDB from './config/db'
 import dev from './config'
 import customerRouter from './routers/customersRoutes'
 import categoryRouter from './routers/catigoriesRoutes'
+import productRouter from './routers/productsRouters'
 
 // use Application type from express
 const app: Application = express()
@@ -37,6 +38,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/api/v1/customers', customerRouter)
 app.use('/api/v1/categories', categoryRouter)
+app.use('/api/v1/products', productRouter)
 
 const PORT = dev.app.serverPort
 

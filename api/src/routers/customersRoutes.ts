@@ -21,6 +21,8 @@ import { isLoggedIn } from '../middlewares/isLoggedIn'
 
 const customerRouter = Router()
 //todo add input validation
+
+// 1. Create Customer
 customerRouter.post(
   '/create',
   avatarUpload.single('avatarImage'),

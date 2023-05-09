@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 
 const initialState = {
+    isLoggedIn: false,
     customer: null as CustomerType | null,
     loading: false,
     error: false,
