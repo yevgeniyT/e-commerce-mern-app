@@ -161,13 +161,14 @@ const deleteProduct = async (req: Request, res: Response) => {
   }
 }
 // 5. Update product
+// TODO add image update, review update if not all fileds are added
 const updateProduct = async (req: Request, res: Response) => {
   try {
     // 1.  Get name and description from req.body
     const { name, description, price } = req.body
+    const { id } = req.params
 
     // 1.1. Create filter, updates, and options for the findByIdAndUpdate method
-    const filter = req.params.id
     const updates = {
       $set: {
         name: name,
@@ -179,7 +180,7 @@ const updateProduct = async (req: Request, res: Response) => {
     const option = { new: true } // to return updated value imidiately
 
     // 2. Update the product with the given id and return the updated document
-    const product = await Product.findByIdAndUpdate(filter, updates, option)
+    const product = await Product.findByIdAndUpdate(id, updates, option)
     // 3. Check if the product with the given id exists
     if (!product) {
       return errorHandler(res, 404, 'Product not found')
