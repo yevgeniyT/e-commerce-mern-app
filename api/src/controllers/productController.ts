@@ -17,8 +17,6 @@ const createProduct = async (
   try {
     // 1. Get name, description, price, category, and brand from req.body
     const { name, description, price, category, brand }: ProductType = req.body
-    console.log('Request body:', req.body)
-    console.log('Description:', description)
 
     // 2. Get the array of images from req.files. I case of empty umage filed an empty array will be stored
     const images = req.files?.map((file) => file.path) ?? []

@@ -25,6 +25,7 @@ const initialState = {
 export const customerSlice = createSlice({
     name: "auth",
     initialState,
+    // TODO Find out if it's used anywahere
     reducers: {
         // Used to cleare message states to emtpy while navigating between pages
         resetError: (state) => {

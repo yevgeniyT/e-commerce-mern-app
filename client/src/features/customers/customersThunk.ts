@@ -192,7 +192,6 @@ const getCustomerProfile = createAsyncThunk(
 );
 
 // 8. Update customer Profile
-
 const updateCustomerProfile = createAsyncThunk(
     "customer/updateCustomerProfile",
     async (updatedCustomerData: CustomerPayload) => {
@@ -227,5 +226,3 @@ export {
     setNewPassword,
     updateCustomerProfile,
 };
-
-// Update customer profile
