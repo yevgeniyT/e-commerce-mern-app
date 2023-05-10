@@ -199,10 +199,65 @@ const updateProduct = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error whule updating the product')
   }
 }
+
+// 6. Filter products by price brand and category
+const getFilteredProducts = async (req: Request, res: Response) => {
+  try {
+    // Retrieve the page, limit, sortBy, and sortOrder from the query parameters in the request. Set default values if they are not provided.
+    const page = parseInt(req.query.page as string) || 1
+    const limit = parseInt(req.query.limit as string) || 10
+    const {
+      priceRange = [],
+      checkedCategory = [],
+      checkedBrand = [],
+    } = req.body
+
+    // Create filtering logic
+    const filter: {
+      [key: string]: { $gte?: number; $lte?: number; $in?: string[] }
+    } = {}
+
+    // If range of price is available
+    if (priceRange.length) {
+      filter.price = { $gte: priceRange[0], $lte: priceRange[1] }
+    }
+
+    // If there are checked categories
+    if (checkedCategory.length) {
+      filter.category = { $in: checkedCategory }
+    }
+
+    // If there are checked brands
+    if (checkedBrand.length) {
+      filter.brand = { $in: checkedBrand }
+    }
+
+    // 1. Fetch products with filter
+    const products = await Product.find(filter)
+      .select('name slug description price images brand isActive')
+      .populate('category', 'name slug')
+      .skip((page - 1) * limit)
+      .lean()
+    // 2. Send the successful response with fetched products
+    return successHandler(res, 200, 'Products were filtered successfuley', {
+      products,
+    })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while fetching filterd products')
+  }
+}
 export {
   createProduct,
   getAllProducts,
   getSingleProduct,
   deleteProduct,
   updateProduct,
+  getFilteredProducts,
 }

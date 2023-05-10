@@ -11,6 +11,7 @@ import {
   createProduct,
   deleteProduct,
   getAllProducts,
+  getFilteredProducts,
   getSingleProduct,
   updateProduct,
 } from '../controllers/productController'
@@ -30,19 +31,22 @@ productRouter.post(
 // 2. GET/api/v1/products -> Get all products
 productRouter.get('/', getAllProducts)
 
-// 3. GET/api/v1/products/:id -> Get single product
+// 3. POST/api/v1/products/filtered
+productRouter.post('/filtered', getFilteredProducts)
+
+// 4. GET/api/v1/products/:id -> Get single product
 productRouter.get('/:id', getSingleProduct)
 
-// 4. DELETE/api/v1/products/:id -> Delete single product
+// 5. DELETE/api/v1/products/:id -> Delete single product
 productRouter.delete('/:id', deleteProduct)
 
-// 5. PUT/api/v1/products/:id -> Update category
+// 6. PUT/api/v1/products/:id -> Update category
 productRouter.put('/:id', productValidationRules, runValidation, updateProduct)
 
-// 6. POST/api/v1/products/:id/add -> Add product to stock
+// 7. POST/api/v1/products/:id/add -> Add product to stock
 
-// 7. POST/api/v1/products/:id/remoove -> Remove product from stock by any reason (damage or sale)
+// 8. POST/api/v1/products/:id/remoove -> Remove product from stock by any reason (damage or sale)
 
-// 8. GET/api/v1/products/:serchValue -> Serch based on any values
+// 9. GET/api/v1/products/:serchValue -> Serch based on any values
 
 export default productRouter
