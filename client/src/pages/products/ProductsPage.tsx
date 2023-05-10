@@ -18,6 +18,7 @@ import { getAllProducts } from "features/products/productsThunk";
 import ProductCardItem from "components/products/ProductCardItem";
 import { ProductType } from "types/productTypes";
 import ProductListItem from "components/products/ProductListItem";
+import { sortProducts } from "features/products/productsSlice";
 
 const ProductPage = () => {
     //Use hooks
@@ -39,7 +40,9 @@ const ProductPage = () => {
     };
 
     const handleSortOptionChange = (event: SelectChangeEvent) => {
-        setSortOption(event.target.value as string);
+        const sortOption = event.target.value as string;
+        setSortOption(sortOption);
+        dispatch(sortProducts(sortOption));
     };
 
     const handleProductsPerPageChange = (event: SelectChangeEvent) => {

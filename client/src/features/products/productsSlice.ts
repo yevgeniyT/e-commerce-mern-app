@@ -16,7 +16,20 @@ const initialState = {
 export const productsSlice = createSlice({
     name: "auth",
     initialState,
-    reducers: {},
+    reducers: {
+        sortProducts: (state, action) => {
+            switch (action.payload) {
+                case "price_low_to_high":
+                    state.products.sort((a, b) => a.price - b.price);
+                    break;
+                case "price_high_to_low":
+                    state.products.sort((a, b) => b.price - a.price);
+                    break;
+                default:
+                    break;
+            }
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getAllProducts.pending, (state) => {
@@ -47,4 +60,5 @@ export const productsSlice = createSlice({
             });
     },
 });
+export const { sortProducts } = productsSlice.actions;
 export default productsSlice.reducer;
