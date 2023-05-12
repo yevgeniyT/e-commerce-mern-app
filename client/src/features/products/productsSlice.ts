@@ -2,11 +2,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
-import { ProductType } from "types/productTypes";
+import { ProductType, Pagination } from "types/productTypes";
 import { getAllProducts } from "./productsThunk";
 
 const initialState = {
     products: [] as Array<ProductType>,
+    pagination: {} as Pagination,
     loading: false,
     error: false,
     success: false,
@@ -39,7 +40,9 @@ export const productsSlice = createSlice({
             .addCase(getAllProducts.fulfilled, (state, action) => {
                 const products = action.payload.payload.products;
                 // console.log(products);
+                const pagination = action.payload.payload.pagination;
 
+                state.pagination = pagination;
                 state.products = products;
                 state.loading = false;
                 state.success = true;

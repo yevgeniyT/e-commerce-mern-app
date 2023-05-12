@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 
 import {
@@ -8,6 +8,7 @@ import {
     MenuItem,
     Box,
     Container,
+    Pagination,
 } from "@mui/material";
 
 import { ViewList, ViewModule } from "@mui/icons-material";
@@ -23,18 +24,23 @@ import { sortProducts } from "features/products/productsSlice";
 const ProductPage = () => {
     //Use hooks
     const dispatch = useAppDispatch();
-
     // get data from store
-    const { products } = useAppSelector((state) => state.productsR);
+    const { products, pagination } = useAppSelector((state) => state.productsR);
 
-    const [layout, setLayout] = useState("cards");
-    const [sortOption, setSortOption] = useState("default");
-    const [productsPerPage, setProductsPerPage] = useState("10");
+    const [layout, setLayout] = useState("cards"); // set state for card or list laout
+    const [sortOption, setSortOption] = useState("default"); // set state for sorting
+    const [productsPerPage, setProductsPerPage] = useState("4"); // set state for nuber of pages on list
+    const [page, setPage] = useState(1); // set state to define page to send to backend
 
+    // TODO Find out how to prevent doble dispatch here
+    // dispatch page and products per page for initial render
     useEffect(() => {
-        dispatch(getAllProducts());
-    }, [dispatch]);
+        dispatch(
+            getAllProducts({ page: page, limit: parseInt(productsPerPage) })
+        );
+    }, [dispatch, page, productsPerPage]);
 
+    // change laout card/list
     const handleLayoutChange = (newLayout: string) => {
         setLayout(newLayout);
     };
@@ -127,7 +133,7 @@ const ProductPage = () => {
                                     height: "40px", // Set the height of the input field
                                 }}
                             >
-                                <MenuItem value={5}>5</MenuItem>
+                                <MenuItem value={4}>4</MenuItem>
                                 <MenuItem value={10}>10</MenuItem>
                                 <MenuItem value={20}>20</MenuItem>
                                 {/* Add more items per page options if needed */}
@@ -173,8 +179,37 @@ const ProductPage = () => {
                                     ))}
                             </Grid>
                         )}
-
                         {/* TODO: Add 'show more' button and pagination controls */}
+                        {/* <button onClick={() => setPage(page + 1)}>
+                            Show More
+                        </button> */}
+
+                        <Grid
+                            item
+                            xs={12}
+                            sx={{
+                                marginTop: "16px",
+                            }}
+                        >
+                            <Box
+                                display='flex'
+                                flexDirection='column'
+                                alignItems='center'
+                                borderTop={1}
+                                borderColor='rgba(0, 0, 0, 0.1)'
+                                pt={2}
+                                sx={{
+                                    width: "60%",
+                                    margin: "auto",
+                                }}
+                            >
+                                <Pagination
+                                    count={pagination.totalPages}
+                                    page={page}
+                                    onChange={(event, value) => setPage(value)}
+                                />
+                            </Box>
+                        </Grid>
                     </Box>
                 </Grid>
             </Grid>

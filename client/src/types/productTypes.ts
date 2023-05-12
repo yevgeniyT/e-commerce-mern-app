@@ -12,3 +12,11 @@ export interface ProductType {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface Pagination {
+    currentPage: number;
+    previousPage: number;
+    nextPage: number;
+    totalNumberOfProducts: number;
+    totalPages: number;
+}

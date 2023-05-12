@@ -63,22 +63,38 @@ const createProduct = async (
 const getAllProducts = async (req: Request, res: Response) => {
   try {
     // Retrieve the page, limit, sortBy, and sortOrder from the query parameters in the request. Set default values if they are not provided.
-    const page = parseInt(req.query.page as string) || 1
-    const limit = parseInt(req.query.limit as string) || 10
+    const page = parseInt(req.query.page as string) || 1 // geting page number from request query with default 1
+    const limit = parseInt(req.query.limit as string) || 3
+
+    console.log(page)
+
+    const totalDocuments = await Product.countDocuments()
 
     // 1. Fetch all products from the database
     const products = await Product.find({})
       .select('name slug description price images brand isActive')
       .populate('category', 'name slug')
       .skip((page - 1) * limit)
+      .limit(limit)
       .lean()
     //Category.find({}): Find all documents in the Category collection without any filters or conditions.
     //.select('name slug description'): Include only the 'name', 'slug', and 'description' fields in the resulting documents. All other fields will be excluded.
     // When you use lean(), it tells Mongoose to return plain JavaScript objects instead of Mongoose documents. This can significantly improve query performance and reduce memory usage, especially when dealing with large datasets.
 
+    if (!products) {
+      errorHandler(res, 404, 'No products found')
+    }
+
     // 2. Send the successful response with fetched products
     return successHandler(res, 200, 'Products fetched successfully', {
       products,
+      pagination: {
+        curentPage: page,
+        previousPage: page - 1,
+        nextPage: page + 1,
+        totalNumberOfProducts: totalDocuments,
+        totalPages: Math.ceil(totalDocuments / limit),
+      },
     })
   } catch (error: unknown) {
     // Handle different types of errors
