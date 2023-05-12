@@ -3,6 +3,7 @@ import mongoose, { Document, Schema } from 'mongoose'
 interface IBrand extends Document {
   name: string
   slug: string
+  products: Schema.Types.ObjectId[]
 }
 
 const brandSchema: Schema = new mongoose.Schema(
@@ -19,6 +20,12 @@ const brandSchema: Schema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
+    products: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+      },
+    ],
   },
   {
     timestamps: true,

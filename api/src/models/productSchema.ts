@@ -51,6 +51,7 @@ const productSchema: Schema = new mongoose.Schema(
     brand: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Brand',
+      required: true,
     },
     stockQuantity: {
       type: Number,

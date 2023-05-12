@@ -7,6 +7,7 @@ import { Types } from 'mongoose'
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import { BrandType } from '../@types/brandTypes'
 import Brand from '../models/brandSchema'
+import Product from '../models/productSchema'
 
 // 1. Create new Brand
 const createBrand = async (req: Request, res: Response) => {
@@ -50,15 +51,37 @@ const createBrand = async (req: Request, res: Response) => {
 // 2. Get all products
 const getAllBrands = async (req: Request, res: Response) => {
   try {
-    // 1. Fetch all brands from the database
-    const brands = await Brand.find().select('name slug').lean()
+    //  aggregate all products grouped by the brand field, and count the number of products for each brand. As a result we get here an array with id and productCount value of that id
+    const brandsWithCount = await Product.aggregate([
+      {
+        $group: {
+          _id: '$brand',
+          productCount: { $sum: 1 },
+        },
+      },
+    ])
 
-    if (!brands) {
+    if (!brandsWithCount.length) {
       errorHandler(res, 404, 'No brand found')
     }
+    // get array with objects with brands
+    const brands = await Brand.find().lean()
+    console.log(brands)
+
+    //After the map function is done executing, finalBrands will be a new array where each brand has a productCount property that indicates how many products are associated with that brand.
+    const finalBrands = brands.map((brand) => {
+      const brandWithCount = brandsWithCount.find(
+        (b) => b._id.toString() === brand._id.toString()
+      )
+      return {
+        ...brand,
+        productCount: brandWithCount ? brandWithCount.productCount : 0,
+      }
+    })
+
     // 2. Send the successful response with fetched brands
     return successHandler(res, 200, 'Brands fetched successfully', {
-      brands,
+      brands: finalBrands,
     })
   } catch (error: unknown) {
     // Handle different types of errors
@@ -71,6 +94,7 @@ const getAllBrands = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error while fetching all brands')
   }
 }
+
 // 3. Get a single product
 const getSingleBrand = async (req: Request, res: Response) => {
   try {

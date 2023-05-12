@@ -74,6 +74,7 @@ const getAllProducts = async (req: Request, res: Response) => {
     const products = await Product.find({})
       .select('name slug description price images brand isActive')
       .populate('category', 'name slug')
+      .populate('brand', 'name slug')
       .skip((page - 1) * limit)
       .limit(limit)
       .lean()

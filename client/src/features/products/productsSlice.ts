@@ -15,7 +15,7 @@ const initialState = {
 };
 
 export const productsSlice = createSlice({
-    name: "auth",
+    name: "products",
     initialState,
     reducers: {
         sortProducts: (state, action) => {

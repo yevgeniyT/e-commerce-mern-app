@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
+import { useAppDispatch, useAppSelector } from "redux/hooks";
+
 import {
     Box,
     TextField,
@@ -9,8 +12,16 @@ import {
     Slider,
     Button,
 } from "@mui/material";
+import { getAllBrands } from "features/brands/brandThunk";
+import { getAllCategories } from "features/categories/categoryThunk";
 
 const FilterSidebar = () => {
+    //use hooks
+    const dispatch = useAppDispatch();
+    // get data from store
+    const { brands } = useAppSelector((state) => state.brandsR);
+    const { categories } = useAppSelector((state) => state.categoriesR);
+
     const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
     const [sliderRange, setSliderRange] = useState([0, 300]); // Set initial slider range
 
@@ -40,16 +51,25 @@ const FilterSidebar = () => {
         });
     };
 
-    // Example data for categories and brands
-    const categories = [
-        { name: "Category 1", count: 10 },
-        { name: "Category 2", count: 5 },
-    ];
+    //dispatch action to get brand
+    useEffect(() => {
+        dispatch(getAllBrands());
+    }, [dispatch]);
+    //dispatch action to get categories
+    useEffect(() => {
+        dispatch(getAllCategories());
+    }, [dispatch]);
 
-    const brands = [
-        { name: "Brand 1", count: 7 },
-        { name: "Brand 2", count: 8 },
-    ];
+    // Example data for categories and brands
+    // const categories = [
+    //     { name: "Category 1", count: 10 },
+    //     { name: "Category 2", count: 5 },
+    // ];
+
+    // const brands = [
+    //     { name: "Brand 1", count: 7 },
+    //     { name: "Brand 2", count: 8 },
+    // ];
 
     // Reset all filters
     const handleReset = () => {
@@ -106,7 +126,8 @@ const FilterSidebar = () => {
                         <FormControlLabel
                             key={index}
                             control={<Checkbox />}
-                            label={`${category.name} (${category.count})`}
+                            label={`${category.name} `}
+                            // (${category.count})
                         />
                     ))}
                 </Grid>
@@ -120,7 +141,7 @@ const FilterSidebar = () => {
                         <FormControlLabel
                             key={index}
                             control={<Checkbox />}
-                            label={`${brand.name} (${brand.count})`}
+                            label={`${brand.name} (${brand.productCount})`}
                         />
                     ))}
                 </Grid>

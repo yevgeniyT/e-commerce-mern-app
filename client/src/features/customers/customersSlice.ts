@@ -23,7 +23,7 @@ const initialState = {
 };
 
 export const customerSlice = createSlice({
-    name: "auth",
+    name: "customer",
     initialState,
     // TODO Find out if it's used anywahere
     reducers: {

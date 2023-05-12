@@ -6,7 +6,9 @@ import {
     CardMedia,
     Typography,
     Button,
+    IconButton,
 } from "@mui/material";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 
 import { ProductType } from "types/productTypes";
 
@@ -16,6 +18,7 @@ interface ProductCardItemProps {
 
 const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
     const { name, price, images } = product;
+    console.log(name);
 
     return (
         <Card
@@ -25,10 +28,6 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
-                "&:hover .product-card-add-to-cart": {
-                    opacity: 1,
-                    transform: "translateY(0)",
-                },
             }}
         >
             <Box
@@ -45,26 +44,6 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
                         padding: "10px",
                     }}
                 />
-                <Box
-                    sx={{
-                        position: "absolute",
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        opacity: 0,
-                        transform: "translateY(10%)",
-                        transition: "opacity 0.3s, transform 0.5s",
-                    }}
-                    className='product-card-add-to-cart'
-                >
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        sx={{ width: "100%" }}
-                    >
-                        Add to Cart
-                    </Button>
-                </Box>
             </Box>
             <CardContent
                 sx={{
@@ -79,16 +58,30 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
                 <Typography gutterBottom variant='body1' component='div'>
                     {name}
                 </Typography>
-                <Typography
-                    variant='h6'
-                    color='text.secondary'
-                    sx={{ fontWeight: "bold" }}
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                    }}
                 >
-                    {price.toLocaleString("de-DE", {
-                        style: "currency",
-                        currency: "EUR",
-                    })}
-                </Typography>
+                    <Typography
+                        variant='h6'
+                        color='text.secondary'
+                        sx={{ fontWeight: "bold" }}
+                    >
+                        {price.toLocaleString("de-DE", {
+                            style: "currency",
+                            currency: "EUR",
+                        })}
+                    </Typography>
+                    <IconButton
+                        color='primary'
+                        aria-label='add to shopping cart'
+                    >
+                        <AddShoppingCartIcon />
+                    </IconButton>
+                </Box>
             </CardContent>
         </Card>
     );
