@@ -18,10 +18,7 @@ const productValidationRules = [
     .isFloat({ min: 0 })
     .withMessage('Price must be a positive number'),
   body('category').notEmpty().withMessage('Category is required'),
-  body('brand')
-    .trim()
-    .isLength({ max: 50 })
-    .withMessage('Manufacturer name cannot be longer than 100 characters'),
+  body('brand').notEmpty().withMessage('Category is required'),
 ]
 
 export { productValidationRules }

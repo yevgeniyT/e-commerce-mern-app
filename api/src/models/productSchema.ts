@@ -49,10 +49,8 @@ const productSchema: Schema = new mongoose.Schema(
       required: true,
     },
     brand: {
-      type: String,
-      trim: true,
-      maxlength: 50,
-      default: '',
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Brand',
     },
     stockQuantity: {
       type: Number,
