@@ -5,7 +5,7 @@ import { Types } from 'mongoose'
 
 //other components import
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
-import { ProductType } from '../@types/productTypes'
+import { PartialProductType, ProductType } from '../@types/productTypes'
 import Product from '../models/productSchema'
 
 // 1. Create new Product
@@ -180,22 +180,25 @@ const deleteProduct = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   try {
     // 1.  Get name and description from req.body
-    const { name, description, price } = req.body
+    const { name, description, price }: PartialProductType = req.body
     const { id } = req.params
 
     // 1.1. Create filter, updates, and options for the findByIdAndUpdate method
-    const updates = {
-      $set: {
-        name: name,
-        description: description,
-        slug: slugify(name),
-        price: price,
-      },
+    const updates: PartialProductType = {
+      description: description,
+      price: price,
+    }
+
+    // If name is present, include it and its slugified version in the updates
+    if (name) {
+      updates.name = name
+      updates.slug = slugify(name)
     }
     const option = { new: true } // to return updated value imidiately
+    const updatesForMongo = { $set: updates } // sets updates with optional filds
 
     // 2. Update the product with the given id and return the updated document
-    const product = await Product.findByIdAndUpdate(id, updates, option)
+    const product = await Product.findByIdAndUpdate(id, updatesForMongo, option)
     // 3. Check if the product with the given id exists
     if (!product) {
       return errorHandler(res, 404, 'Product not found')
@@ -221,40 +224,52 @@ const updateProduct = async (req: Request, res: Response) => {
 const getFilteredProducts = async (req: Request, res: Response) => {
   try {
     // Retrieve the page, limit, sortBy, and sortOrder from the query parameters in the request. Set default values if they are not provided.
-    const page = parseInt(req.query.page as string) || 1
-    const limit = parseInt(req.query.limit as string) || 10
+    // const page = parseInt(req.query.page as string) || 1
+    // const limit = parseInt(req.query.limit as string) || 5
     const {
       priceRange = [],
-      checkedCategory = [],
-      checkedBrand = [],
+      checkedCategories = [],
+      checkedBrands = [],
     } = req.body
 
-    // Create filtering logic
+    console.log(req.body)
+
+    // Initialize filter object which will store filtering criteria
     const filter: {
       [key: string]: { $gte?: number; $lte?: number; $in?: string[] }
     } = {}
 
-    // If range of price is available
+    // If priceRange array is not empty, set a price range filter
     if (priceRange.length) {
       filter.price = { $gte: priceRange[0], $lte: priceRange[1] }
     }
 
-    // If there are checked categories
-    if (checkedCategory.length) {
-      filter.category = { $in: checkedCategory }
+    // If checkedCategory array is not empty, set a category filter to include any of the checked categories
+    if (checkedCategories.length) {
+      filter.category = { $in: checkedCategories }
     }
 
-    // If there are checked brands
-    if (checkedBrand.length) {
-      filter.brand = { $in: checkedBrand }
+    // If checkedBrand array is not empty, set a brand filter to include any of the checked brands
+    if (checkedBrands.length) {
+      filter.brand = { $in: checkedBrands }
     }
 
-    // 1. Fetch products with filter
+    // Fetch products from the database that meet the filtering criteria
+    // Use .select() to limit the fields that are returned
+    // Use .populate() to include associated category and brand data
+    // Use .skip() to implement pagination
+    // Use .lean() to convert the Mongoose document to a plain JavaScript object
     const products = await Product.find(filter)
       .select('name slug description price images brand isActive')
       .populate('category', 'name slug')
-      .skip((page - 1) * limit)
+      .populate('brand', 'name slug')
+      // .skip((page - 1) * limit)
       .lean()
+
+    // If no products are found (i.e., the products array is empty), return an error
+    if (products.length === 0) {
+      return errorHandler(res, 400, 'No products with such filers found')
+    }
     // 2. Send the successful response with fetched products
     return successHandler(res, 200, 'Products were filtered successfuley', {
       products,

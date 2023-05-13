@@ -55,18 +55,19 @@ const getAllBrands = async (req: Request, res: Response) => {
     const brandsWithCount = await Product.aggregate([
       {
         $group: {
+          //identifier expression that $group uses to group documents. Here, it's grouping documents by the brand field, so all documents with the same brand will be in the same group.
           _id: '$brand',
+          //This is an accumulator expression that $group applies to each group. { $sum: 1 } expression means "for each document in the group, add 1 to the sum", so the result is the total count of documents in the group.
           productCount: { $sum: 1 },
         },
       },
     ])
 
     if (!brandsWithCount.length) {
-      errorHandler(res, 404, 'No brand found')
+      return errorHandler(res, 404, 'No brand found')
     }
     // get array with objects with brands
     const brands = await Brand.find().lean()
-    console.log(brands)
 
     //After the map function is done executing, finalBrands will be a new array where each brand has a productCount property that indicates how many products are associated with that brand.
     const finalBrands = brands.map((brand) => {

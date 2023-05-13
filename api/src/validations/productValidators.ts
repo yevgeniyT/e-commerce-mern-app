@@ -21,4 +21,27 @@ const productValidationRules = [
   body('brand').notEmpty().withMessage('Category is required'),
 ]
 
-export { productValidationRules }
+const productUpdateValidationRules = [
+  body('name')
+    .trim()
+    .optional()
+    .isLength({ max: 100 })
+    .withMessage('Product name cannot be longer than 100 characters'),
+
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ max: 1000 })
+    .withMessage('Product description cannot be longer than 1000 characters'),
+
+  body('price')
+    .optional()
+    .isFloat({ min: 0 })
+    .withMessage('Price must be a positive number'),
+
+  body('category').optional().notEmpty().withMessage('Category is required'),
+
+  body('brand').optional().notEmpty().withMessage('Brand is required'),
+]
+
+export { productValidationRules, productUpdateValidationRules }

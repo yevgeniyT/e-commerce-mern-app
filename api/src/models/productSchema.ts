@@ -10,6 +10,9 @@ interface IProduct extends Document {
   brand: string
   stockQuantity?: number
   isActive: boolean
+  discount?: number
+  ratings: Array<number>
+  averageRating: number
   createdAt?: Date
   updatedAt?: Date
 }
@@ -59,6 +62,20 @@ const productSchema: Schema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    discount: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    ratings: {
+      type: [Number],
+      default: [],
+    },
+    averageRating: {
+      type: Number,
+      default: 0,
     },
   },
   {

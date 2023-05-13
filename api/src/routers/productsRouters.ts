@@ -4,7 +4,10 @@ import { Router } from 'express'
 // other components import
 
 import runValidation from '../validations'
-import { productValidationRules } from '../validations/productValidators'
+import {
+  productUpdateValidationRules,
+  productValidationRules,
+} from '../validations/productValidators'
 import { imageUpload } from '../util/upload'
 
 import {
@@ -41,7 +44,12 @@ productRouter.get('/:id', getSingleProduct)
 productRouter.delete('/:id', deleteProduct)
 
 // 6. PUT/api/v1/products/:id -> Update category
-productRouter.put('/:id', productValidationRules, runValidation, updateProduct)
+productRouter.put(
+  '/:id',
+  productUpdateValidationRules,
+  runValidation,
+  updateProduct
+)
 
 // 7. POST/api/v1/products/:id/add -> Add product to stock
 

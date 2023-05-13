@@ -24,7 +24,7 @@ export const categorySlice = createSlice({
                 state.success = false;
             })
             .addCase(getAllCategories.fulfilled, (state, action) => {
-                const categories = action.payload.payload.categories;
+                const categories = action.payload.payload.finalCategories;
 
                 state.categories = categories;
                 state.loading = false;

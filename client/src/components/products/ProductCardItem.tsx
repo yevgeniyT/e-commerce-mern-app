@@ -18,7 +18,6 @@ interface ProductCardItemProps {
 
 const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
     const { name, price, images } = product;
-    console.log(name);
 
     return (
         <Card

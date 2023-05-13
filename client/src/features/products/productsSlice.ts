@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
 import { ProductType, Pagination } from "types/productTypes";
-import { getAllProducts } from "./productsThunk";
+import { getAllProducts, getFilteredProducts } from "./productsThunk";
 
 const initialState = {
     products: [] as Array<ProductType>,
@@ -53,6 +53,33 @@ export const productsSlice = createSlice({
                 state.loading = false;
                 state.error = true;
                 state.success = false;
+                // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
+                state.message =
+                    action.error.message ||
+                    // use alias to handle undefined type
+                    "Unable to fetch all products.";
+                toast.error(action.error.message);
+                console.log(state.message);
+            });
+        builder
+            .addCase(getFilteredProducts.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(getFilteredProducts.fulfilled, (state, action) => {
+                const products = action.payload.payload.products;
+                // console.log(products);
+                state.products = products;
+                state.loading = false;
+                state.success = true;
+                state.message = action.payload.message;
+                toast.success(action.payload.message);
+            })
+            .addCase(getFilteredProducts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.products = [];
                 // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
                 state.message =
                     action.error.message ||

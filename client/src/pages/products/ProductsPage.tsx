@@ -25,7 +25,9 @@ const ProductPage = () => {
     //Use hooks
     const dispatch = useAppDispatch();
     // get data from store
-    const { products, pagination } = useAppSelector((state) => state.productsR);
+    const { products, pagination, error } = useAppSelector(
+        (state) => state.productsR
+    );
 
     const [layout, setLayout] = useState("cards"); // set state for card or list laout
     const [sortOption, setSortOption] = useState("default"); // set state for sorting
@@ -153,7 +155,7 @@ const ProductPage = () => {
                                     products.map((product: ProductType) => (
                                         <Grid
                                             item
-                                            key={product.id}
+                                            key={product._id}
                                             xs={12}
                                             sm={6}
                                             md={4}
@@ -171,7 +173,7 @@ const ProductPage = () => {
                             <Grid container spacing={2}>
                                 {products &&
                                     products.map((product: ProductType) => (
-                                        <Grid item key={product.id} xs={12}>
+                                        <Grid item key={product._id} xs={12}>
                                             <ProductListItem
                                                 product={product}
                                             />

@@ -6,6 +6,7 @@ import { Types } from 'mongoose'
 //other components import
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import Category from '../models/categorySchema'
+import Product from '../models/productSchema'
 
 // 1. Create new category
 const createCategory = async (req: Request, res: Response) => {
@@ -36,17 +37,38 @@ const createCategory = async (req: Request, res: Response) => {
 // 2.  Get all categories
 const getAllCategories = async (req: Request, res: Response) => {
   try {
+    // aggregate all products grouped by the category field, and count the number of products for each category. As a result we get here an array with id and productCount value of that id
+    const categoriesWithCount = await Product.aggregate([
+      {
+        $group: {
+          // /  //identifier expression that $group uses to group documents. Here, it's grouping documents by the brand field, so all documents with the same brand will be in the same group.
+          _id: '$category',
+          //This is an accumulator expression that $group applies to each group. { $sum: 1 } expression means "for each document in the group, add 1 to the sum", so the result is the total count of documents in the group.
+          productCount: { $sum: 1 },
+        },
+      },
+    ])
+
+    if (!categoriesWithCount.length) {
+      return errorHandler(res, 404, 'No category found')
+    }
     // 1. Fetch all categories from the database
-    const categories = await Category.find({})
-      .select('name slug description')
-      .lean()
-    //Category.find({}): Find all documents in the Category collection without any filters or conditions.
-    //.select('name slug description'): Include only the 'name', 'slug', and 'description' fields in the resulting documents. All other fields will be excluded.
-    // When you use lean(), it tells Mongoose to return plain JavaScript objects instead of Mongoose documents. This can significantly improve query performance and reduce memory usage, especially when dealing with large datasets.
+    const categories = await Category.find().lean()
+
+    // Add product counts to each category
+    const finalCategories = categories.map((category) => {
+      const categoryWithCount = categoriesWithCount.find(
+        (c) => c._id.toString() === category._id.toString()
+      )
+      return {
+        ...category,
+        productCount: categoryWithCount ? categoryWithCount.productCount : 0,
+      }
+    })
 
     // 2. Send the successful response with fetched categories
     return successHandler(res, 200, 'Categories fetched successfully', {
-      categories,
+      finalCategories,
     })
   } catch (error: unknown) {
     // Handle different types of errors

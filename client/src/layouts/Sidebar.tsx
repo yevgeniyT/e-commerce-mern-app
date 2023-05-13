@@ -12,8 +12,11 @@ import {
     Slider,
     Button,
 } from "@mui/material";
+import { CategoryType } from "../types/categoryType";
+import { BrandType } from "types/brandTypes";
 import { getAllBrands } from "features/brands/brandThunk";
 import { getAllCategories } from "features/categories/categoryThunk";
+import { getFilteredProducts } from "features/products/productsThunk";
 
 const FilterSidebar = () => {
     //use hooks
@@ -21,9 +24,33 @@ const FilterSidebar = () => {
     // get data from store
     const { brands } = useAppSelector((state) => state.brandsR);
     const { categories } = useAppSelector((state) => state.categoriesR);
+    const { products } = useAppSelector((state) => state.productsR);
 
-    const [priceRange, setPriceRange] = useState({ min: 0, max: 300 });
-    const [sliderRange, setSliderRange] = useState([0, 300]); // Set initial slider range
+    // Initialize the price range state with the minimum and maximum prices of all products
+    //reduce is used to reduce the array to a single value. This method does not change the original array.
+    //reduce takes a callback function as its first argument. This function is executed on each element of the array.The result of the function is stored in an accumulator (in this case, min), which is then used as a parameter in the next execution of the function.
+    //The callback function here takes two arguments: min and product. min is the accumulator, and product is the current element in the array. This function is executed on every product in the products array.
+    //Inside the callback function, Math.min(min, product.price) is used to compare the current minimum price (min) and the price of the current product (product.price).it's comparing the current smallest price found so far with the price of the current product, and returning the smaller of the two.
+    //Infinity is the initial value of the min accumulator. This is the second argument to the reduce method. It's a way to ensure that any price from the products array will be less than the initial value, as Infinity is the largest possible number in JavaScript.
+    // Summary: Go through each product in the products array, and for each one, compare its price to the current smallest price found. If this product's price is smaller, then it becomes the new smallest price. Continue this until we've checked every product, and give me the smallest price found." This smallest price is then stored in the minPrice constant.
+    // const minPrice = products.reduce(
+    //     (min, product) => Math.min(min, product.price),
+    //     Infinity
+    // );
+    // const maxPrice = products.reduce(
+    //     (max, product) => Math.max(max, product.price),
+    //     0
+    // );
+
+    const [priceRange, setPriceRange] = useState({
+        min: 0,
+        max: 300,
+    });
+    const [sliderRange, setSliderRange] = useState([0, 300]);
+
+    // Add state to save array of checked categories and brands
+    const [checkedCategories, setCheckedCategories] = useState<string[]>([]);
+    const [checkedBrands, setCheckedBrands] = useState<string[]>([]);
 
     // Update the state when the price range inputs change
     const handlePriceRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,6 +77,18 @@ const FilterSidebar = () => {
             max: (newValue as number[])[1],
         });
     };
+    // Reset all filters
+    const handleReset = () => {
+        // Reset price range
+        setPriceRange({ min: 0, max: 300 });
+        setSliderRange([0, 300]);
+
+        // Reset categories
+        setCheckedCategories([]);
+
+        // Reset brands
+        setCheckedBrands([]);
+    };
 
     //dispatch action to get brand
     useEffect(() => {
@@ -60,20 +99,44 @@ const FilterSidebar = () => {
         dispatch(getAllCategories());
     }, [dispatch]);
 
-    // Example data for categories and brands
-    // const categories = [
-    //     { name: "Category 1", count: 10 },
-    //     { name: "Category 2", count: 5 },
-    // ];
+    useEffect(() => {
+        dispatch(
+            getFilteredProducts({
+                priceRange: [priceRange.min, priceRange.max], // Transform to array
+                checkedCategories,
+                checkedBrands,
+            })
+        );
+    }, [checkedBrands, checkedCategories, dispatch, priceRange]);
 
-    // const brands = [
-    //     { name: "Brand 1", count: 7 },
-    //     { name: "Brand 2", count: 8 },
-    // ];
+    //Save checked categories in state
+    const handleCheckedCategories = (categoryId: string) => {
+        //What ever is already in previous state
+        setCheckedCategories((prevCategories) => {
+            // Check if the category is already in the array
+            // If it is, remove it (uncheck the category)
+            //includes() method  is used to check if a certain value exists in an array or not. It returns true if the value is found in the array, and false otherwise.
+            if (prevCategories.includes(categoryId)) {
+                return prevCategories.filter((id) => id !== categoryId);
+            }
+            // If it's not in the array, add it (check the category)
+            else {
+                return [...prevCategories, categoryId];
+            }
+        });
+    };
 
-    // Reset all filters
-    const handleReset = () => {
-        // TODO: Reset the state for categories and brands checkboxes
+    // Save checked Barnds in state
+
+    const handleChekedBrands = (brandId: string) => {
+        // Whatever we have in previous state
+        setCheckedBrands((previousBrands) => {
+            if (previousBrands.includes(brandId)) {
+                return previousBrands.filter((id) => id !== brandId);
+            } else {
+                return [...previousBrands, brandId];
+            }
+        });
     };
 
     return (
@@ -122,12 +185,22 @@ const FilterSidebar = () => {
             <Grid item xs={12}>
                 <Typography variant='h6'>Category</Typography>
                 <Grid container direction='column'>
-                    {categories.map((category, index) => (
+                    {categories.map((category: CategoryType) => (
                         <FormControlLabel
-                            key={index}
-                            control={<Checkbox />}
-                            label={`${category.name} `}
-                            // (${category.count})
+                            key={category._id}
+                            control={
+                                // The checked prop determines whether the checkbox is checked or not. If the value you pass to checked is true, the checkbox will be checked; if it's false, the checkbox will be unchecked.
+                                //checkedCategories.includes(category._id): checking if the current category's ID is in the checkedCategories array. If the category's ID is in the array, that means the user has checked that checkbox, so checkedCategories.includes(category._id) will be true and the checkbox will be checked. If the category's ID is not in the array, that means the user has not checked that checkbox, so checkedCategories.includes(category._id) will be false and the checkbox will be unchecked.
+                                <Checkbox
+                                    checked={checkedCategories.includes(
+                                        category._id
+                                    )}
+                                />
+                            }
+                            label={`${category.name} (${category.productCount})`}
+                            onChange={() => {
+                                handleCheckedCategories(category._id);
+                            }}
                         />
                     ))}
                 </Grid>
@@ -137,11 +210,18 @@ const FilterSidebar = () => {
             <Grid item xs={12}>
                 <Typography variant='h6'>Brand</Typography>
                 <Grid container direction='column'>
-                    {brands.map((brand, index) => (
+                    {brands.map((brand: BrandType) => (
                         <FormControlLabel
-                            key={index}
-                            control={<Checkbox />}
+                            key={brand._id}
+                            control={
+                                <Checkbox
+                                    checked={checkedBrands.includes(brand._id)}
+                                />
+                            }
                             label={`${brand.name} (${brand.productCount})`}
+                            onChange={() => {
+                                handleChekedBrands(brand._id);
+                            }}
                         />
                     ))}
                 </Grid>
