@@ -219,7 +219,6 @@ const updateProduct = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error whule updating the product')
   }
 }
-
 // 6. Filter products by price brand and category
 const getFilteredProducts = async (req: Request, res: Response) => {
   try {
@@ -285,6 +284,49 @@ const getFilteredProducts = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error while fetching filterd products')
   }
 }
+
+// 7. Serch products by any word
+// 7. Search products by any word
+const searchProducts = async (req: Request, res: Response) => {
+  try {
+    //Retrieve and typecast searchValue to string from query parameters
+    let searchValue = String(req.query.searchValue || '')
+
+    // Validate searchValue: it should exist and not be an empty string
+    if (!searchValue || searchValue.length === 0) {
+      throw new Error('Search value is required')
+    }
+
+    // Trim white space from searchValue
+    searchValue = searchValue.trim()
+
+    // what ever in the begining + serchValue + whatever at the end, 'i' -ignor Case
+    const searchRegExp = new RegExp('.*' + searchValue + '.*', 'i')
+    //Define filter for database query: it will match any product whose name contains searchValue
+    const filter = { $or: [{ name: { $regex: searchRegExp } }] }
+    // Query the database with the defined filter
+    const products = await Product.find(filter)
+    // If products were found, return them in the response
+    if (products.length === 0) {
+      return errorHandler(res, 404, 'No products found')
+    }
+
+    return successHandler(res, 200, 'Products were found', { products })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+      if (error.message === 'Search value is required') {
+        return errorHandler(res, 400, error.message)
+      }
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while fetching filtered products')
+  }
+}
+
 export {
   createProduct,
   getAllProducts,
@@ -292,4 +334,5 @@ export {
   deleteProduct,
   updateProduct,
   getFilteredProducts,
+  searchProducts,
 }

@@ -16,6 +16,7 @@ import {
   getAllProducts,
   getFilteredProducts,
   getSingleProduct,
+  searchProducts,
   updateProduct,
 } from '../controllers/productController'
 
@@ -30,6 +31,8 @@ productRouter.post(
   runValidation,
   createProduct
 )
+// 9. GET/api/v1/products/search?searchValue=:searchValue -> Search based on any values
+productRouter.get('/search', searchProducts)
 // 2. GET/api/v1/products/:id -> Get single product
 productRouter.get('/:id', getSingleProduct)
 
@@ -53,7 +56,5 @@ productRouter.put(
 // 7. POST/api/v1/products/:id/add -> Add product to stock
 
 // 8. POST/api/v1/products/:id/remoove -> Remove product from stock by any reason (damage or sale)
-
-// 9. GET/api/v1/products/:serchValue -> Serch based on any values
 
 export default productRouter
