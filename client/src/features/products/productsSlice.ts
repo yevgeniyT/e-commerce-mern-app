@@ -6,6 +6,7 @@ import { ProductType, Pagination } from "types/productTypes";
 import {
     getAllProducts,
     getFilteredProducts,
+    getSerchedProducts,
     getSingleProduct,
 } from "./productsThunk";
 
@@ -13,6 +14,7 @@ const initialState = {
     products: [] as Array<ProductType>,
     singleProduct: {} as ProductType | null,
     pagination: {} as Pagination,
+    searchResults: [] as Array<ProductType>,
     loading: false,
     error: false,
     success: false,
@@ -34,6 +36,9 @@ export const productsSlice = createSlice({
                 default:
                     break;
             }
+        },
+        resetSerchInput: (state) => {
+            state.searchResults = [];
         },
     },
     extraReducers: (builder) => {
@@ -119,7 +124,34 @@ export const productsSlice = createSlice({
                 toast.error(action.error.message);
                 console.log(state.message);
             });
+        // 1 Get serched products
+        builder
+            .addCase(getSerchedProducts.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(getSerchedProducts.fulfilled, (state, action) => {
+                const products = action.payload.payload.products;
+                // console.log(products);
+                state.searchResults = products;
+                state.loading = false;
+                state.success = true;
+                state.message = action.payload.message;
+                toast.success(action.payload.message);
+            })
+            .addCase(getSerchedProducts.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                // Update the message with the error message from the action recieved from thunk from catch block by throw new Error
+                state.message =
+                    action.error.message ||
+                    // use alias to handle undefined type
+                    "Unable to fetch all products.";
+                toast.error(action.error.message);
+                console.log(state.message);
+            });
     },
 });
-export const { sortProducts } = productsSlice.actions;
+export const { sortProducts, resetSerchInput } = productsSlice.actions;
 export default productsSlice.reducer;
