@@ -30,15 +30,14 @@ productRouter.post(
   runValidation,
   createProduct
 )
+// 2. GET/api/v1/products/:id -> Get single product
+productRouter.get('/:id', getSingleProduct)
 
-// 2. GET/api/v1/products -> Get all products
+// 3. GET/api/v1/products -> Get all products
 productRouter.get('/', getAllProducts)
 
-// 3. POST/api/v1/products/filtered
+// 4. POST/api/v1/products/filtered -> Get filtered products
 productRouter.post('/filtered', getFilteredProducts)
-
-// 4. GET/api/v1/products/:id -> Get single product
-productRouter.get('/:id', getSingleProduct)
 
 // 5. DELETE/api/v1/products/:id -> Delete single product
 productRouter.delete('/:id', deleteProduct)

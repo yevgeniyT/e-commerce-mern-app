@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Box,
     Grid,
@@ -7,21 +8,31 @@ import {
     CardContent,
     Typography,
     Button,
+    useTheme,
 } from "@mui/material";
 import { ProductType } from "types/productTypes";
+import { getSingleProduct } from "features/products/productsThunk";
+import { useAppDispatch } from "redux/hooks";
 
 interface ProductCardItemProps {
     product: ProductType;
 }
 
 const ProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
-    const { name, price, images, description } = product;
+    const { name, price, images, description, slug, _id } = product;
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+    const theme = useTheme();
 
     const limitedDescription =
         description.length > 300
             ? description.slice(0, 300) + "..."
             : description;
 
+    const handleProductClick = (id: string) => {
+        dispatch(getSingleProduct(id));
+        navigate(`/products/${slug}`);
+    };
     return (
         <Card>
             <Grid container>
@@ -33,6 +44,10 @@ const ProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        cursor: "pointer",
+                    }}
+                    onClick={() => {
+                        handleProductClick(_id);
                     }}
                 >
                     <CardMedia
@@ -51,7 +66,20 @@ const ProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                             justifyContent: "space-between",
                         }}
                     >
-                        <Typography gutterBottom variant='h5' component='div'>
+                        <Typography
+                            gutterBottom
+                            variant='h5'
+                            component='div'
+                            sx={{
+                                cursor: "pointer",
+                                "&:hover": {
+                                    color: theme.palette.error.main,
+                                },
+                            }}
+                            onClick={() => {
+                                handleProductClick(_id);
+                            }}
+                        >
                             {name}
                         </Typography>
                         <Typography

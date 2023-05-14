@@ -49,7 +49,6 @@ const getFilteredProducts = createAsyncThunk(
                 checkedCategories,
                 checkedBrands,
             });
-            console.log(response.data.payload);
 
             return response.data;
         } catch (error) {
@@ -65,4 +64,26 @@ const getFilteredProducts = createAsyncThunk(
     }
 );
 
-export { getAllProducts, getFilteredProducts };
+// 3. Get single product by ID
+
+const getSingleProduct = createAsyncThunk(
+    "products/getSingleProduct",
+    async (id: string) => {
+        try {
+            // add page as query parameter
+            const response = await axios.get(`${BASE_URL}/${id}`);
+            return response.data;
+        } catch (error) {
+            // use type of error from axios to type error massege from backend
+            const axiosError = error as AxiosError;
+            if (axiosError.response) {
+                const errorData = axiosError.response.data as ErrorResponseData;
+                //When an error is thrown in the async thunk, Redux Toolkit automatically triggers the rejected case in the slice. The error object thrown in the thunk is passed to the rejected case through the action.error object.
+                throw new Error(errorData.message);
+            }
+            throw new Error("Failed to fetch single product");
+        }
+    }
+);
+
+export { getAllProducts, getFilteredProducts, getSingleProduct };

@@ -19,14 +19,20 @@ import ResetPasswordActivation from "components/customers/ResetPassowrdActivatio
 import ResetPasswordPage from "pages/customers/ResetPasswordPage";
 import EditAccountPage from "pages/customers/EditAccountPage";
 import ProductsPage from "pages/products/ProductsPage";
+import SerchAndCartBar from "layouts/SearchAndCartBar";
+import ProductDetailsPage from "pages/products/ProductDetailsPage";
 
 const Index = () => {
     return (
         <div className='main-app'>
             <BrowserRouter>
                 <header>
-                    <Navbar />
+                    <div>
+                        <Navbar />
+                        <SerchAndCartBar />
+                    </div>
                 </header>
+
                 <main>
                     <Routes>
                         <Route path='/' element={<HomePage />} />
@@ -64,6 +70,10 @@ const Index = () => {
                             element={<EditAccountPage />}
                         />
                         <Route path='/products' element={<ProductsPage />} />
+                        <Route
+                            path='/products/:slug'
+                            element={<ProductDetailsPage />}
+                        />
 
                         <Route path='*' element={<Error />} />
                     </Routes>

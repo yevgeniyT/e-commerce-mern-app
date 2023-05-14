@@ -3,10 +3,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import { toast } from "react-toastify";
 import { ProductType, Pagination } from "types/productTypes";
-import { getAllProducts, getFilteredProducts } from "./productsThunk";
+import {
+    getAllProducts,
+    getFilteredProducts,
+    getSingleProduct,
+} from "./productsThunk";
 
 const initialState = {
     products: [] as Array<ProductType>,
+    singleProduct: {} as ProductType | null,
     pagination: {} as Pagination,
     loading: false,
     error: false,
@@ -32,6 +37,7 @@ export const productsSlice = createSlice({
         },
     },
     extraReducers: (builder) => {
+        // 1 Get all products
         builder
             .addCase(getAllProducts.pending, (state) => {
                 state.loading = true;
@@ -53,7 +59,7 @@ export const productsSlice = createSlice({
                 state.loading = false;
                 state.error = true;
                 state.success = false;
-                // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
+                // Update the message with the error message from the action recieved from thunk from catch block by throw new Error
                 state.message =
                     action.error.message ||
                     // use alias to handle undefined type
@@ -62,6 +68,7 @@ export const productsSlice = createSlice({
                 console.log(state.message);
             });
         builder
+            // 2. Get filtered Products
             .addCase(getFilteredProducts.pending, (state) => {
                 state.loading = true;
                 state.success = false;
@@ -80,11 +87,35 @@ export const productsSlice = createSlice({
                 state.error = true;
                 state.success = false;
                 state.products = [];
-                // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
+                // Update the message with the error message from the action recieved from thunk from catch block by throw new Error
                 state.message =
                     action.error.message ||
                     // use alias to handle undefined type
                     "Unable to fetch all products.";
+                toast.error(action.error.message);
+                console.log(state.message);
+            });
+        builder
+            // 2. Get single Productt
+            .addCase(getSingleProduct.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(getSingleProduct.fulfilled, (state, action) => {
+                const product = action.payload.payload.product;
+                state.singleProduct = product;
+                state.loading = false;
+                state.success = true;
+                state.message = action.payload.message;
+                toast.success(action.payload.message);
+            })
+            .addCase(getSingleProduct.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.singleProduct = null;
+                state.message =
+                    action.error.message || "Unable to fetch the product.";
                 toast.error(action.error.message);
                 console.log(state.message);
             });

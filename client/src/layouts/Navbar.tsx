@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
     };
 
     return (
-        <AppBar position='static' sx={{ marginBottom: "32px" }}>
+        <AppBar position='static'>
             <Toolbar>
                 <IconButton
                     edge='start'

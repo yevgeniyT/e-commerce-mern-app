@@ -1,23 +1,34 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
     Box,
     Card,
     CardContent,
     CardMedia,
     Typography,
-    Button,
     IconButton,
+    useTheme,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-
+import { useAppDispatch } from "redux/hooks";
 import { ProductType } from "types/productTypes";
+import { getSingleProduct } from "features/products/productsThunk";
 
 interface ProductCardItemProps {
     product: ProductType;
 }
 
 const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
-    const { name, price, images } = product;
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const theme = useTheme();
+    const { name, price, images, _id, slug } = product;
+
+    const handleProductClick = (id: string) => {
+        dispatch(getSingleProduct(id));
+        navigate(`/products/${slug}`);
+    };
 
     return (
         <Card
@@ -32,6 +43,10 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
             <Box
                 sx={{
                     position: "relative",
+                    cursor: "pointer",
+                }}
+                onClick={() => {
+                    handleProductClick(_id);
                 }}
             >
                 <CardMedia
@@ -50,11 +65,24 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
                     flexDirection: "column",
                     padding: "10px 10px",
                     "&:last-child": {
-                        paddingBottom: "10px", // Change the value as needed
+                        paddingBottom: "10px",
                     },
                 }}
             >
-                <Typography gutterBottom variant='body1' component='div'>
+                <Typography
+                    gutterBottom
+                    variant='body1'
+                    component='div'
+                    sx={{
+                        cursor: "pointer",
+                        "&:hover": {
+                            color: theme.palette.error.main,
+                        },
+                    }}
+                    onClick={() => {
+                        handleProductClick(_id);
+                    }}
+                >
                     {name}
                 </Typography>
                 <Box
