@@ -20,6 +20,7 @@ export interface BaseCustomer {
 export interface CustomerType extends BaseCustomer {
     customerId: string;
     isBanned: boolean;
+    isAdmin: boolean;
 }
 
 export interface UserCredentials {

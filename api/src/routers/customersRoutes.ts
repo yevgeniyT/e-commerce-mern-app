@@ -5,6 +5,7 @@ import { Router } from 'express'
 import {
   createCustomer,
   getCustomerProfile,
+  logOutCustomer,
   loginCustomer,
   requestPasswordReset,
   resetPassword,
@@ -32,6 +33,7 @@ customerRouter.post(
 customerRouter.post('/verify-customer', verifyCustomer)
 
 customerRouter.post('/login', signInValidation, loginCustomer)
+customerRouter.get('/logout', logOutCustomer)
 
 customerRouter
   .route('/profile')

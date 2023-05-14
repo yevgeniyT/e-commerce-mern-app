@@ -89,8 +89,6 @@ const getSingleProduct = createAsyncThunk(
 const getSerchedProducts = createAsyncThunk(
     "products/getSerchedProducts",
     async (serchValue: string) => {
-        console.log(serchValue);
-
         try {
             // add serch value as query parameter
             const response = await axios.get(

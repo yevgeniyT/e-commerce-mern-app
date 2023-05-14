@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
         if (success && !hasNavigated.current) {
             hasNavigated.current = true;
             setTimeout(() => {
-                navigate("/customer/account");
+                navigate("/");
             }, 2000);
         }
     }, [success, navigate]);

@@ -40,7 +40,7 @@ const AccountActivation: React.FC = () => {
     useEffect(() => {
         if (success) {
             setTimeout(() => {
-                navigate("/customer/account/login");
+                navigate("/");
             }, 2000);
         }
     }, [success, message, navigate]);

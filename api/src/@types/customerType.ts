@@ -20,6 +20,7 @@ export interface BaseCustomer {
 export interface CustomerType extends BaseCustomer {
   customerId: string
   isBanned: boolean
+  isAdmin: boolean
 }
 
 //optional fuilds used to handle type error in userController as, all fuilds can be undefined if user not provide input. Partial utility type to make all the properties in BaseCustomer optional.

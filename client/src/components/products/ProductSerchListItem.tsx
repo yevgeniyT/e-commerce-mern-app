@@ -55,3 +55,5 @@ const ProductDropdownItem: React.FC<ProductCardItemProps> = ({ product }) => {
 };
 
 export default ProductDropdownItem;
+
+//TODO update the render make picture small name and price one under one

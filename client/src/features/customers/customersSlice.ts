@@ -4,6 +4,7 @@ import {
     createNewCustomer,
     forgotPassword,
     getCustomerProfile,
+    logOutCustomer,
     loginCustomer,
     resetPasswordVarification,
     setNewPassword,
@@ -15,7 +16,9 @@ import { toast } from "react-toastify";
 
 const initialState = {
     isLoggedIn: false,
+    isAdmin: false,
     customer: null as CustomerType | null,
+    csutomerShortData: {} as CustomerType,
     loading: false,
     error: false,
     success: false,
@@ -108,11 +111,18 @@ export const customerSlice = createSlice({
             .addCase(loginCustomer.pending, (state) => {
                 state.loading = true;
                 state.success = false;
+                state.isLoggedIn = false;
             })
             .addCase(loginCustomer.fulfilled, (state, action) => {
+                //TODO update to use state instedof isAdmin
+                if (action.payload.payload.isAdmin) {
+                    state.isAdmin = true;
+                }
+                state.csutomerShortData = action.payload.payload;
                 state.loading = false;
                 state.error = false;
                 state.success = true;
+                state.isLoggedIn = true;
                 state.message = action.payload.message;
                 toast.success(action.payload.message);
             })
@@ -120,6 +130,7 @@ export const customerSlice = createSlice({
                 state.loading = false;
                 state.error = true;
                 state.success = false;
+                state.isLoggedIn = false;
                 state.message =
                     action.error.message ||
                     "Unable to login. Please try again.";
@@ -213,6 +224,31 @@ export const customerSlice = createSlice({
                     action.error.message ||
                     "Unable to reset password. Please try again.";
                 toast.error(action.error.message);
+            });
+
+        // 9. Log Out customer
+        builder
+            .addCase(logOutCustomer.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+                state.isLoggedIn = true;
+            })
+            .addCase(logOutCustomer.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = false;
+                state.success = true;
+                state.isLoggedIn = false;
+                state.message = action.payload.message;
+                toast.success(action.payload.message);
+            })
+            .addCase(logOutCustomer.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.isLoggedIn = false;
+                state.message = action.error.message || "Unable to log out.";
+                toast.error(action.error.message);
+                console.log(state.message);
             });
     },
 });

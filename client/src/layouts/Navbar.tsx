@@ -1,5 +1,4 @@
-// src/components/Navbar.tsx
-import React from "react";
+import React, { useState } from "react";
 import {
     AppBar,
     Toolbar,
@@ -7,14 +6,39 @@ import {
     Button,
     IconButton,
     Box,
+    Avatar,
+    Menu,
+    MenuItem,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 
-const Navbar: React.FC = () => {
-    const navigate = useNavigate();
+import { useAppSelector, useAppDispatch } from "redux/hooks";
+import { logOutCustomer } from "features/customers/customersThunk";
 
+const Navbar: React.FC = () => {
+    const dispatch = useAppDispatch();
+    const isLoggedIn = useAppSelector((state) => state.customerR.isLoggedIn);
+    const { avatarImage, isAdmin } = useAppSelector(
+        (state) => state.customerR.csutomerShortData
+    );
+    const navigate = useNavigate();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const goTo = (path: string) => {
         navigate(path);
+        handleClose();
+    };
+
+    const handleLogOut = () => {
+        dispatch(logOutCustomer());
+        navigate("/");
     };
 
     return (
@@ -31,31 +55,52 @@ const Navbar: React.FC = () => {
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
                     E-commerce app
                 </Typography>
-                <Box>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/customer/account/login")}
-                    >
-                        Sign in
-                    </Button>
+                <Box display='flex' alignItems='center'>
+                    {!isLoggedIn && (
+                        <Button
+                            color='inherit'
+                            onClick={() => goTo("/customer/account/login")}
+                        >
+                            Sign in
+                        </Button>
+                    )}
 
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/user-dashbord")}
-                    >
-                        Profile
-                    </Button>
+                    {isLoggedIn && (
+                        <>
+                            <Avatar
+                                aria-controls='simple-menu'
+                                aria-haspopup='true'
+                                onClick={handleClick}
+                                src={avatarImage}
+                                sx={{
+                                    marginLeft: "16px",
+                                    cursor: "pointer",
+                                }}
+                            >
+                                {/* Add your avatar image here */}
+                            </Avatar>
 
-                    <Button color='inherit' onClick={() => goTo("/posts")}>
-                        All Posts
-                    </Button>
-
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/add-new-post")}
-                    >
-                        Create Post
-                    </Button>
+                            <Menu
+                                id='simple-menu'
+                                anchorEl={anchorEl}
+                                keepMounted
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem
+                                    onClick={() => goTo("/user-dashbord")}
+                                >
+                                    Profile
+                                </MenuItem>
+                                <MenuItem onClick={() => goTo("/my-orders")}>
+                                    My Orders
+                                </MenuItem>
+                                <MenuItem onClick={handleLogOut}>
+                                    Sign Out
+                                </MenuItem>
+                            </Menu>
+                        </>
+                    )}
                     {/*         
           <Button color="inherit" onClick={handleLoginLogout}>
             {loggedIn ? 'Logout' : 'Login'}

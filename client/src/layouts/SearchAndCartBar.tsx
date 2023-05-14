@@ -129,3 +129,6 @@ const SerchAndCartBar = () => {
 };
 
 export default SerchAndCartBar;
+
+//TODO Adjust the size of proper to the size of serch input.
+//TODO Fix the way serch works, if type correct at once and then incorrect it will not show no products match

@@ -132,7 +132,9 @@ const loginCustomer = async (req: Request, res: Response) => {
     const { email, password }: BaseCustomer = req.body
 
     //2 Chek if the user exist already
-    const customer = await Customer.findOne({ email: email })
+    const customer = await Customer.findOne({ email: email }).select(
+      'isAdmin password'
+    )
     if (!customer) {
       return errorHandler(
         res,
@@ -178,7 +180,12 @@ const loginCustomer = async (req: Request, res: Response) => {
       // Set the SameSite attribute to protect against CSRF attacks
       sameSite: 'lax',
     })
-    return successHandler(res, 200, 'You successfully logged in. Welcome!')
+    return successHandler(
+      res,
+      200,
+      'You successfully logged in. Welcome!',
+      customer
+    )
   } catch (error: unknown) {
     if (typeof error === 'string') {
       console.log('An unknown error occurred.')
@@ -383,6 +390,31 @@ const updateCustomerProfile = async (req: Request, res: Response) => {
     })
   }
 }
+const logOutCustomer = (req: Request, res: Response) => {
+  try {
+    // Clear the authentication token cookie
+    res.clearCookie('authToken', {
+      // Set "secure" to true if using HTTPS
+      secure: true,
+
+      // Set the path attribute to "/", so the cookie is cleared for all paths within the domain
+      path: '/',
+
+      // Set the SameSite attribute to protect against CSRF attacks
+      sameSite: 'lax',
+    })
+    return successHandler(res, 200, 'Customer logged out')
+  } catch (error: unknown) {
+    if (typeof error === 'string') {
+      console.log('An unknown error occurred.')
+    } else if (error instanceof Error) {
+      console.log(error.message)
+    }
+    return res.status(500).json({
+      message: 'An unknown error occurred while logged out.',
+    })
+  }
+}
 export {
   createCustomer,
   verifyCustomer,
@@ -392,6 +424,7 @@ export {
   validatePasswordResetToken,
   resetPassword,
   updateCustomerProfile,
+  logOutCustomer,
 }
 
 //TODO Update catch block in all controllers like in category controllers

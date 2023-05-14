@@ -21,6 +21,8 @@ import EditAccountPage from "pages/customers/EditAccountPage";
 import ProductsPage from "pages/products/ProductsPage";
 import SerchAndCartBar from "layouts/SearchAndCartBar";
 import ProductDetailsPage from "pages/products/ProductDetailsPage";
+import LoggedInRoute from "./LoginRoute";
+import AdminRoute from "./AdminRoute";
 
 const Index = () => {
     return (
@@ -52,10 +54,7 @@ const Index = () => {
                             path='/customer/account/forgotpassword'
                             element={<ForgotPasswordPage />}
                         />
-                        <Route
-                            path='customer/account'
-                            element={<CustomerAccount />}
-                        />
+
                         <Route
                             // make sure to set full route!!!
                             path='/api/v1/customer/account/verify-password/:token'
@@ -65,15 +64,29 @@ const Index = () => {
                             path='/customer/account/resetpassword'
                             element={<ResetPasswordPage />}
                         />
-                        <Route
-                            path='/customer/account/edit'
-                            element={<EditAccountPage />}
-                        />
+
                         <Route path='/products' element={<ProductsPage />} />
                         <Route
                             path='/products/:slug'
                             element={<ProductDetailsPage />}
                         />
+
+                        <Route element={<LoggedInRoute />}>
+                            <Route
+                                path='customer/account'
+                                element={<CustomerAccount />}
+                            />
+                            <Route
+                                path='/customer/account/edit'
+                                element={<EditAccountPage />}
+                            />
+                            <Route
+                                path='customer/account/logout'
+                                element={<LoginPage />}
+                            />
+                        </Route>
+
+                        <Route element={<AdminRoute />}></Route>
 
                         <Route path='*' element={<Error />} />
                     </Routes>

@@ -26,6 +26,7 @@ export interface ICustomer extends Document {
   }
   avatarImage: string
   isBanned: boolean
+  isAdmin: boolean
   createdAt: Date
   updatedAt: Date
   orders: mongoose.Schema.Types.ObjectId[]
@@ -87,6 +88,11 @@ const customerSchema: Schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+
     orders: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Order' }],
   },
   { timestamps: true }
