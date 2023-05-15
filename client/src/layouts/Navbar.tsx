@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import {
     AppBar,
     Toolbar,
-    Typography,
     Button,
-    IconButton,
     Box,
     Avatar,
     Menu,
@@ -36,25 +34,60 @@ const Navbar: React.FC = () => {
         handleClose();
     };
 
-    const handleLogOut = () => {
+    const handleLogOutCustomer = () => {
         dispatch(logOutCustomer());
         navigate("/");
     };
 
+    const handleLogOutAdmin = () => {};
+
     return (
         <AppBar position='static'>
-            <Toolbar>
-                <IconButton
-                    edge='start'
-                    color='inherit'
-                    aria-label='menu'
-                    onClick={() => goTo("/")}
-                >
-                    {/* Add your logo/icon here */}
-                </IconButton>
-                <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-                    E-commerce app
-                </Typography>
+            <Toolbar
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "70%",
+                    margin: "auto",
+                }}
+            >
+                <Box display='flex'>
+                    <Button
+                        color='inherit'
+                        onClick={() => goTo("/")}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        Location
+                    </Button>
+                    <Button
+                        color='inherit'
+                        onClick={() => goTo("/")}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        Operating Hours
+                    </Button>
+                    <Button
+                        color='inherit'
+                        onClick={() => goTo("/")}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        Delivery & Payment
+                    </Button>
+                    <Button
+                        color='inherit'
+                        onClick={() => goTo("/")}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        About Us
+                    </Button>
+                    <Button
+                        color='inherit'
+                        onClick={() => goTo("/")}
+                        sx={{ textTransform: "capitalize" }}
+                    >
+                        Contact Us
+                    </Button>
+                </Box>
                 <Box display='flex' alignItems='center'>
                     {!isLoggedIn && (
                         <Button
@@ -76,10 +109,7 @@ const Navbar: React.FC = () => {
                                     marginLeft: "16px",
                                     cursor: "pointer",
                                 }}
-                            >
-                                {/* Add your avatar image here */}
-                            </Avatar>
-
+                            ></Avatar>
                             <Menu
                                 id='simple-menu'
                                 anchorEl={anchorEl}
@@ -87,24 +117,43 @@ const Navbar: React.FC = () => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                <MenuItem
-                                    onClick={() => goTo("/user-dashbord")}
-                                >
-                                    Profile
-                                </MenuItem>
-                                <MenuItem onClick={() => goTo("/my-orders")}>
-                                    My Orders
-                                </MenuItem>
-                                <MenuItem onClick={handleLogOut}>
-                                    Sign Out
-                                </MenuItem>
+                                {isAdmin ? (
+                                    <>
+                                        <MenuItem
+                                            onClick={() =>
+                                                goTo("/admin-dashbord")
+                                            }
+                                        >
+                                            Admin Dashboard
+                                        </MenuItem>
+                                        <MenuItem onClick={handleLogOutAdmin}>
+                                            Sign Out
+                                        </MenuItem>
+                                    </>
+                                ) : (
+                                    <>
+                                        <MenuItem
+                                            onClick={() =>
+                                                goTo("/user-dashbord")
+                                            }
+                                        >
+                                            Profile
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={() => goTo("/my-orders")}
+                                        >
+                                            My Orders
+                                        </MenuItem>
+                                        <MenuItem
+                                            onClick={handleLogOutCustomer}
+                                        >
+                                            Sign Out
+                                        </MenuItem>
+                                    </>
+                                )}
                             </Menu>
                         </>
                     )}
-                    {/*         
-          <Button color="inherit" onClick={handleLoginLogout}>
-            {loggedIn ? 'Logout' : 'Login'}
-          </Button> */}
                 </Box>
             </Toolbar>
         </AppBar>

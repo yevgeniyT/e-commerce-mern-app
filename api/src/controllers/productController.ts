@@ -72,7 +72,7 @@ const getAllProducts = async (req: Request, res: Response) => {
 
     // 1. Fetch all products from the database
     const products = await Product.find({})
-      .select('name slug description price images brand isActive')
+      // .select('name slug description price images brand isActive')
       .populate('category', 'name slug')
       .populate('brand', 'name slug')
       .skip((page - 1) * limit)

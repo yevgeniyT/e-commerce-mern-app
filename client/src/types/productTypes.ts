@@ -6,8 +6,16 @@ export interface ProductType {
     price: number;
     discount?: number;
     images: Array<string>;
-    category: string;
-    brand: string;
+    category: {
+        _id: string;
+        name: string;
+        // add other properties here if needed
+    };
+    brand: {
+        _id: string;
+        name: string;
+        // add other properties here if needed
+    };
     stockQuantity: number;
     ratings: Array<number>;
     averageRating: number;
@@ -28,4 +36,12 @@ export interface FilteredProductsParams {
     priceRange: number[];
     checkedCategories: string[];
     checkedBrands: string[];
+}
+export interface ProductRowData {
+    id: string;
+    productImage: string;
+    productName: string;
+    productCategory: string;
+    productPrice: number;
+    productDiscount: number | undefined;
 }

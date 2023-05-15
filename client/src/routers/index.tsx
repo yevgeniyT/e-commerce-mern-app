@@ -24,6 +24,11 @@ import ProductDetailsPage from "pages/products/ProductDetailsPage";
 import LoggedInRoute from "./LoginRoute";
 import AdminRoute from "./AdminRoute";
 
+import AdminProductPage from "pages/adminDashbord/AdminProductPage";
+import AdminCustomerPage from "pages/adminDashbord/AdminCustomerPage";
+import AdminOrdersPage from "pages/adminDashbord/AdminOrdersPage";
+import AdminProductCreatePage from "pages/adminDashbord/AdminProductCreatePage";
+
 const Index = () => {
     return (
         <div className='main-app'>
@@ -70,12 +75,28 @@ const Index = () => {
                             path='/products/:slug'
                             element={<ProductDetailsPage />}
                         />
+                        <Route
+                            path='admin/account/products'
+                            element={<AdminProductPage />}
+                        />
+                        <Route
+                            path='admin/account/products/create-new-product'
+                            element={<AdminProductCreatePage />}
+                        />
+                        <Route
+                            path='admin/account/customers'
+                            element={<AdminCustomerPage />}
+                        />
+                        <Route
+                            path='admin/account/orders'
+                            element={<AdminOrdersPage />}
+                        />
+                        <Route
+                            path='customer/account'
+                            element={<CustomerAccount />}
+                        />
 
                         <Route element={<LoggedInRoute />}>
-                            <Route
-                                path='customer/account'
-                                element={<CustomerAccount />}
-                            />
                             <Route
                                 path='/customer/account/edit'
                                 element={<EditAccountPage />}
