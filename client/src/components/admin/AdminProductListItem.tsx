@@ -25,7 +25,6 @@ const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
         product;
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-    const theme = useTheme();
 
     const handleProductClick = (id: string) => {
         dispatch(getSingleProduct(id));
@@ -42,10 +41,6 @@ const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        cursor: "pointer",
-                    }}
-                    onClick={() => {
-                        handleProductClick(_id);
                     }}
                 >
                     <CardMedia
@@ -78,15 +73,6 @@ const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                                 gutterBottom
                                 variant='h5'
                                 component='div'
-                                sx={{
-                                    cursor: "pointer",
-                                    "&:hover": {
-                                        color: theme.palette.error.main,
-                                    },
-                                }}
-                                onClick={() => {
-                                    handleProductClick(_id);
-                                }}
                             >
                                 Name: {name}
                             </Typography>
@@ -118,6 +104,9 @@ const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                                 variant='contained'
                                 color='primary'
                                 sx={{ width: "30%", minWidth: "140px" }}
+                                onClick={() => {
+                                    handleProductClick(_id);
+                                }}
                             >
                                 Edit Product
                             </Button>

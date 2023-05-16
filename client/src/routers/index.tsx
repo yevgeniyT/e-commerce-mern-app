@@ -28,6 +28,7 @@ import AdminProductPage from "pages/adminDashbord/AdminProductPage";
 import AdminCustomerPage from "pages/adminDashbord/AdminCustomerPage";
 import AdminOrdersPage from "pages/adminDashbord/AdminOrdersPage";
 import AdminProductCreatePage from "pages/adminDashbord/AdminProductCreatePage";
+import AdminProductEditePage from "pages/adminDashbord/AdminProductEditPage";
 
 const Index = () => {
     return (
@@ -76,19 +77,23 @@ const Index = () => {
                             element={<ProductDetailsPage />}
                         />
                         <Route
-                            path='admin/account/products'
+                            path='/admin/account/products'
                             element={<AdminProductPage />}
                         />
                         <Route
-                            path='admin/account/products/create-new-product'
+                            path='/admin/account/products/create-new-product'
                             element={<AdminProductCreatePage />}
                         />
                         <Route
-                            path='admin/account/customers'
+                            path='admin/account/products/:slug/edit'
+                            element={<AdminProductEditePage />}
+                        />
+                        <Route
+                            path='/admin/account/customers'
                             element={<AdminCustomerPage />}
                         />
                         <Route
-                            path='admin/account/orders'
+                            path='/admin/account/orders'
                             element={<AdminOrdersPage />}
                         />
                         <Route

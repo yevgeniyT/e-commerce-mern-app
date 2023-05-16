@@ -9,7 +9,7 @@ const ProductDetailsPage = () => {
     const { singleProduct, loading, error } = useAppSelector(
         (state) => state.productsR
     );
-
+    // used to change images
     const [selectedImage, setSelectedImage] = useState("");
 
     useEffect(() => {

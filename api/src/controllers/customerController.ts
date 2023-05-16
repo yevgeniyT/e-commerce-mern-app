@@ -154,9 +154,11 @@ const loginCustomer = async (req: Request, res: Response) => {
     if (!isPasswordMatched) {
       return errorHandler(res, 400, 'Incorrect data. Please try again')
     }
+
     const customerId = customer._id
-    // 4. Create an authentication token containing the user's ID and role
-    const authToken = createAuthToken(customer._id)
+
+    // 4. Create an authentication token containing the user's ID and isAdmin value
+    const authToken = createAuthToken(customer._id, customer.isAdmin)
 
     // 5. Reset cookie of there is one for some reason already exists
 

@@ -11,7 +11,6 @@ import {
 import { imageUpload } from '../util/upload'
 
 import {
-  createProduct,
   deleteProduct,
   getAllProducts,
   getFilteredProducts,
@@ -22,15 +21,6 @@ import {
 
 const productRouter = Router()
 
-// 1. POST/api/v1/products -> isLogedIn, isAdmin -> Create product
-// TODO Add admin and isLogedin validation
-productRouter.post(
-  '/',
-  imageUpload.array('images', 5), // in body key is images, up to 5 images in array
-  productValidationRules,
-  runValidation,
-  createProduct
-)
 // 9. GET/api/v1/products/search?searchValue=:searchValue -> Search based on any values
 productRouter.get('/search', searchProducts)
 // 2. GET/api/v1/products/:id -> Get single product

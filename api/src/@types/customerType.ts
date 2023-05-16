@@ -27,4 +27,5 @@ export interface CustomerType extends BaseCustomer {
 export interface CustomerPayload extends Partial<BaseCustomer> {
   customerId?: string
   hashPassword?: string
+  isAdmin?: boolean
 }
