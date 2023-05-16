@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     // todo check if useRef here make sence
     const hasNavigated = useRef(false);
 
-    const { success } = useAppSelector((state) => state.customerR);
+    const { success, isLoggedIn } = useAppSelector((state) => state.customerR);
 
     const [credentials, setCredentials] = useState({
         email: "",
@@ -37,13 +37,13 @@ const LoginPage: React.FC = () => {
     };
 
     useEffect(() => {
-        if (success && !hasNavigated.current) {
+        if (isLoggedIn && !hasNavigated.current) {
             hasNavigated.current = true;
             setTimeout(() => {
                 navigate("/");
             }, 2000);
         }
-    }, [success, navigate]);
+    }, [isLoggedIn, navigate]);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCredentials((prev) => ({

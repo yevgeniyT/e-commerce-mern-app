@@ -20,6 +20,8 @@ const Navbar: React.FC = () => {
     const { avatarImage, isAdmin } = useAppSelector(
         (state) => state.customerR.csutomerShortData
     );
+    console.log(avatarImage);
+
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -34,12 +36,12 @@ const Navbar: React.FC = () => {
         handleClose();
     };
 
-    const handleLogOutCustomer = () => {
+    const handleLogOut = () => {
+        console.log("logout action");
+
         dispatch(logOutCustomer());
         navigate("/");
     };
-
-    const handleLogOutAdmin = () => {};
 
     return (
         <AppBar position='static'>
@@ -121,12 +123,12 @@ const Navbar: React.FC = () => {
                                     <>
                                         <MenuItem
                                             onClick={() =>
-                                                goTo("/admin-dashbord")
+                                                goTo("/admin/account/products")
                                             }
                                         >
                                             Admin Dashboard
                                         </MenuItem>
-                                        <MenuItem onClick={handleLogOutAdmin}>
+                                        <MenuItem onClick={handleLogOut}>
                                             Sign Out
                                         </MenuItem>
                                     </>
@@ -144,9 +146,7 @@ const Navbar: React.FC = () => {
                                         >
                                             My Orders
                                         </MenuItem>
-                                        <MenuItem
-                                            onClick={handleLogOutCustomer}
-                                        >
+                                        <MenuItem onClick={handleLogOut}>
                                             Sign Out
                                         </MenuItem>
                                     </>

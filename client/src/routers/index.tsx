@@ -43,6 +43,7 @@ const Index = () => {
 
                 <main>
                     <Routes>
+                        {/* Common routers */}
                         <Route path='/' element={<HomePage />} />
                         <Route
                             path='/customer/account/create'
@@ -72,35 +73,13 @@ const Index = () => {
                         />
 
                         <Route path='/products' element={<ProductsPage />} />
+
                         <Route
                             path='/products/:slug'
                             element={<ProductDetailsPage />}
                         />
-                        <Route
-                            path='/admin/account/products'
-                            element={<AdminProductPage />}
-                        />
-                        <Route
-                            path='/admin/account/products/create-new-product'
-                            element={<AdminProductCreatePage />}
-                        />
-                        <Route
-                            path='admin/account/products/:slug/edit'
-                            element={<AdminProductEditePage />}
-                        />
-                        <Route
-                            path='/admin/account/customers'
-                            element={<AdminCustomerPage />}
-                        />
-                        <Route
-                            path='/admin/account/orders'
-                            element={<AdminOrdersPage />}
-                        />
-                        <Route
-                            path='customer/account'
-                            element={<CustomerAccount />}
-                        />
 
+                        {/* Logged in customer protected routers */}
                         <Route element={<LoggedInRoute />}>
                             <Route
                                 path='/customer/account/edit'
@@ -110,9 +89,34 @@ const Index = () => {
                                 path='customer/account/logout'
                                 element={<LoginPage />}
                             />
+                            <Route
+                                path='customer/account'
+                                element={<CustomerAccount />}
+                            />
                         </Route>
-
-                        <Route element={<AdminRoute />}></Route>
+                        {/* Admin protected routers */}
+                        <Route element={<AdminRoute />}>
+                            <Route
+                                path='/admin/account/orders'
+                                element={<AdminOrdersPage />}
+                            />
+                            <Route
+                                path='/admin/account/customers'
+                                element={<AdminCustomerPage />}
+                            />
+                            <Route
+                                path='admin/account/products/:slug/edit'
+                                element={<AdminProductEditePage />}
+                            />
+                            <Route
+                                path='/admin/account/products/create-new-product'
+                                element={<AdminProductCreatePage />}
+                            />
+                            <Route
+                                path='/admin/account/products'
+                                element={<AdminProductPage />}
+                            />
+                        </Route>
 
                         <Route path='*' element={<Error />} />
                     </Routes>

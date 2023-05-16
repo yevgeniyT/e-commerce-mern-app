@@ -133,7 +133,7 @@ const loginCustomer = async (req: Request, res: Response) => {
 
     //2 Chek if the user exist already
     const customer = await Customer.findOne({ email: email }).select(
-      'isAdmin password'
+      'isAdmin password avatarImage'
     )
     if (!customer) {
       return errorHandler(

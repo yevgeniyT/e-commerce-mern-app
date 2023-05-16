@@ -235,6 +235,7 @@ export const customerSlice = createSlice({
             })
             .addCase(logOutCustomer.fulfilled, (state, action) => {
                 state.loading = false;
+                state.isAdmin = false;
                 state.error = false;
                 state.success = true;
                 state.isLoggedIn = false;
