@@ -20,7 +20,6 @@ const Navbar: React.FC = () => {
     const { avatarImage, isAdmin } = useAppSelector(
         (state) => state.customerR.csutomerShortData
     );
-    console.log(avatarImage);
 
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -119,38 +118,47 @@ const Navbar: React.FC = () => {
                                 open={Boolean(anchorEl)}
                                 onClose={handleClose}
                             >
-                                {isAdmin ? (
-                                    <>
-                                        <MenuItem
-                                            onClick={() =>
-                                                goTo("/admin/account/products")
-                                            }
-                                        >
-                                            Admin Dashboard
-                                        </MenuItem>
-                                        <MenuItem onClick={handleLogOut}>
-                                            Sign Out
-                                        </MenuItem>
-                                    </>
-                                ) : (
-                                    <>
-                                        <MenuItem
-                                            onClick={() =>
-                                                goTo("/user-dashbord")
-                                            }
-                                        >
-                                            Profile
-                                        </MenuItem>
-                                        <MenuItem
-                                            onClick={() => goTo("/my-orders")}
-                                        >
-                                            My Orders
-                                        </MenuItem>
-                                        <MenuItem onClick={handleLogOut}>
-                                            Sign Out
-                                        </MenuItem>
-                                    </>
-                                )}
+                                {isAdmin
+                                    ? [
+                                          <MenuItem
+                                              key='admin-dashboard'
+                                              onClick={() =>
+                                                  goTo(
+                                                      "/admin/account/products"
+                                                  )
+                                              }
+                                          >
+                                              Admin Dashboard
+                                          </MenuItem>,
+                                          <MenuItem
+                                              key='logout'
+                                              onClick={handleLogOut}
+                                          >
+                                              Sign Out
+                                          </MenuItem>,
+                                      ]
+                                    : [
+                                          <MenuItem
+                                              key='profile'
+                                              onClick={() =>
+                                                  goTo("/user-dashbord")
+                                              }
+                                          >
+                                              Profile
+                                          </MenuItem>,
+                                          <MenuItem
+                                              key='my-orders'
+                                              onClick={() => goTo("/my-orders")}
+                                          >
+                                              My Orders
+                                          </MenuItem>,
+                                          <MenuItem
+                                              key='logout'
+                                              onClick={handleLogOut}
+                                          >
+                                              Sign Out
+                                          </MenuItem>,
+                                      ]}
                             </Menu>
                         </>
                     )}

@@ -21,6 +21,8 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { getAllCategories } from "features/categories/categoryThunk";
 import { getAllBrands } from "features/brands/brandThunk";
+import { createNewProduct } from "features/admin/adminThunk";
+import Loading from "components/common/Loading";
 
 const AdminProductCreatePage: React.FC = () => {
     //Use hooks
@@ -31,6 +33,7 @@ const AdminProductCreatePage: React.FC = () => {
 
     const categories = useAppSelector((state) => state.categoriesR.categories);
     const brands = useAppSelector((state) => state.brandsR.brands);
+    const { loading } = useAppSelector((state) => state.adminR);
     // 1. Set nedded states
     // 1.1 Set state to get and store users data from input
     const [newProduct, setNewProduct] = useState({
@@ -56,12 +59,12 @@ const AdminProductCreatePage: React.FC = () => {
             newProductFormData.append("brand", Brand);
             if (newProduct.images) {
                 newProduct.images.forEach((image, index) => {
-                    // Loop through the images and append each one. The forEach loop provides two values: the current item (in this case, image), and the current index (in this case, index).For the first image file in the array, index will be 0 and image will be the first image file. So, "images[" + index + "]" -> (expression of concatination) will be "images[0]", and the append method will add a field named "images[0]" with the value of the first image file to the FormData object.
-                    newProductFormData.append("images[" + index + "]", image);
+                    // Loop through the images and append each one. The forEach loop provides two values: the current item (in this case, image), and the current index (in this case, index).
+                    newProductFormData.append("images", image);
                 });
             }
 
-            // dispatch(createNewProduct(newProductFormData));
+            dispatch(createNewProduct(newProductFormData));
         } catch (error) {
             if (error instanceof Error) {
                 console.log("Error while creating form-data - ", error.message);
@@ -108,6 +111,10 @@ const AdminProductCreatePage: React.FC = () => {
     useEffect(() => {
         dispatch(getAllBrands());
     }, [dispatch]);
+
+    if (loading) {
+        return <Loading />;
+    }
     return (
         <Container maxWidth='sm'>
             <Box sx={{ mt: 8 }}>
