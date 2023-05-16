@@ -126,48 +126,48 @@ const deleteProduct = async (req: Request, res: Response) => {
 }
 // 5. Update product
 // TODO add image update, review update if not all fileds are added
-const updateProduct = async (req: Request, res: Response) => {
-  try {
-    // 1.  Get name and description from req.body
-    const { name, description, price }: PartialProductType = req.body
-    const { id } = req.params
+// const updateProduct = async (req: Request, res: Response) => {
+//   try {
+//     // 1.  Get name and description from req.body
+//     const { name, description, price }: PartialProductType = req.body
+//     const { id } = req.params
 
-    // 1.1. Create filter, updates, and options for the findByIdAndUpdate method
-    const updates: PartialProductType = {
-      description: description,
-      price: price,
-    }
+//     // 1.1. Create filter, updates, and options for the findByIdAndUpdate method
+//     const updates: PartialProductType = {
+//       description: description,
+//       price: price,
+//     }
 
-    // If name is present, include it and its slugified version in the updates
-    if (name) {
-      updates.name = name
-      updates.slug = slugify(name)
-    }
-    const option = { new: true } // to return updated value imidiately
-    const updatesForMongo = { $set: updates } // sets updates with optional filds
+//     // If name is present, include it and its slugified version in the updates
+//     if (name) {
+//       updates.name = name
+//       updates.slug = slugify(name)
+//     }
+//     const option = { new: true } // to return updated value imidiately
+//     const updatesForMongo = { $set: updates } // sets updates with optional filds
 
-    // 2. Update the product with the given id and return the updated document
-    const product = await Product.findByIdAndUpdate(id, updatesForMongo, option)
-    // 3. Check if the product with the given id exists
-    if (!product) {
-      return errorHandler(res, 404, 'Product not found')
-    }
+//     // 2. Update the product with the given id and return the updated document
+//     const product = await Product.findByIdAndUpdate(id, updatesForMongo, option)
+//     // 3. Check if the product with the given id exists
+//     if (!product) {
+//       return errorHandler(res, 404, 'Product not found')
+//     }
 
-    // 4. Send the successful response after deleting the product
-    return successHandler(res, 200, 'Product updated successfully', {
-      product,
-    })
-  } catch (error: unknown) {
-    // Handle different types of errors
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error('An unknown error occurred.')
-    }
-    // Send the error response
-    return errorHandler(res, 500, 'Error whule updating the product')
-  }
-}
+//     // 4. Send the successful response after deleting the product
+//     return successHandler(res, 200, 'Product updated successfully', {
+//       product,
+//     })
+//   } catch (error: unknown) {
+//     // Handle different types of errors
+//     if (error instanceof Error) {
+//       console.error(error.message)
+//     } else {
+//       console.error('An unknown error occurred.')
+//     }
+//     // Send the error response
+//     return errorHandler(res, 500, 'Error whule updating the product')
+//   }
+// }
 // 6. Filter products by price brand and category
 const getFilteredProducts = async (req: Request, res: Response) => {
   try {

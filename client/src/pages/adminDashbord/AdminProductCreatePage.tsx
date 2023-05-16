@@ -260,3 +260,5 @@ const AdminProductCreatePage: React.FC = () => {
 };
 
 export default AdminProductCreatePage;
+
+//TODO Add navigation to product page after success
