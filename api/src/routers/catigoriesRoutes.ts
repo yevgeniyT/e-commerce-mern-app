@@ -3,10 +3,8 @@ import { Router } from 'express'
 
 // other components import
 import {
-  deleteCategory,
   getAllCategories,
   getSingleCategory,
-  updateCategory,
 } from '../controllers/categoryController'
 import { categoryValidationRules } from '../validations/categoryValidators'
 import runValidation from '../validations'
@@ -18,15 +16,5 @@ categoryRouter.get('/', getAllCategories)
 
 // 3. Get single category
 categoryRouter.get('/:id', getSingleCategory)
-
-// 4. Delete single category
-categoryRouter.delete('/:id', deleteCategory)
-// 5. Update category
-categoryRouter.put(
-  '/:id',
-  categoryValidationRules,
-  runValidation,
-  updateCategory
-)
 
 export default categoryRouter

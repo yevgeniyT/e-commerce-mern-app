@@ -3,6 +3,7 @@ export interface CategoryType {
     name: string;
     description?: string;
     productCount: number;
+    slug?: string;
 }
 
 export interface NewCategory {

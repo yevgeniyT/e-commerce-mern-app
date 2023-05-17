@@ -12,7 +12,9 @@ import {
   adminToogleIsActive,
   adminUpdateProduct,
   createCategory,
+  deleteCategory,
   getAllCustomers,
+  updateCategory,
 } from '../controllers/adminControllers'
 import { categoryValidationRules } from '../validations/categoryValidators'
 
@@ -48,6 +50,16 @@ adminRouter.put(
 
 // 3. GET/api/v1/admin/customers -> isLogedIn, isAdmin -> Get all customers
 adminRouter.get('/customers', isLoggedIn, isAdmin, getAllCustomers)
+
+// 4. Delete single category
+adminRouter.delete('/categories/:id', isLoggedIn, isAdmin, deleteCategory)
+// 5. Update category
+adminRouter.put(
+  '/categories/:id',
+  categoryValidationRules,
+  runValidation,
+  updateCategory
+)
 
 // 4.  POST/api/v1/admin/categories -> isLogedIn, isAdmin -> Create category
 adminRouter.post(

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { useAppDispatch } from "redux/hooks";
-import { toogleIsActive } from "features/admin/adminThunk";
+
 import { CustomerType } from "types/customerType";
 
 interface ListItemProps {

@@ -15,21 +15,25 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useAppDispatch } from "redux/hooks";
 
 import { CategoryType } from "types/categoryType";
+import { getSingleCategory } from "features/categories/categoryThunk";
 
 interface ListItemProps {
     category: CategoryType;
 }
 
 const AdminCategoryListItem: React.FC<ListItemProps> = ({ category }) => {
-    const { name, _id } = category;
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
+
+    const { name, _id, slug } = category;
 
     // const dispatch = useAppDispatch();
     // const navigate = useNavigate();
 
-    // const handleClick = (id: string) => {
-    //     dispatch(getSingleProduct(id));
-    //     navigate(`/admin/account/products/${slug}/edit`);
-    // };
+    const handleCategoryClick = (id: string) => {
+        dispatch(getSingleCategory(id));
+        navigate(`/admin/account/categories/${slug}/edit`);
+    };
 
     return (
         <Card>
@@ -58,7 +62,7 @@ const AdminCategoryListItem: React.FC<ListItemProps> = ({ category }) => {
                     <IconButton
                         color='primary'
                         onClick={() => {
-                            // handleProductClick(_id);
+                            handleCategoryClick(_id);
                         }}
                     >
                         <EditIcon />
