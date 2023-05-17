@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import {
     createNewCategory,
     createNewProduct,
+    deleteCategory,
     getAllCustomers,
     toogleIsActive,
     updateCategory,
@@ -146,7 +147,7 @@ export const adminSlice = createSlice({
                     "Unable to create category. Please try again.";
                 toast.error(action.error.message);
             });
-        // 2. Update category
+        // 5. Update category
         builder
             .addCase(updateCategory.pending, (state) => {
                 state.loading = true;
@@ -165,7 +166,29 @@ export const adminSlice = createSlice({
                 state.message =
                     action.error.message ||
                     // use alias to handle undefined type
-                    "Unable to update product. Please try again.";
+                    "Unable to update category. Please try again.";
+                toast.error(action.error.message);
+            });
+        // 5. Delete category
+        builder
+            .addCase(deleteCategory.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(deleteCategory.fulfilled, (state, action) => {
+                state.loading = false;
+                state.success = true;
+                toast.success(action.payload.message);
+            })
+            .addCase(deleteCategory.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
+                state.message =
+                    action.error.message ||
+                    // use alias to handle undefined type
+                    "Unable to delete category. Please try again.";
                 toast.error(action.error.message);
             });
     },

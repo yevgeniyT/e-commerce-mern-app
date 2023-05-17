@@ -11,11 +11,16 @@ import {
 
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useAppDispatch } from "redux/hooks";
 
 import { CategoryType } from "types/categoryType";
-import { getSingleCategory } from "features/categories/categoryThunk";
+import {
+    getAllCategories,
+    getSingleCategory,
+} from "features/categories/categoryThunk";
+import { deleteCategory } from "features/admin/adminThunk";
 
 interface ListItemProps {
     category: CategoryType;
@@ -27,18 +32,20 @@ const AdminCategoryListItem: React.FC<ListItemProps> = ({ category }) => {
 
     const { name, _id, slug } = category;
 
-    // const dispatch = useAppDispatch();
-    // const navigate = useNavigate();
-
     const handleCategoryClick = (id: string) => {
         dispatch(getSingleCategory(id));
         navigate(`/admin/account/categories/${slug}/edit`);
+    };
+    const handleCategoryDelete = (id: string) => {
+        dispatch(deleteCategory(id)).then(() => {
+            dispatch(getAllCategories());
+        });
     };
 
     return (
         <Card>
             <Grid container>
-                <Grid item xs={11}>
+                <Grid item xs={10}>
                     <CardContent
                         sx={{
                             height: "100%",
@@ -52,7 +59,7 @@ const AdminCategoryListItem: React.FC<ListItemProps> = ({ category }) => {
                 </Grid>
                 <Grid
                     item
-                    xs={1}
+                    xs={2}
                     sx={{
                         display: "flex",
                         alignItems: "botton",
@@ -66,6 +73,14 @@ const AdminCategoryListItem: React.FC<ListItemProps> = ({ category }) => {
                         }}
                     >
                         <EditIcon />
+                    </IconButton>
+                    <IconButton
+                        color='error'
+                        onClick={() => {
+                            handleCategoryDelete(_id);
+                        }}
+                    >
+                        <DeleteIcon />
                     </IconButton>
                 </Grid>
             </Grid>
