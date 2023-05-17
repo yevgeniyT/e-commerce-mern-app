@@ -100,7 +100,12 @@ const AdminSidebar = () => {
                                 paddingRight: "1rem",
                             }}
                         >
-                            <Button size='small'>Edit</Button>
+                            <Button
+                                size='small'
+                                onClick={() => goTo("/admin/account/edit")}
+                            >
+                                Edit
+                            </Button>
                         </CardActions>
                     </Grid>
                 </Grid>

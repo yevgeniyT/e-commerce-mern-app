@@ -7,6 +7,7 @@ export interface Address {
 }
 
 export interface BaseCustomer {
+    _id: string;
     firstName: string;
     lastName: string;
     email: string;

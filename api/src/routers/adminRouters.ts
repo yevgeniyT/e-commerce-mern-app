@@ -11,6 +11,7 @@ import {
   adminCreateProduct,
   adminToogleIsActive,
   adminUpdateProduct,
+  getAllCustomers,
 } from '../controllers/adminControllers'
 
 const adminRouter = Router()
@@ -42,5 +43,8 @@ adminRouter.put(
   runValidation,
   adminUpdateProduct
 )
+
+// 3. GET/api/v1/admin/customers -> isLogedIn, isAdmin -> Get all customers
+adminRouter.get('/customers', isLoggedIn, isAdmin, getAllCustomers)
 
 export default adminRouter

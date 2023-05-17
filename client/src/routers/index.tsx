@@ -29,6 +29,7 @@ import AdminCustomerPage from "pages/adminDashbord/AdminCustomerPage";
 import AdminOrdersPage from "pages/adminDashbord/AdminOrdersPage";
 import AdminProductCreatePage from "pages/adminDashbord/AdminProductCreatePage";
 import AdminProductEditePage from "pages/adminDashbord/AdminProductEditPage";
+import AdminEditProfilePage from "pages/adminDashbord/AdminEditProfilePAge";
 
 const Index = () => {
     return (
@@ -114,6 +115,10 @@ const Index = () => {
                             <Route
                                 path='/admin/account/products'
                                 element={<AdminProductPage />}
+                            />
+                            <Route
+                                path='admin/account/edit'
+                                element={<AdminEditProfilePage />}
                             />
                         </Route>
 

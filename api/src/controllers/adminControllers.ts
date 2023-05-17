@@ -7,6 +7,7 @@ import { Types } from 'mongoose'
 import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import { PartialProductType, ProductType } from '../@types/productTypes'
 import Product from '../models/productSchema'
+import Customer from '../models/customersSchems'
 
 // 1. Create new Product
 const adminCreateProduct = async (
@@ -114,7 +115,6 @@ const adminUpdateProduct = async (
     return errorHandler(res, 500, 'Error while deleting the product')
   }
 }
-
 // 3. Set is product active
 const adminToogleIsActive = async (req: Request, res: Response) => {
   try {
@@ -151,4 +151,56 @@ const adminToogleIsActive = async (req: Request, res: Response) => {
   }
 }
 
-export { adminCreateProduct, adminUpdateProduct, adminToogleIsActive }
+// 4. Get all customers
+const getAllCustomers = async (req: Request, res: Response) => {
+  try {
+    // Retrieve the page, limit, sortBy, and sortOrder from the query parameters in the request. Set default values if they are not provided.
+    const page = parseInt(req.query.page as string) || 1 // geting page number from request query with default 1
+    const limit = parseInt(req.query.limit as string) || 3
+
+    const totalDocuments = await Customer.countDocuments()
+    // TODO Update orders when be done
+    // 1. Fetch all products from the database
+    const customers = await Customer.find({})
+      // .select('name slug description price images brand isActive')
+      // .populate('orders', '')
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ updatedAt: -1 }) // sort by timestamp
+      .lean()
+    //Category.find({}): Find all documents in the Category collection without any filters or conditions.
+    //.select('name slug description'): Include only the 'name', 'slug', and 'description' fields in the resulting documents. All other fields will be excluded.
+    // When you use lean(), it tells Mongoose to return plain JavaScript objects instead of Mongoose documents. This can significantly improve query performance and reduce memory usage, especially when dealing with large datasets.
+
+    if (!customers) {
+      errorHandler(res, 404, 'No customers found')
+    }
+
+    // 2. Send the successful response with fetched products
+    return successHandler(res, 200, 'Customers fetched successfully', {
+      customers,
+      pagination: {
+        curentPage: page,
+        previousPage: page - 1,
+        nextPage: page + 1,
+        totalNumberOfProducts: totalDocuments,
+        totalPages: Math.ceil(totalDocuments / limit),
+      },
+    })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while fetching all customers')
+  }
+}
+export {
+  adminCreateProduct,
+  adminUpdateProduct,
+  adminToogleIsActive,
+  getAllCustomers,
+}
