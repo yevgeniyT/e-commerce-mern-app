@@ -4,3 +4,7 @@ export interface CategoryType {
     description?: string;
     productCount: number;
 }
+
+export interface NewCategory {
+    name: string;
+}

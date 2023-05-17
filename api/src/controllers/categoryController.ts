@@ -8,32 +8,6 @@ import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import Category from '../models/categorySchema'
 import Product from '../models/productSchema'
 
-// 1. Create new category
-const createCategory = async (req: Request, res: Response) => {
-  try {
-    // 1. Get name and description from req.body
-    const { name, description } = req.body
-
-    // 2. Create category and save it to db by using create metod
-    const category = await Category.create({
-      name: name,
-      description: description,
-      // use to create slug name from name
-      slug: slugify(name),
-    })
-
-    return successHandler(res, 200, 'Category was created successfuly')
-  } catch (error: unknown) {
-    // Handle different types of errors
-    if (error instanceof Error) {
-      console.error(error.message)
-    } else {
-      console.error('An unknown error occurred.')
-    }
-    // Send the error response
-    return errorHandler(res, 500, 'Error while  creating category')
-  }
-}
 // 2.  Get all categories
 const getAllCategories = async (req: Request, res: Response) => {
   try {
@@ -188,10 +162,4 @@ const updateCategory = async (req: Request, res: Response) => {
   }
 }
 
-export {
-  createCategory,
-  getAllCategories,
-  getSingleCategory,
-  deleteCategory,
-  updateCategory,
-}
+export { getAllCategories, getSingleCategory, deleteCategory, updateCategory }

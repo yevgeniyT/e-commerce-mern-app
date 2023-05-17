@@ -125,7 +125,7 @@ const AdminSidebar = () => {
                     >
                         <ListItemText
                             sx={{ marginLeft: "16px" }}
-                            primary='All Products'
+                            primary='Products'
                         />
                     </ListItem>
 
@@ -138,6 +138,26 @@ const AdminSidebar = () => {
                         <ListItemText
                             sx={{ marginLeft: "16px" }}
                             primary='Add New Product'
+                        />
+                    </ListItem>
+
+                    <ListItem
+                        button
+                        onClick={() => goTo("/admin/account/categories")}
+                    >
+                        <ListItemText
+                            sx={{ marginLeft: "16px" }}
+                            primary='Categories'
+                        />
+                    </ListItem>
+
+                    <ListItem
+                        button
+                        onClick={() => goTo("/admin/account/brands")}
+                    >
+                        <ListItemText
+                            sx={{ marginLeft: "16px" }}
+                            primary='Brands'
                         />
                     </ListItem>
                 </List>

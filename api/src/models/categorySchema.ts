@@ -44,3 +44,5 @@ const categorySchema: Schema = new mongoose.Schema(
 const Category = mongoose.model<ICategory>('Category', categorySchema)
 
 export default Category
+
+//TODO Delete description

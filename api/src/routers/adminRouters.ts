@@ -11,8 +11,10 @@ import {
   adminCreateProduct,
   adminToogleIsActive,
   adminUpdateProduct,
+  createCategory,
   getAllCustomers,
 } from '../controllers/adminControllers'
+import { categoryValidationRules } from '../validations/categoryValidators'
 
 const adminRouter = Router()
 
@@ -46,5 +48,15 @@ adminRouter.put(
 
 // 3. GET/api/v1/admin/customers -> isLogedIn, isAdmin -> Get all customers
 adminRouter.get('/customers', isLoggedIn, isAdmin, getAllCustomers)
+
+// 4.  POST/api/v1/admin/categories -> isLogedIn, isAdmin -> Create category
+adminRouter.post(
+  '/categories',
+  isLoggedIn,
+  isAdmin,
+  categoryValidationRules,
+  runValidation,
+  createCategory
+)
 
 export default adminRouter

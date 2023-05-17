@@ -3,7 +3,6 @@ import { Router } from 'express'
 
 // other components import
 import {
-  createCategory,
   deleteCategory,
   getAllCategories,
   getSingleCategory,
@@ -13,10 +12,6 @@ import { categoryValidationRules } from '../validations/categoryValidators'
 import runValidation from '../validations'
 
 const categoryRouter = Router()
-
-// 1. Create category
-// TODO Add admin and isLogedin validation
-categoryRouter.post('/', categoryValidationRules, runValidation, createCategory)
 
 // 2. Get all categories
 categoryRouter.get('/', getAllCategories)

@@ -30,6 +30,8 @@ import AdminOrdersPage from "pages/adminDashbord/AdminOrdersPage";
 import AdminProductCreatePage from "pages/adminDashbord/AdminProductCreatePage";
 import AdminProductEditePage from "pages/adminDashbord/AdminProductEditPage";
 import AdminEditProfilePage from "pages/adminDashbord/AdminEditProfilePAge";
+import AdminCategoriesPage from "pages/adminDashbord/AdminCategoriesPage";
+import { AdminBrandsPage } from "pages/adminDashbord/AdminBrandsPage";
 
 const Index = () => {
     return (
@@ -119,6 +121,14 @@ const Index = () => {
                             <Route
                                 path='admin/account/edit'
                                 element={<AdminEditProfilePage />}
+                            />
+                            <Route
+                                path='/admin/account/categories'
+                                element={<AdminCategoriesPage />}
+                            />
+                            <Route
+                                path='/admin/account/brands'
+                                element={<AdminBrandsPage />}
                             />
                         </Route>
 

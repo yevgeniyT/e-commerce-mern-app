@@ -11,6 +11,7 @@ const categoryValidationRules = [
     .withMessage('Category name cannot be longer than 50 characters'),
   body('description')
     .trim()
+    .optional()
     .isLength({ max: 500 })
     .withMessage('Category description cannot be longer than 500 characters'),
 ]

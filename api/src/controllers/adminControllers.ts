@@ -8,6 +8,7 @@ import { successHandler, errorHandler } from '../helpers/requestsHandler'
 import { PartialProductType, ProductType } from '../@types/productTypes'
 import Product from '../models/productSchema'
 import Customer from '../models/customersSchems'
+import Category from '../models/categorySchema'
 
 // 1. Create new Product
 const adminCreateProduct = async (
@@ -198,9 +199,37 @@ const getAllCustomers = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error while fetching all customers')
   }
 }
+
+// 6. Create new category
+const createCategory = async (req: Request, res: Response) => {
+  try {
+    // 1. Get name and description from req.body
+    const { name, description } = req.body
+
+    // 2. Create category and save it to db by using create metod
+    const category = await Category.create({
+      name: name,
+      description: description,
+      // use to create slug name from name
+      slug: slugify(name),
+    })
+
+    return successHandler(res, 200, 'Category was created successfuly')
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while  creating category')
+  }
+}
 export {
   adminCreateProduct,
   adminUpdateProduct,
   adminToogleIsActive,
   getAllCustomers,
+  createCategory,
 }
