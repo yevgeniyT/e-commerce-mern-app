@@ -26,6 +26,7 @@ const getAllProducts = async (req: Request, res: Response) => {
       .populate('brand', 'name slug')
       .skip((page - 1) * limit)
       .limit(limit)
+      .sort({ updatedAt: -1 }) // sort by timestamp
       .lean()
     //Category.find({}): Find all documents in the Category collection without any filters or conditions.
     //.select('name slug description'): Include only the 'name', 'slug', and 'description' fields in the resulting documents. All other fields will be excluded.
@@ -69,7 +70,7 @@ const getSingleProduct = async (req: Request, res: Response) => {
 
     // 2. Fetch the product with the given id from the database
     const product = await Product.findById(id)
-      .select('name slug description price images brand isActive')
+      .select('name slug description price images brand isActive category')
       .lean()
 
     // Check if the category exists

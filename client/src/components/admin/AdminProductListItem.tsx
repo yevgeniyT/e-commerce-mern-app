@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     Box,
@@ -8,28 +8,46 @@ import {
     CardContent,
     Typography,
     Button,
-    useTheme,
     Checkbox,
     FormControlLabel,
 } from "@mui/material";
 import { ProductType } from "types/productTypes";
 import { getSingleProduct } from "features/products/productsThunk";
 import { useAppDispatch } from "redux/hooks";
+import { toogleIsActive } from "features/admin/adminThunk";
 
 interface ProductCardItemProps {
     product: ProductType;
 }
 
 const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
-    const { name, price, images, discount, category, brand, slug, _id } =
-        product;
+    const {
+        name,
+        price,
+        images,
+        discount,
+        category,
+        brand,
+        slug,
+        _id,
+        isActive,
+    } = product;
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
+    const [activeProduct, setActiveProduct] = useState(isActive);
+
     const handleProductClick = (id: string) => {
         dispatch(getSingleProduct(id));
-        navigate(`/products/${slug}`);
+        navigate(`/admin/account/products/${slug}/edit`);
     };
+    //TODO make it more dependent on state in db not in lockal state
+    const handleIsActiveChange = (id: string) => {
+        setActiveProduct(!activeProduct);
+        dispatch(toogleIsActive(id));
+    };
+
     return (
         <Card>
             <Grid container>
@@ -113,10 +131,10 @@ const AdminProductListItem: React.FC<ProductCardItemProps> = ({ product }) => {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        // checked={isActive}
-                                        // onChange={() =>
-                                        //     handleIsActiveChange(_id)
-                                        // }
+                                        checked={activeProduct}
+                                        onChange={() =>
+                                            handleIsActiveChange(_id)
+                                        }
                                         name='isActive'
                                         color='primary'
                                     />

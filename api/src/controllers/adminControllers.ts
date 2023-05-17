@@ -115,4 +115,40 @@ const adminUpdateProduct = async (
   }
 }
 
-export { adminCreateProduct, adminUpdateProduct }
+// 3. Set is product active
+const adminToogleIsActive = async (req: Request, res: Response) => {
+  try {
+    // 1. Get id from request params
+    const { id } = req.params
+
+    // 2. Fetch the current state of the product from the database
+    const product = await Product.findById(id)
+
+    // 3. Check if the product with the given id exists
+    if (!product) {
+      return errorHandler(res, 404, 'Product not found')
+    }
+
+    // 4. Toggle isActive status
+    product.isActive = !product.isActive
+
+    // 5. Save the updated product
+    await product.save()
+
+    // 6. Send the successful response after updating the product
+    return successHandler(res, 200, 'Product updated successfully', {
+      product,
+    })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while updating the product')
+  }
+}
+
+export { adminCreateProduct, adminUpdateProduct, adminToogleIsActive }

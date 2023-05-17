@@ -30,7 +30,7 @@ const persistConfig = {
     //storage engine used to store the state. In this case we use the browser's localStorage
     storage,
     //This is an array of reducer keys that will be persist. Only the state slices corresponding to these keys will be persisted
-    whitelist: ["customerR"],
+    whitelist: ["customerR", "productsR"],
 };
 //When use the persistedReducer to create Redux store, the redux-persist library will automatically persist the whitelisted state slices to the storage engine whenever the state changes. When the application loads, redux-persist will also rehydrate the state from the storage back into the Redux store, ensuring that the persisted data is available across sessions.
 const persistedReducer = persistReducer(persistConfig, rootReducer);

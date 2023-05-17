@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { useNavigate } from "react-router-dom";
 import {
     List,
@@ -18,17 +20,21 @@ import {
 } from "@mui/material";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
+import { getCustomerProfile } from "features/customers/customersThunk";
 
 const AdminSidebar = () => {
-    // Fetch customerData from your state/store here.
-    // For this example, I'll use a dummy data
-    const customerData = {
-        role: "Admin",
-        firstName: "Admin",
-        lastName: "User",
-        avatarImage: "/path/to/avatar/image",
-        email: "admin@example.com",
-    };
+    const dispatch = useAppDispatch();
+    const dispatched = useRef(false);
+    const customerData = useAppSelector((state) => state.customerR.customer);
+
+    useEffect(() => {
+        if (!dispatched.current) {
+            console.log("dispatch action");
+
+            dispatch(getCustomerProfile());
+            dispatched.current = true;
+        }
+    }, [dispatch]);
 
     const navigate = useNavigate();
 
@@ -63,8 +69,8 @@ const AdminSidebar = () => {
                             }}
                         >
                             <Avatar
-                                alt={`${customerData.firstName} ${customerData.lastName}`}
-                                src={customerData.avatarImage}
+                                alt={`${customerData?.firstName} ${customerData?.lastName}`}
+                                src={customerData?.avatarImage}
                                 sx={{
                                     width: 75,
                                     height: 75,
@@ -76,15 +82,15 @@ const AdminSidebar = () => {
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <CardHeader
-                            title={`${customerData.role}`}
-                            subheader={`${customerData.firstName} ${customerData.lastName}`}
+                            title={`Admin`}
+                            subheader={`${customerData?.firstName} ${customerData?.lastName}`}
                         />
                         <CardContent
                             sx={{ paddingTop: "0", paddingBottom: "0" }}
                         >
                             <Typography variant='body1' gutterBottom>
                                 <strong>Email: </strong>{" "}
-                                {`${customerData.email}`}
+                                {`${customerData?.email}`}
                             </Typography>
                         </CardContent>
                         <CardActions

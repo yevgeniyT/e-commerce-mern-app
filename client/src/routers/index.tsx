@@ -78,7 +78,10 @@ const Index = () => {
                             path='/products/:slug'
                             element={<ProductDetailsPage />}
                         />
-
+                        <Route
+                            path='customer/account'
+                            element={<CustomerAccount />}
+                        />
                         {/* Logged in customer protected routers */}
                         <Route element={<LoggedInRoute />}>
                             <Route
@@ -88,10 +91,6 @@ const Index = () => {
                             <Route
                                 path='customer/account/logout'
                                 element={<LoginPage />}
-                            />
-                            <Route
-                                path='customer/account'
-                                element={<CustomerAccount />}
                             />
                         </Route>
                         {/* Admin protected routers */}

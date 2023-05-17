@@ -9,6 +9,7 @@ import { isLoggedIn } from '../middlewares/isLoggedIn'
 import { isAdmin } from '../middlewares/isAdmin'
 import {
   adminCreateProduct,
+  adminToogleIsActive,
   adminUpdateProduct,
 } from '../controllers/adminControllers'
 
@@ -24,8 +25,14 @@ adminRouter.post(
   runValidation,
   adminCreateProduct
 )
-
-// 2. PUT/api/v1/admin/products/:id -> isLogedIn, isAdmin -> Updtae product
+// 2. PUT/api/v1/admin/products/:id/active -> isLogedIn, isAdmin -> Toggle isActive
+adminRouter.put(
+  '/products/:id/active',
+  isLoggedIn,
+  isAdmin,
+  adminToogleIsActive
+)
+// 3. PUT/api/v1/admin/products/:id -> isLogedIn, isAdmin -> Updtae product
 adminRouter.put(
   '/products/:id',
   imageUpload.array('images', 5), // in body key is images, up to 5 images in array

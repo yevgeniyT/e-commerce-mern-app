@@ -21,6 +21,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 
 import { getAllCategories } from "features/categories/categoryThunk";
 import { getAllBrands } from "features/brands/brandThunk";
+import { updateProduct } from "features/admin/adminThunk";
 
 const AdminProductEditePage: React.FC = () => {
     //Use hooks
@@ -28,9 +29,13 @@ const AdminProductEditePage: React.FC = () => {
     const dispatch = useAppDispatch();
 
     // Get data from store
+    const { singleProduct } = useAppSelector((state) => state.productsR);
+
+    console.log("diatils action");
 
     const categories = useAppSelector((state) => state.categoriesR.categories);
     const brands = useAppSelector((state) => state.brandsR.brands);
+
     // 1. Set nedded states
     // 1.1 Set state to get and store users data from input
     const [newProduct, setNewProduct] = useState({
@@ -48,20 +53,30 @@ const AdminProductEditePage: React.FC = () => {
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
         try {
-            const newProductFormData = new FormData();
-            newProductFormData.append("name", newProduct.name);
-            newProductFormData.append("description", newProduct.description);
-            newProductFormData.append("price", newProduct.price);
-            newProductFormData.append("category", Category);
-            newProductFormData.append("brand", Brand);
+            const newProductData = new FormData();
+            newProductData.append("name", newProduct.name);
+            newProductData.append("description", newProduct.description);
+            newProductData.append("price", newProduct.price);
+            newProductData.append("category", Category);
+            newProductData.append("brand", Brand);
             if (newProduct.images) {
                 newProduct.images.forEach((image, index) => {
                     // Loop through the images and append each one. The forEach loop provides two values: the current item (in this case, image), and the current index (in this case, index).For the first image file in the array, index will be 0 and image will be the first image file. So, "images[" + index + "]" -> (expression of concatination) will be "images[0]", and the append method will add a field named "images[0]" with the value of the first image file to the FormData object.
-                    newProductFormData.append("images[" + index + "]", image);
+                    newProductData.append("images", image);
                 });
             }
 
-            // dispatch(createNewProduct(newProductFormData));
+            if (singleProduct) {
+                dispatch(
+                    updateProduct({
+                        id: singleProduct._id,
+                        newProductData: newProductData,
+                    })
+                );
+                navigate("/admin/account/products");
+            } else {
+                console.log("Cant update product");
+            }
         } catch (error) {
             if (error instanceof Error) {
                 console.log("Error while creating form-data - ", error.message);
@@ -108,11 +123,25 @@ const AdminProductEditePage: React.FC = () => {
     useEffect(() => {
         dispatch(getAllBrands());
     }, [dispatch]);
+
+    // Use useEffect to update state when singleProduct changes
+    useEffect(() => {
+        if (singleProduct) {
+            setNewProduct({
+                name: singleProduct.name || "",
+                description: singleProduct.description || "",
+                price: singleProduct.price.toString() || "",
+                images: null,
+            });
+            setCategory(singleProduct.category.name);
+        }
+    }, [singleProduct]);
+
     return (
         <Container maxWidth='sm'>
             <Box sx={{ mt: 8 }}>
-                <Typography variant='h4' align='center'>
-                    Create New Product
+                <Typography variant='h4' align='center' sx={{ mb: 3 }}>
+                    Update Product
                 </Typography>
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={2}>
@@ -142,6 +171,7 @@ const AdminProductEditePage: React.FC = () => {
                             <TextField
                                 required
                                 fullWidth
+                                type='number'
                                 name='price'
                                 label='Price'
                                 value={newProduct.price}
@@ -241,7 +271,7 @@ const AdminProductEditePage: React.FC = () => {
                                     variant='contained'
                                     color='primary'
                                 >
-                                    Create Product
+                                    Update Product
                                 </Button>
                             </Box>
                         </Grid>
