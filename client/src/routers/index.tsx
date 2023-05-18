@@ -33,6 +33,8 @@ import AdminEditProfilePage from "pages/adminDashbord/AdminEditProfilePAge";
 import AdminCategoriesPage from "pages/adminDashbord/AdminCategoriesPage";
 import { AdminBrandsPage } from "pages/adminDashbord/AdminBrandsPage";
 import AdminCategoryEditePage from "pages/adminDashbord/AdminCategoryEdirPage";
+import CustomerAcountPage from "pages/customers/CustomerAccountPage";
+import ShoppingCartPage from "pages/orders/ShopingCartPage";
 
 const Index = () => {
     return (
@@ -83,9 +85,10 @@ const Index = () => {
                             element={<ProductDetailsPage />}
                         />
                         <Route
-                            path='customer/account'
-                            element={<CustomerAccount />}
+                            path='/chekout/cart'
+                            element={<ShoppingCartPage />}
                         />
+
                         {/* Logged in customer protected routers */}
                         <Route element={<LoggedInRoute />}>
                             <Route
@@ -95,6 +98,10 @@ const Index = () => {
                             <Route
                                 path='customer/account/logout'
                                 element={<LoginPage />}
+                            />
+                            <Route
+                                path='customer/account'
+                                element={<CustomerAcountPage />}
                             />
                         </Route>
                         {/* Admin protected routers */}

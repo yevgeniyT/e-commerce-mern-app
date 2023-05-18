@@ -14,6 +14,7 @@ import productsReducer from "features/products/productsSlice";
 import brandReducer from "features/brands/brandSlice";
 import categoryReducer from "features/categories/categorySlice";
 import adminReducer from "features/admin/adminSlice";
+import cartReducer from "features/cart/cartSlice";
 
 //Create a rootReducer by combining individual reducers. This rootReducer will handle the global state of your application.
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
     brandsR: brandReducer,
     categoriesR: categoryReducer,
     adminR: adminReducer,
+    cartR: cartReducer,
 });
 
 const persistConfig = {
@@ -30,7 +32,7 @@ const persistConfig = {
     //storage engine used to store the state. In this case we use the browser's localStorage
     storage,
     //This is an array of reducer keys that will be persist. Only the state slices corresponding to these keys will be persisted
-    whitelist: ["customerR", "productsR"],
+    whitelist: ["customerR", "productsR", "cartR"],
 };
 //When use the persistedReducer to create Redux store, the redux-persist library will automatically persist the whitelisted state slices to the storage engine whenever the state changes. When the application loads, redux-persist will also rehydrate the state from the storage back into the Redux store, ensuring that the persisted data is available across sessions.
 const persistedReducer = persistReducer(persistConfig, rootReducer);

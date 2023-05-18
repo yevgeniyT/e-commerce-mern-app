@@ -1,14 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
-import { useAppSelector } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 import Loading from "components/common/Loading";
 import Error from "components/common/Error";
+import { ProductType } from "types/productTypes";
+import { addProductToCart } from "features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 const ProductDetailsPage = () => {
+    const dispatch = useAppDispatch();
+
     const { singleProduct, loading, error } = useAppSelector(
         (state) => state.productsR
     );
+    // Get access to cart store. Need to check if product in cart before edding new to prevent double check
+    const cart = useAppSelector((state) => state.cartR.cart);
     // used to change images
     const [selectedImage, setSelectedImage] = useState("");
 
@@ -28,7 +35,18 @@ const ProductDetailsPage = () => {
         return <Error />;
     }
 
-    console.log(singleProduct);
+    // add product to cart, check if product oin cart already before adding
+    const handleAddToCart = (product: ProductType) => {
+        //Array.prototype.some method is used to check if there's at least one product in the cart with the same id as the product you're trying to add. If some returns true, that means the product is already in the cart, so an alert is shown. If some returns false, that means the product isn't in the cart, so it's added to the cart.
+        const isProductInCart = cart.some((item) => item._id === product._id);
+        if (isProductInCart) {
+            // Product is already in the cart. Show a message.
+            toast.error("This product is already in your cart.");
+        } else {
+            // Product is not in the cart. Add it.
+            dispatch(addProductToCart(product));
+        }
+    };
 
     return (
         <Container maxWidth='xl'>
@@ -88,7 +106,13 @@ const ProductDetailsPage = () => {
                                     <Typography variant='h6'>
                                         {singleProduct.price}$
                                     </Typography>
-                                    <Button variant='contained' color='primary'>
+                                    <Button
+                                        variant='contained'
+                                        color='primary'
+                                        onClick={() => {
+                                            handleAddToCart(singleProduct);
+                                        }}
+                                    >
                                         Add to cart
                                     </Button>
                                 </Box>

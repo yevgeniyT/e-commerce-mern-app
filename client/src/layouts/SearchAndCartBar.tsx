@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { getSerchedProducts } from "features/products/productsThunk";
 import ProductDropdownItem from "components/products/ProductSerchListItem";
 import { resetSerchInput } from "features/products/productsSlice";
+import { useNavigate } from "react-router-dom";
 
 // Define a custom styled InputBase component
 const CustomInputBase = styled(InputBase)(({ theme }) => ({
@@ -36,10 +37,13 @@ const CustomInputBase = styled(InputBase)(({ theme }) => ({
 
 const SerchAndCartBar = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const { searchResults, success } = useAppSelector(
         (state) => state.productsR
     );
+    const cart = useAppSelector((state) => state.cartR.cart);
+
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const [searchQuery, setSearchQuery] = useState("");
     // to handle dropdown be open. If true it will be open but inittialy by defalt it false
@@ -117,8 +121,13 @@ const SerchAndCartBar = () => {
                     </Typography>
                 </Box>
                 <Box display='flex' justifyContent='flex-end' flexGrow={1}>
-                    <IconButton color='inherit'>
-                        <Badge badgeContent={4} color='error'>
+                    <IconButton
+                        color='inherit'
+                        onClick={() => {
+                            navigate("/chekout/cart");
+                        }}
+                    >
+                        <Badge badgeContent={cart.length} color='error'>
                             <ShoppingCartIcon />
                         </Badge>
                     </IconButton>

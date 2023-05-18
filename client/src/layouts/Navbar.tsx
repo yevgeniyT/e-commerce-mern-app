@@ -141,7 +141,7 @@ const Navbar: React.FC = () => {
                                           <MenuItem
                                               key='profile'
                                               onClick={() =>
-                                                  goTo("/user-dashbord")
+                                                  goTo("customer/account")
                                               }
                                           >
                                               Profile

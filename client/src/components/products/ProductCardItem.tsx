@@ -10,9 +10,11 @@ import {
     useTheme,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import { useAppDispatch } from "redux/hooks";
+import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { ProductType } from "types/productTypes";
 import { getSingleProduct } from "features/products/productsThunk";
+import { addProductToCart } from "features/cart/cartSlice";
+import { toast } from "react-toastify";
 
 interface ProductCardItemProps {
     product: ProductType;
@@ -21,13 +23,29 @@ interface ProductCardItemProps {
 const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
-
+    // use MUI schem to customise icon
     const theme = useTheme();
+    // distructure data recived from product page
     const { name, price, images, _id, slug } = product;
+
+    // Get access to cart store. Need to check if product in cart before edding new to prevent double check
+    const cart = useAppSelector((state) => state.cartR.cart);
 
     const handleProductClick = (id: string) => {
         dispatch(getSingleProduct(id));
         navigate(`/products/${slug}`);
+    };
+    // add product to cart, check if product oin cart already before adding
+    const handleAddToCart = (product: ProductType) => {
+        //Array.prototype.some method is used to check if there's at least one product in the cart with the same id as the product you're trying to add. If some returns true, that means the product is already in the cart, so an alert is shown. If some returns false, that means the product isn't in the cart, so it's added to the cart.
+        const isProductInCart = cart.some((item) => item._id === product._id);
+        if (isProductInCart) {
+            // Product is already in the cart. Show a message.
+            toast.error("This product is already in your cart.");
+        } else {
+            // Product is not in the cart. Add it.
+            dispatch(addProductToCart(product));
+        }
     };
 
     return (
@@ -105,6 +123,9 @@ const ProductCardItem: React.FC<ProductCardItemProps> = ({ product }) => {
                     <IconButton
                         color='primary'
                         aria-label='add to shopping cart'
+                        onClick={() => {
+                            handleAddToCart(product);
+                        }}
                     >
                         <AddShoppingCartIcon />
                     </IconButton>
