@@ -44,6 +44,7 @@ const createNewOrder = createAsyncThunk(
                 },
                 { withCredentials: true } // To send token back to backend
             );
+
             return response.data;
         } catch (error) {
             // use type of error from axios to type error massege from backend

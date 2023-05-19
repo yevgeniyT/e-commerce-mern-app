@@ -28,7 +28,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { clearCart, deleteProductFromCart } from "features/cart/cartSlice";
 import EmptyCartPage from "./EmptyCartPage";
-import { OrderItemType, OrderType } from "types/ordersTypes";
+import { OrderType } from "types/ordersTypes";
 import { createNewOrder } from "features/cart/cartThunk";
 
 const ShoppingCartPage = () => {
@@ -109,6 +109,7 @@ const ShoppingCartPage = () => {
             totalPrice: subtotalValue + selectedDelivery,
         };
         dispatch(createNewOrder(newOrder));
+        dispatch(clearCart());
     };
 
     return (

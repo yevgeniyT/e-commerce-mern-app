@@ -45,3 +45,10 @@ export interface ProductRowData {
     productPrice: number;
     productDiscount: number | undefined;
 }
+export interface CarouselProductType {
+    _id: string;
+    name?: string;
+    slug?: string;
+    description?: string;
+    image: string;
+}

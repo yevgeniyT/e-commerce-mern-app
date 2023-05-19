@@ -1,0 +1,30 @@
+[
+    {
+        "_id": "1",
+        "name": "Healthy Sweets with a New Raspberry Flavor!",
+        "slug": "healthy-sweets",
+        "description": "Nutritious sweets for children and adults",
+        "image": "https://res.cloudinary.com/dental-care-app/image/upload/v1683962207/product-images/tccbuspjxjo4iusjccb0.jpg"
+    },
+    {
+        "_id": "2",
+        "name": "New Flavors",
+        "slug": "new-flavors",
+        "description": "New flavors of your child's favorite toothpaste - Blueberry and Strawberry",
+        "image": "https://res.cloudinary.com/dental-care-app/image/upload/v1683962207/product-images/tccbuspjxjo4iusjccb0.jpg"
+    },
+    {
+        "_id": "3",
+        "name": "New Arrival",
+        "slug": "new-arrival",
+        "description": "WildOnes rechargeable toothbrushes from Brush-Baby",
+        "image": "https://res.cloudinary.com/dental-care-app/image/upload/v1683962207/product-images/tccbuspjxjo4iusjccb0.jpg"
+    },
+    {
+        "_id": "4",
+        "name": "Latest Product",
+        "slug": "latest-product",
+        "description": "For braces wearers - CureBrash Orto",
+        "image": "https://res.cloudinary.com/dental-care-app/image/upload/v1683962207/product-images/tccbuspjxjo4iusjccb0.jpg"
+    }
+]

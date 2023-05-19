@@ -1,65 +1,33 @@
 import React from "react";
-import {
-    Container,
-    Box,
-    Button,
-    Typography,
-    Grid,
-    Paper,
-    Card,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    CardMedia,
-} from "@mui/material";
+import { Container, Box, Typography, Grid, Paper } from "@mui/material";
+import Carousel from "react-material-ui-carousel";
+
+import courusel from "../components/home/courusel.json";
+import CouruselItem from "components/home/CouruselItem";
+import { CarouselProductType } from "types/productTypes";
 
 const HomePage: React.FC = () => {
-    const banners = [
-        { title: "Banner 1", image: "/path/to/image1.jpg", action: "/action1" },
-        { title: "Banner 2", image: "/path/to/image2.jpg", action: "/action2" },
-        { title: "Banner 3", image: "/path/to/image3.jpg", action: "/action3" },
-        { title: "Banner 4", image: "/path/to/image4.jpg", action: "/action4" },
-    ];
-
     return (
         <Container maxWidth='xl'>
-            <Grid container spacing={2}>
-                {banners.map((banner, index) => (
-                    <Grid item xs={12} sm={6} md={6} lg={3} key={index}>
-                        <Card>
-                            <CardActionArea>
-                                <CardMedia
-                                    component='img'
-                                    height='140'
-                                    image={banner.image}
-                                    alt={banner.title}
-                                />
-                                <CardContent>
-                                    <Typography
-                                        gutterBottom
-                                        variant='h5'
-                                        component='div'
-                                    >
-                                        {banner.title}
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                            <CardActions>
-                                <Button
-                                    size='small'
-                                    color='primary'
-                                    variant='contained'
-                                >
-                                    Call To Action
-                                </Button>
-                            </CardActions>
-                        </Card>
-                    </Grid>
-                ))}
+            <Grid container>
+                <Grid item xs={12} sx={{ marginBottom: "32px" }}>
+                    <Carousel interval={5000} animation='slide'>
+                        {courusel.map((product: CarouselProductType) => (
+                            <CouruselItem key={product._id} product={product} />
+                        ))}
+                    </Carousel>
+                </Grid>
             </Grid>
-            <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4} lg={2}>
-                    <Paper>
+            <Grid
+                container
+                spacing={2}
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                }}
+            >
+                <Grid item xs={12} sm={5} md={4} lg={2}>
+                    <Paper sx={{ height: "100%" }}>
                         <Box p={2}>
                             <Typography variant='h6'>
                                 <span role='img' aria-label='truck'>
@@ -72,8 +40,8 @@ const HomePage: React.FC = () => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={2}>
-                    <Paper>
+                <Grid item xs={12} sm={5} md={4} lg={2}>
+                    <Paper sx={{ height: "100%" }}>
                         <Box p={2}>
                             <Typography variant='h6'>
                                 <span role='img' aria-label='shield'>
@@ -86,8 +54,8 @@ const HomePage: React.FC = () => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={2}>
-                    <Paper>
+                <Grid item xs={12} sm={5} md={4} lg={2}>
+                    <Paper sx={{ height: "100%" }}>
                         <Box p={2}>
                             <Typography variant='h6'>
                                 <span role='img' aria-label='check'>
@@ -100,8 +68,8 @@ const HomePage: React.FC = () => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={2}>
-                    <Paper>
+                <Grid item xs={12} sm={5} md={4} lg={2}>
+                    <Paper sx={{ height: "100%" }}>
                         <Box p={2}>
                             <Typography variant='h6'>
                                 <span role='img' aria-label='phone'>
@@ -116,8 +84,8 @@ const HomePage: React.FC = () => {
                     </Paper>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={4} lg={2}>
-                    <Paper>
+                <Grid item xs={12} sm={5} md={4} lg={2}>
+                    <Paper sx={{ height: "100%" }}>
                         <Box p={2}>
                             <Typography variant='h6'>
                                 <span role='img' aria-label='smile'>
