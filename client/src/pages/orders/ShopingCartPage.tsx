@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Table,
     TableBody,
@@ -28,6 +28,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import { clearCart, deleteProductFromCart } from "features/cart/cartSlice";
 import EmptyCartPage from "./EmptyCartPage";
+import { OrderItemType, OrderType } from "types/ordersTypes";
+import { createNewOrder } from "features/cart/cartThunk";
 
 const ShoppingCartPage = () => {
     // use hooks
@@ -94,6 +96,21 @@ const ShoppingCartPage = () => {
         0
     );
 
+    const handleCheckoutProceed = () => {
+        const items = cart.map((product) => ({
+            product: product._id,
+            quantity: quantities[product._id],
+            price: product.price * quantities[product._id],
+        }));
+
+        const newOrder: OrderType = {
+            items: items,
+            deliveryCost: selectedDelivery,
+            totalPrice: subtotalValue + selectedDelivery,
+        };
+        dispatch(createNewOrder(newOrder));
+    };
+
     return (
         <Container maxWidth='xl'>
             {cart.length === 0 ? (
@@ -136,7 +153,7 @@ const ShoppingCartPage = () => {
                                                                 src={
                                                                     product
                                                                         .images[0]
-                                                                } // Replace with actual image source
+                                                                }
                                                                 alt={
                                                                     product.name
                                                                 }
@@ -332,6 +349,7 @@ const ShoppingCartPage = () => {
                                     color='primary'
                                     variant='contained'
                                     fullWidth
+                                    onClick={handleCheckoutProceed}
                                 >
                                     Proceed to Checkout
                                 </Button>
