@@ -5,9 +5,9 @@ export interface OrderItemType {
 }
 
 export interface OrderType {
-  user: string
+  customer: string
   items: Array<OrderItemType>
-  deliveryOption: number
+  deliveryCost: number
   totalPrice: number
   status: string
   createdAt?: Date

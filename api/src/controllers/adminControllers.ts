@@ -167,7 +167,7 @@ const getAllCustomers = async (req: Request, res: Response) => {
     // 1. Fetch all products from the database
     const customers = await Customer.find({})
       // .select('name slug description price images brand isActive')
-      // .populate('orders', '')
+      .populate('orders', '')
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ updatedAt: -1 }) // sort by timestamp

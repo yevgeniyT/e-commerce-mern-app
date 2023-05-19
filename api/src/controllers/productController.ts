@@ -237,7 +237,6 @@ export {
   getAllProducts,
   getSingleProduct,
   deleteProduct,
-  updateProduct,
   getFilteredProducts,
   searchProducts,
 }

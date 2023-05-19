@@ -16,6 +16,7 @@ import categoryRouter from './routers/catigoriesRoutes'
 import productRouter from './routers/productsRouters'
 import brandRouter from './routers/brandRouters'
 import adminRouter from './routers/adminRouters'
+import orderRouter from './routers/ordersRouters'
 
 // use Application type from express
 const app: Application = express()
@@ -43,6 +44,7 @@ app.use('/api/v1/categories', categoryRouter)
 app.use('/api/v1/products', productRouter)
 app.use('/api/v1/brands', brandRouter)
 app.use('/api/v1/admin', adminRouter)
+app.use('/api/v1/orders', orderRouter)
 
 const PORT = dev.app.serverPort
 

@@ -10,7 +10,6 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   try {
     // 1. Get the authToken from the cookies
     const authToken = req.cookies['authToken']
-    console.log(authToken)
 
     // 2. Check if authToken exists
     if (!authToken) {
@@ -29,7 +28,6 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
 
       // 4. Attach the decoded data (user ID) to the request object for other middlewares to use
       const customer = decodedData
-      console.log(customer)
 
       req.customer = {
         customerId: customer.customerId,

@@ -8,24 +8,24 @@ interface IOrderItem {
 interface IOrder extends Document {
   customer: string
   items: Array<IOrderItem>
-  deliveryOption: number
+  deliveryCost: number
   totalPrice: number
   status: string
   createdAt?: Date
   updatedAt?: Date
 }
 
-const orderSchema = new mongoose.Schema(
+const orderSchema = new Schema(
   {
     customer: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: 'Customer',
       required: true,
     },
     items: [
       {
         product: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: Schema.Types.ObjectId,
           ref: 'Product',
           required: true,
         },
@@ -39,7 +39,7 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
-    deliveryOption: {
+    deliveryCost: {
       type: Number,
       required: true,
     },
@@ -60,4 +60,4 @@ const orderSchema = new mongoose.Schema(
 
 const Order = mongoose.model('Order', orderSchema)
 
-module.exports = Order
+export default Order
