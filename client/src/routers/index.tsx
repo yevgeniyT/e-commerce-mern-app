@@ -35,6 +35,7 @@ import { AdminBrandsPage } from "pages/adminDashbord/AdminBrandsPage";
 import AdminCategoryEditePage from "pages/adminDashbord/AdminCategoryEdirPage";
 import CustomerAcountPage from "pages/customers/CustomerAccountPage";
 import ShoppingCartPage from "pages/orders/ShopingCartPage";
+import EmptyCart from "pages/orders/EmptyCartPage";
 
 const Index = () => {
     return (
@@ -87,6 +88,10 @@ const Index = () => {
                         <Route
                             path='/chekout/cart'
                             element={<ShoppingCartPage />}
+                        />
+                        <Route
+                            path='/chekout/empty-cart'
+                            element={<EmptyCart />}
                         />
 
                         {/* Logged in customer protected routers */}

@@ -1,5 +1,5 @@
 // Dependencies and types imports
-import { timeStamp } from 'console'
+
 import mongoose, { Schema, Document, model } from 'mongoose'
 import { isEmailValid, isStrongPassword } from '../validations/authValidators'
 

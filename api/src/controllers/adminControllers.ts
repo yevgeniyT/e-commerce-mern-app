@@ -13,7 +13,7 @@ import Category from '../models/categorySchema'
 // 1. Create new Product
 const adminCreateProduct = async (
   //By adding Request & { files?: Express.Multer.File[] to the type of req, you are extending the type of Request to include an optional files property with the type File[]. This way, TypeScript will know the correct type for req.files
-  req: Request & { files?: Express.Multer.File[] },
+  req: Request, // & { files?: Express.Multer.File[] }
   res: Response
 ) => {
   try {
@@ -21,8 +21,11 @@ const adminCreateProduct = async (
     const { name, description, price, category, brand }: ProductType = req.body
 
     // 2. Get the array of images from req.files. I case of empty umage filed an empty array will be stored
-    const images = req.files?.map((file) => file.path) ?? []
-
+    // const images = req.files?.map((file) => file.path) ?? []
+    const images =
+      (req as Request & { files: Express.Multer.File[] }).files?.map(
+        (file) => file.path
+      ) ?? []
     // 3. Check if the product already exists in DB
     const isExist = await Product.findOne({ name: name })
     if (isExist) {

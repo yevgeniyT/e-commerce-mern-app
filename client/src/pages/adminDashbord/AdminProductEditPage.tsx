@@ -30,6 +30,7 @@ const AdminProductEditePage: React.FC = () => {
 
     // Get data from store
     const { singleProduct } = useAppSelector((state) => state.productsR);
+    console.log(singleProduct);
 
     console.log("diatils action");
 
