@@ -36,6 +36,7 @@ import AdminCategoryEditePage from "pages/adminDashbord/AdminCategoryEdirPage";
 import CustomerAcountPage from "pages/customers/CustomerAccountPage";
 import ShoppingCartPage from "pages/orders/ShopingCartPage";
 import EmptyCart from "pages/orders/EmptyCartPage";
+import PaymentPage from "pages/orders/PaymentPage";
 
 const Index = () => {
     return (
@@ -107,6 +108,10 @@ const Index = () => {
                             <Route
                                 path='customer/account'
                                 element={<CustomerAcountPage />}
+                            />
+                            <Route
+                                path='chekout/payment'
+                                element={<PaymentPage />}
                             />
                         </Route>
                         {/* Admin protected routers */}

@@ -21,6 +21,7 @@
     "@types/lusca": "^1.7.0",
     "@types/mongoose": "^5.11.97",
     "bcryptjs": "^2.4.3",
+    "braintree": "^3.15.0",
     "cloudinary": "^1.36.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -51,6 +52,7 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/braintree": "^3.3.8",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/errorhandler": "^0.0.32",

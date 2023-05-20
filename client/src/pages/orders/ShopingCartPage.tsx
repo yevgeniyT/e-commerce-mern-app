@@ -30,13 +30,17 @@ import { clearCart, deleteProductFromCart } from "features/cart/cartSlice";
 import EmptyCartPage from "./EmptyCartPage";
 import { OrderType } from "types/ordersTypes";
 import { createNewOrder } from "features/cart/cartThunk";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const ShoppingCartPage = () => {
     // use hooks
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     // get access to store data
     const cart = useAppSelector((state) => state.cartR.cart);
+    const isLoggedIn = useAppSelector((state) => state.customerR.isLoggedIn);
 
     // create an empty object to store initial quantity of each product as 1
     let initialQuantities: Record<string, number> = {};
@@ -95,8 +99,13 @@ const ShoppingCartPage = () => {
         (acc, value) => acc + value,
         0
     );
+    console.log(isLoggedIn);
 
     const handleCheckoutProceed = () => {
+        if (!isLoggedIn) {
+            toast.error("Please log in to proceed");
+            return;
+        }
         const items = cart.map((product) => ({
             product: product._id,
             quantity: quantities[product._id],
@@ -108,8 +117,18 @@ const ShoppingCartPage = () => {
             deliveryCost: selectedDelivery,
             totalPrice: subtotalValue + selectedDelivery,
         };
-        dispatch(createNewOrder(newOrder));
-        dispatch(clearCart());
+
+        try {
+            dispatch(createNewOrder(newOrder));
+            dispatch(clearCart());
+            navigate("/checkout/payment");
+        } catch (error: any) {
+            toast(
+                `Failed to proceed to checkout: ${
+                    error.message || "Unknown error"
+                }`
+            );
+        }
     };
 
     return (
@@ -364,3 +383,5 @@ const ShoppingCartPage = () => {
 };
 
 export default ShoppingCartPage;
+
+//TODO Clear cart after procced to checkout after checking if the user is logged in
