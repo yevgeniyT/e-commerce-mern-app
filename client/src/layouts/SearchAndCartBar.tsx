@@ -24,6 +24,8 @@ import ProductDropdownItem from "components/products/ProductSerchListItem";
 import { resetSerchInput } from "features/products/productsSlice";
 import { useNavigate } from "react-router-dom";
 
+import logo from "../data/logo.png";
+
 // Define a custom styled InputBase component
 const CustomInputBase = styled(InputBase)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -39,9 +41,7 @@ const SerchAndCartBar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { searchResults, success } = useAppSelector(
-        (state) => state.productsR
-    );
+    const { searchResults } = useAppSelector((state) => state.productsR);
     const cart = useAppSelector((state) => state.cartR.cart);
 
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -71,9 +71,12 @@ const SerchAndCartBar = () => {
         >
             <Toolbar style={{ width: "70%", margin: "auto" }}>
                 <Box display='flex' justifyContent='flex-start' flexGrow={1}>
-                    <Typography variant='h4' component='h1'>
-                        Your Brand
-                    </Typography>
+                    <img
+                        src={logo}
+                        alt='Brand'
+                        style={{ width: "150px", height: "auto" }}
+                        onClick={() => navigate("/")}
+                    />
                 </Box>
                 <ClickAwayListener onClickAway={handleClose}>
                     <Box display='flex' flexGrow={3}>
@@ -116,10 +119,12 @@ const SerchAndCartBar = () => {
                     </Box>
                 </ClickAwayListener>
                 <Box display='flex' justifyContent='flex-end' flexGrow={1}>
-                    <Typography variant='h6'>
-                        <PhoneIcon /> (123) 456-7890
-                    </Typography>
+                    <Box display='flex' alignItems='center'>
+                        <PhoneIcon style={{ marginRight: "10px" }} />
+                        <Typography variant='h6'>+49 (123) 456-7890</Typography>
+                    </Box>
                 </Box>
+
                 <Box display='flex' justifyContent='flex-end' flexGrow={1}>
                     <IconButton
                         color='inherit'

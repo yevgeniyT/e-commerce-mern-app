@@ -13,7 +13,6 @@ import Footer from "layouts/Footter";
 import LoginPage from "pages/customers/LoginPage";
 import RegistrationPage from "pages/customers/RegistrationPage";
 import AccountActivation from "components/customers/AccountActivation";
-import CustomerAccount from "pages/customers/AccountPage";
 import ForgotPasswordPage from "pages/customers/ForgotPasswordPage";
 import ResetPasswordActivation from "components/customers/ResetPassowrdActivation";
 import ResetPasswordPage from "pages/customers/ResetPasswordPage";
@@ -37,6 +36,7 @@ import CustomerAcountPage from "pages/customers/CustomerAccountPage";
 import ShoppingCartPage from "pages/orders/ShopingCartPage";
 import EmptyCart from "pages/orders/EmptyCartPage";
 import PaymentPage from "pages/orders/PaymentPage";
+import FooterSubscriptionBar from "layouts/FooterSubscriptionBar";
 
 const Index = () => {
     return (
@@ -158,6 +158,7 @@ const Index = () => {
                     </Routes>
                 </main>
                 <footer>
+                    <FooterSubscriptionBar />
                     <Footer />
                 </footer>
             </BrowserRouter>
