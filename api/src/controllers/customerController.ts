@@ -179,7 +179,7 @@ const loginCustomer = async (req: Request, res: Response) => {
       secure: false,
 
       // sets the cookie to expire in 4 minutes from the time it is created.
-      expires: new Date(Date.now() + 1000 * 30 * 60),
+      expires: new Date(Date.now() + 1000 * 60 * 60),
 
       // Set the SameSite attribute to protect against CSRF attacks
       sameSite: 'lax',

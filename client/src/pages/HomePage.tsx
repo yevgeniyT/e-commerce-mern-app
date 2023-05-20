@@ -12,6 +12,7 @@ import baner4 from "../data/baner4.png";
 import { getAllProducts } from "features/products/productsThunk";
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import ProductCardItem from "components/products/ProductCardItem";
+import FooterSubscriptionBar from "layouts/FooterSubscriptionBar";
 
 const HomePage: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -24,12 +25,7 @@ const HomePage: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <Container
-            maxWidth='xl'
-            sx={{
-                marginBottom: "32px",
-            }}
-        >
+        <Container maxWidth='xl'>
             <Grid container>
                 <Grid item xs={12} sx={{ marginBottom: "32px" }}>
                     <Carousel interval={5000} animation='slide'>
@@ -200,7 +196,13 @@ const HomePage: React.FC = () => {
                     Top Featured Dental Products{" "}
                 </Typography>
             </Grid>
-            <Grid container spacing={2}>
+            <Grid
+                container
+                spacing={2}
+                sx={{
+                    marginBottom: "32px",
+                }}
+            >
                 {products &&
                     products.map((product: ProductType) => (
                         <Grid
@@ -214,6 +216,9 @@ const HomePage: React.FC = () => {
                             <ProductCardItem product={product} />
                         </Grid>
                     ))}
+            </Grid>
+            <Grid>
+                <FooterSubscriptionBar />
             </Grid>
         </Container>
     );

@@ -65,6 +65,7 @@ const AdminProductCreatePage: React.FC = () => {
             }
 
             dispatch(createNewProduct(newProductFormData));
+            navigate("/admin/account/products");
         } catch (error) {
             if (error instanceof Error) {
                 console.log("Error while creating form-data - ", error.message);
@@ -118,7 +119,11 @@ const AdminProductCreatePage: React.FC = () => {
     return (
         <Container maxWidth='sm'>
             <Box sx={{ mt: 8 }}>
-                <Typography variant='h4' align='center'>
+                <Typography
+                    variant='h4'
+                    align='center'
+                    sx={{ marginBottom: "16px" }}
+                >
                     Create New Product
                 </Typography>
                 <form onSubmit={handleSubmit}>

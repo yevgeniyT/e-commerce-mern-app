@@ -11,6 +11,7 @@ import {
     Paper,
     List,
     ClickAwayListener,
+    Container,
 } from "@mui/material";
 
 import Popper from "@mui/material/Popper";
@@ -69,75 +70,83 @@ const SerchAndCartBar = () => {
             color='default'
             sx={{ paddingY: "12px", marginBottom: "32px" }}
         >
-            <Toolbar style={{ width: "70%", margin: "auto" }}>
-                <Box display='flex' justifyContent='flex-start' flexGrow={1}>
-                    <img
-                        src={logo}
-                        alt='Brand'
-                        style={{ width: "150px", height: "auto" }}
-                        onClick={() => navigate("/")}
-                    />
-                </Box>
-                <ClickAwayListener onClickAway={handleClose}>
-                    <Box display='flex' flexGrow={3}>
-                        <CustomInputBase
-                            placeholder='Search…'
-                            inputProps={{ "aria-label": "search" }}
-                            onChange={handleSearch}
-                            endAdornment={<SearchIcon />}
-                            value={searchQuery}
-                        />
-                        <Popper
-                            open={open}
-                            anchorEl={anchorEl}
-                            placement='bottom'
-                        >
-                            <Paper
-                                sx={{
-                                    backgroundColor: "background.paper",
-                                    border: "1px solid",
-                                    borderColor: "divider",
-                                    maxHeight: "200px",
-                                    overflowY: "auto",
-                                }}
-                            >
-                                <List>
-                                    {searchResults.map((product) => (
-                                        <ProductDropdownItem
-                                            key={product._id}
-                                            product={product}
-                                        />
-                                    ))}
-                                    {searchResults.length === 0 && (
-                                        <Typography>
-                                            No products found
-                                        </Typography>
-                                    )}
-                                </List>
-                            </Paper>
-                        </Popper>
-                    </Box>
-                </ClickAwayListener>
-                <Box display='flex' justifyContent='flex-end' flexGrow={1}>
-                    <Box display='flex' alignItems='center'>
-                        <PhoneIcon style={{ marginRight: "10px" }} />
-                        <Typography variant='h6'>+49 (123) 456-7890</Typography>
-                    </Box>
-                </Box>
-
-                <Box display='flex' justifyContent='flex-end' flexGrow={1}>
-                    <IconButton
-                        color='inherit'
-                        onClick={() => {
-                            navigate("/chekout/cart");
-                        }}
+            <Container maxWidth='xl'>
+                <Toolbar>
+                    <Box
+                        display='flex'
+                        justifyContent='flex-start'
+                        flexGrow={1}
                     >
-                        <Badge badgeContent={cart.length} color='error'>
-                            <ShoppingCartIcon />
-                        </Badge>
-                    </IconButton>
-                </Box>
-            </Toolbar>
+                        <img
+                            src={logo}
+                            alt='Brand'
+                            style={{ width: "150px", height: "auto" }}
+                            onClick={() => navigate("/")}
+                        />
+                    </Box>
+                    <ClickAwayListener onClickAway={handleClose}>
+                        <Box display='flex' flexGrow={3}>
+                            <CustomInputBase
+                                placeholder='Search…'
+                                inputProps={{ "aria-label": "search" }}
+                                onChange={handleSearch}
+                                endAdornment={<SearchIcon />}
+                                value={searchQuery}
+                            />
+                            <Popper
+                                open={open}
+                                anchorEl={anchorEl}
+                                placement='bottom'
+                            >
+                                <Paper
+                                    sx={{
+                                        backgroundColor: "background.paper",
+                                        border: "1px solid",
+                                        borderColor: "divider",
+                                        maxHeight: "200px",
+                                        overflowY: "auto",
+                                    }}
+                                >
+                                    <List>
+                                        {searchResults.map((product) => (
+                                            <ProductDropdownItem
+                                                key={product._id}
+                                                product={product}
+                                            />
+                                        ))}
+                                        {searchResults.length === 0 && (
+                                            <Typography>
+                                                No products found
+                                            </Typography>
+                                        )}
+                                    </List>
+                                </Paper>
+                            </Popper>
+                        </Box>
+                    </ClickAwayListener>
+                    <Box display='flex' justifyContent='flex-end' flexGrow={1}>
+                        <Box display='flex' alignItems='center'>
+                            <PhoneIcon style={{ marginRight: "10px" }} />
+                            <Typography variant='h6'>
+                                +49 (123) 456-7890
+                            </Typography>
+                        </Box>
+                    </Box>
+
+                    <Box display='flex' justifyContent='flex-end' flexGrow={1}>
+                        <IconButton
+                            color='inherit'
+                            onClick={() => {
+                                navigate("/chekout/cart");
+                            }}
+                        >
+                            <Badge badgeContent={cart.length} color='error'>
+                                <ShoppingCartIcon />
+                            </Badge>
+                        </IconButton>
+                    </Box>
+                </Toolbar>
+            </Container>
         </AppBar>
     );
 };

@@ -36,7 +36,6 @@ import CustomerAcountPage from "pages/customers/CustomerAccountPage";
 import ShoppingCartPage from "pages/orders/ShopingCartPage";
 import EmptyCart from "pages/orders/EmptyCartPage";
 import PaymentPage from "pages/orders/PaymentPage";
-import FooterSubscriptionBar from "layouts/FooterSubscriptionBar";
 
 const Index = () => {
     return (
@@ -158,7 +157,6 @@ const Index = () => {
                     </Routes>
                 </main>
                 <footer>
-                    <FooterSubscriptionBar />
                     <Footer />
                 </footer>
             </BrowserRouter>

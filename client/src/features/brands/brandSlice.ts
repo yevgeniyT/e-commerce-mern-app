@@ -25,12 +25,10 @@ export const brandSlice = createSlice({
             })
             .addCase(getAllBrands.fulfilled, (state, action) => {
                 const brands = action.payload.payload.brands;
-
                 state.brands = brands;
                 state.loading = false;
                 state.success = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
             })
             .addCase(getAllBrands.rejected, (state, action) => {
                 state.loading = false;
@@ -41,7 +39,7 @@ export const brandSlice = createSlice({
                     action.error.message ||
                     // use alias to handle undefined type
                     "Unable to fetch all brands.";
-                toast.error(action.error.message);
+
                 console.log(state.message);
             });
     },

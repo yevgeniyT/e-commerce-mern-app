@@ -7,6 +7,7 @@ import {
     Avatar,
     Menu,
     MenuItem,
+    Container,
 } from "@mui/material";
 
 import { useNavigate } from "react-router-dom";
@@ -44,126 +45,128 @@ const Navbar: React.FC = () => {
 
     return (
         <AppBar position='static'>
-            <Toolbar
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "70%",
-                    margin: "auto",
-                }}
-            >
-                <Box display='flex'>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/")}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        Location
-                    </Button>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/")}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        Operating Hours
-                    </Button>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/")}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        Delivery & Payment
-                    </Button>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/")}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        About Us
-                    </Button>
-                    <Button
-                        color='inherit'
-                        onClick={() => goTo("/")}
-                        sx={{ textTransform: "capitalize" }}
-                    >
-                        Contact Us
-                    </Button>
-                </Box>
-                <Box display='flex' alignItems='center'>
-                    {!isLoggedIn && (
+            <Container maxWidth='xl'>
+                <Toolbar
+                    sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                    }}
+                >
+                    <Box display='flex'>
                         <Button
                             color='inherit'
-                            onClick={() => goTo("/customer/account/login")}
+                            onClick={() => goTo("/")}
+                            sx={{ textTransform: "capitalize" }}
                         >
-                            Sign in
+                            Location
                         </Button>
-                    )}
-
-                    {isLoggedIn && (
-                        <>
-                            <Avatar
-                                aria-controls='simple-menu'
-                                aria-haspopup='true'
-                                onClick={handleClick}
-                                src={avatarImage}
-                                sx={{
-                                    marginLeft: "16px",
-                                    cursor: "pointer",
-                                }}
-                            ></Avatar>
-                            <Menu
-                                id='simple-menu'
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
+                        <Button
+                            color='inherit'
+                            onClick={() => goTo("/")}
+                            sx={{ textTransform: "capitalize" }}
+                        >
+                            Operating Hours
+                        </Button>
+                        <Button
+                            color='inherit'
+                            onClick={() => goTo("/")}
+                            sx={{ textTransform: "capitalize" }}
+                        >
+                            Delivery & Payment
+                        </Button>
+                        <Button
+                            color='inherit'
+                            onClick={() => goTo("/")}
+                            sx={{ textTransform: "capitalize" }}
+                        >
+                            About Us
+                        </Button>
+                        <Button
+                            color='inherit'
+                            onClick={() => goTo("/")}
+                            sx={{ textTransform: "capitalize" }}
+                        >
+                            Contact Us
+                        </Button>
+                    </Box>
+                    <Box display='flex' alignItems='center'>
+                        {!isLoggedIn && (
+                            <Button
+                                color='inherit'
+                                onClick={() => goTo("/customer/account/login")}
                             >
-                                {isAdmin
-                                    ? [
-                                          <MenuItem
-                                              key='admin-dashboard'
-                                              onClick={() =>
-                                                  goTo(
-                                                      "/admin/account/products"
-                                                  )
-                                              }
-                                          >
-                                              Admin Dashboard
-                                          </MenuItem>,
-                                          <MenuItem
-                                              key='logout'
-                                              onClick={handleLogOut}
-                                          >
-                                              Sign Out
-                                          </MenuItem>,
-                                      ]
-                                    : [
-                                          <MenuItem
-                                              key='profile'
-                                              onClick={() =>
-                                                  goTo("customer/account")
-                                              }
-                                          >
-                                              Profile
-                                          </MenuItem>,
-                                          <MenuItem
-                                              key='my-orders'
-                                              onClick={() => goTo("/my-orders")}
-                                          >
-                                              My Orders
-                                          </MenuItem>,
-                                          <MenuItem
-                                              key='logout'
-                                              onClick={handleLogOut}
-                                          >
-                                              Sign Out
-                                          </MenuItem>,
-                                      ]}
-                            </Menu>
-                        </>
-                    )}
-                </Box>
-            </Toolbar>
+                                Sign in
+                            </Button>
+                        )}
+
+                        {isLoggedIn && (
+                            <>
+                                <Avatar
+                                    aria-controls='simple-menu'
+                                    aria-haspopup='true'
+                                    onClick={handleClick}
+                                    src={avatarImage}
+                                    sx={{
+                                        marginLeft: "16px",
+                                        cursor: "pointer",
+                                    }}
+                                ></Avatar>
+                                <Menu
+                                    id='simple-menu'
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    {isAdmin
+                                        ? [
+                                              <MenuItem
+                                                  key='admin-dashboard'
+                                                  onClick={() =>
+                                                      goTo(
+                                                          "/admin/account/products"
+                                                      )
+                                                  }
+                                              >
+                                                  Admin Dashboard
+                                              </MenuItem>,
+                                              <MenuItem
+                                                  key='logout'
+                                                  onClick={handleLogOut}
+                                              >
+                                                  Sign Out
+                                              </MenuItem>,
+                                          ]
+                                        : [
+                                              <MenuItem
+                                                  key='profile'
+                                                  onClick={() =>
+                                                      goTo("customer/account")
+                                                  }
+                                              >
+                                                  Profile
+                                              </MenuItem>,
+                                              <MenuItem
+                                                  key='my-orders'
+                                                  onClick={() =>
+                                                      goTo("/my-orders")
+                                                  }
+                                              >
+                                                  My Orders
+                                              </MenuItem>,
+                                              <MenuItem
+                                                  key='logout'
+                                                  onClick={handleLogOut}
+                                              >
+                                                  Sign Out
+                                              </MenuItem>,
+                                          ]}
+                                </Menu>
+                            </>
+                        )}
+                    </Box>
+                </Toolbar>
+            </Container>
         </AppBar>
     );
 };

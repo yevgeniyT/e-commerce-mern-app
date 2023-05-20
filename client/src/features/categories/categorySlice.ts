@@ -26,12 +26,10 @@ export const categorySlice = createSlice({
             })
             .addCase(getAllCategories.fulfilled, (state, action) => {
                 const categories = action.payload.payload.finalCategories;
-
                 state.categories = categories;
                 state.loading = false;
                 state.success = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
             })
             .addCase(getAllCategories.rejected, (state, action) => {
                 state.loading = false;
@@ -42,7 +40,7 @@ export const categorySlice = createSlice({
                     action.error.message ||
                     // use alias to handle undefined type
                     "Unable to fetch all brands.";
-                toast.error(action.error.message);
+
                 console.log(state.message);
             });
 
@@ -58,7 +56,6 @@ export const categorySlice = createSlice({
                 state.loading = false;
                 state.success = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
             })
             .addCase(getSingleCategory.rejected, (state, action) => {
                 state.loading = false;
