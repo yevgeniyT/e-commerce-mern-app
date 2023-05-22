@@ -51,7 +51,12 @@ const Index = () => {
                 <main>
                     <Routes>
                         {/* Common routers */}
+                        <Route
+                            path='/products/:slug'
+                            element={<ProductDetailsPage />}
+                        />
                         <Route path='/' element={<HomePage />} />
+
                         <Route
                             path='/customer/account/create'
                             element={<RegistrationPage />}
@@ -82,10 +87,6 @@ const Index = () => {
                         <Route path='/products' element={<ProductsPage />} />
 
                         <Route
-                            path='/products/:slug'
-                            element={<ProductDetailsPage />}
-                        />
-                        <Route
                             path='/chekout/cart'
                             element={<ShoppingCartPage />}
                         />
@@ -109,7 +110,7 @@ const Index = () => {
                                 element={<CustomerAcountPage />}
                             />
                             <Route
-                                path='chekout/payment'
+                                path='checkout/payment'
                                 element={<PaymentPage />}
                             />
                         </Route>

@@ -7,16 +7,19 @@ import {
     createNewProduct,
     deleteCategory,
     getAllCustomers,
+    getAllOrders,
     toogleIsActive,
     updateCategory,
     updateProduct,
 } from "./adminThunk";
 import { CustomerType } from "types/customerType";
 import { Pagination } from "types/productTypes";
+import { OrderType } from "types/ordersTypes";
 
 const initialState = {
     customers: [] as Array<CustomerType>,
     pagination: {} as Pagination,
+    orders: [] as Array<OrderType>,
     loading: false,
     error: false,
     success: false,
@@ -189,6 +192,35 @@ export const adminSlice = createSlice({
                     action.error.message ||
                     // use alias to handle undefined type
                     "Unable to delete category. Please try again.";
+                toast.error(action.error.message);
+            });
+        // 3. Get all cusorderstomers
+        builder
+            .addCase(getAllOrders.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+            })
+            .addCase(getAllOrders.fulfilled, (state, action) => {
+                const orders = action.payload.payload.orders;
+                // console.log(products);
+                const pagination = action.payload.payload.pagination;
+
+                state.pagination = pagination;
+                state.orders = orders;
+                state.loading = false;
+                state.success = true;
+                toast.success(action.payload.message);
+            })
+            .addCase(getAllOrders.rejected, (state, action) => {
+                state.customers = [];
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                // Update the message with the error message from the action reciwed from thunk from catch block by throw new Error
+                state.message =
+                    action.error.message ||
+                    // use alias to handle undefined type
+                    "Unable to update product. Please try again.";
                 toast.error(action.error.message);
             });
     },

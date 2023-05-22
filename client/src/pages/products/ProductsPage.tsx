@@ -31,7 +31,7 @@ const ProductPage = () => {
 
     const [layout, setLayout] = useState("cards"); // set state for card or list laout
     const [sortOption, setSortOption] = useState("default"); // set state for sorting
-    const [productsPerPage, setProductsPerPage] = useState("4"); // set state for nuber of pages on list
+    const [productsPerPage, setProductsPerPage] = useState("10"); // set state for nuber of pages on list
     const [page, setPage] = useState(1); // set state to define page to send to backend
 
     // TODO Find out how to prevent doble dispatch here

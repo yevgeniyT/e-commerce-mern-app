@@ -14,6 +14,7 @@ import {
   createCategory,
   deleteCategory,
   getAllCustomers,
+  getAllOrders,
   updateCategory,
 } from '../controllers/adminControllers'
 import { categoryValidationRules } from '../validations/categoryValidators'
@@ -61,7 +62,7 @@ adminRouter.put(
   updateCategory
 )
 
-// 4.  POST/api/v1/admin/categories -> isLogedIn, isAdmin -> Create category
+// 6.  POST/api/v1/admin/categories -> isLogedIn, isAdmin -> Create category
 adminRouter.post(
   '/categories',
   isLoggedIn,
@@ -70,5 +71,7 @@ adminRouter.post(
   runValidation,
   createCategory
 )
+// 7. GET/api/v1/orders - isLoggetIn - Get all orders
+adminRouter.get('/orders', isLoggedIn, getAllOrders)
 
 export default adminRouter

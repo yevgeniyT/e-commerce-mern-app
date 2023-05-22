@@ -19,9 +19,11 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { updateCustomerProfile } from "features/customers/customersThunk";
+import { useNavigate } from "react-router-dom";
 
 const EditAccountPage: React.FC = () => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     // state for storing password and handle error if passwords are not matched to eachother
     const [password, setPassword] = useState("");
@@ -34,6 +36,10 @@ const EditAccountPage: React.FC = () => {
 
     // State for password change section visibility
     const [showPasswordSection, setShowPasswordSection] = useState(false);
+
+    // States for adress change section visability
+    const [showBillingAdress, setShowBillingAdress] = useState(false);
+    const [showShippingAddress, setShowShippingAddress] = useState(false);
 
     // State for updated data
     const [newCustomerData, setNewCustomerData] = useState({
@@ -64,6 +70,15 @@ const EditAccountPage: React.FC = () => {
     const handleClickShowPasswordSection = () => {
         setShowPasswordSection(
             (prevShowPasswordSection) => !prevShowPasswordSection
+        );
+    };
+
+    const handleClickShowBillingAdressSection = () => {
+        setShowBillingAdress((prevShowBillingAdress) => !prevShowBillingAdress);
+    };
+    const handleClickShowShippingAdressSection = () => {
+        setShowShippingAddress(
+            (prevShowShippinggAdress) => !prevShowShippinggAdress
         );
     };
 
@@ -190,6 +205,7 @@ const EditAccountPage: React.FC = () => {
                                 fullWidth
                                 type='tel'
                                 name='phone'
+                                autoComplete='off'
                                 placeholder='+49 (123) 456-7890'
                                 inputProps={{
                                     pattern:
@@ -199,122 +215,179 @@ const EditAccountPage: React.FC = () => {
                             />
                         </Grid>
                     </Grid>
-                    {/* Used to show data in Collaps by set and unset check mark */}
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={showPasswordSection}
-                                onChange={handleClickShowPasswordSection}
-                            />
-                        }
-                        label='Change Password'
-                    />
-                    {errorMessage && (
-                        <Alert severity='error'>{errorMessage}</Alert>
-                    )}
-                    {/* Collaps used to wrap the content that should be shown or hidden based on the value of showPasswordSection.  */}
-                    <Collapse
-                        in={showPasswordSection}
+                    <Grid
+                        container
                         sx={{
-                            marginTop: "12px",
+                            display: "flex",
+                            flexDirection: "column",
                         }}
                     >
-                        <Grid container spacing={2}>
-                            <Grid
-                                item
-                                xs={4}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <Typography variant='subtitle1'>
-                                    New Password
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={8}>
-                                {/* OutlinedInput when you want more control over the input field's appearance or when you need to build a custom input component. It includes icon at the end of hiden password, and to better handle it used this component */}
-                                <OutlinedInput
-                                    fullWidth
-                                    type={showPassword ? "text" : "password"}
-                                    name='newPassword'
-                                    inputProps={{
-                                        minLength: 8,
-                                    }}
-                                    onChange={handlePasswordChange}
-                                    endAdornment={
-                                        //used to add an adornment (icon) at the end of the input field. In this case, it's used to add a visibility toggle icon.
-                                        <InputAdornment position='end'>
-                                            <IconButton
-                                                onClick={
-                                                    handleClickShowPassword
-                                                }
-                                            >
-                                                {showPassword ? (
-                                                    <VisibilityOff />
-                                                ) : (
-                                                    <Visibility />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
-                                    sx={{
-                                        "& .MuiInputBase-input": {
-                                            padding: "6px 8px",
-                                        },
-                                    }}
+                        {/* Used to show data in Collaps by set and unset check mark */}
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={showPasswordSection}
+                                    onChange={handleClickShowPasswordSection}
                                 />
-                            </Grid>
-                            <Grid
-                                item
-                                xs={4}
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center", // Vertically center the content
-                                }}
-                            >
-                                <Typography variant='subtitle1'>
-                                    Confirm New Password
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={8}>
-                                <OutlinedInput
-                                    fullWidth
-                                    type={
-                                        showPasswordConfirm
-                                            ? "text"
-                                            : "password"
-                                    }
-                                    inputProps={{
-                                        minLength: 8,
-                                    }}
-                                    name='newPasswordConfirm'
-                                    onChange={handlePasswordConfirmChange}
-                                    endAdornment={
-                                        <InputAdornment position='end'>
-                                            <IconButton
-                                                onClick={
-                                                    handleClickShowPasswordConfirm
-                                                }
-                                            >
-                                                {showPasswordConfirm ? (
-                                                    <VisibilityOff />
-                                                ) : (
-                                                    <Visibility />
-                                                )}
-                                            </IconButton>
-                                        </InputAdornment>
-                                    }
+                            }
+                            label='Change Password'
+                        />
+                        {errorMessage && (
+                            <Alert severity='error'>{errorMessage}</Alert>
+                        )}
+                        {/* Collaps used to wrap the content that should be shown or hidden based on the value of showPasswordSection.  */}
+                        <Collapse
+                            in={showPasswordSection}
+                            sx={{
+                                marginTop: "12px",
+                            }}
+                        >
+                            <Grid container spacing={2}>
+                                <Grid
+                                    item
+                                    xs={4}
                                     sx={{
-                                        "& .MuiInputBase-input": {
-                                            padding: "6px 8px",
-                                        },
+                                        display: "flex",
+                                        alignItems: "center",
                                     }}
-                                />
+                                >
+                                    <Typography variant='subtitle1'>
+                                        New Password
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={8}>
+                                    {/* OutlinedInput when you want more control over the input field's appearance or when you need to build a custom input component. It includes icon at the end of hiden password, and to better handle it used this component */}
+                                    <OutlinedInput
+                                        fullWidth
+                                        type={
+                                            showPassword ? "text" : "password"
+                                        }
+                                        name='newPassword'
+                                        autoComplete='new-password'
+                                        inputProps={{
+                                            minLength: 8,
+                                        }}
+                                        onChange={handlePasswordChange}
+                                        endAdornment={
+                                            //used to add an adornment (icon) at the end of the input field. In this case, it's used to add a visibility toggle icon.
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    onClick={
+                                                        handleClickShowPassword
+                                                    }
+                                                >
+                                                    {showPassword ? (
+                                                        <VisibilityOff />
+                                                    ) : (
+                                                        <Visibility />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        sx={{
+                                            "& .MuiInputBase-input": {
+                                                padding: "6px 8px",
+                                            },
+                                        }}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={4}
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center", // Vertically center the content
+                                    }}
+                                >
+                                    <Typography variant='subtitle1'>
+                                        Confirm New Password
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <OutlinedInput
+                                        fullWidth
+                                        type={
+                                            showPasswordConfirm
+                                                ? "text"
+                                                : "password"
+                                        }
+                                        inputProps={{
+                                            minLength: 8,
+                                        }}
+                                        name='newPasswordConfirm'
+                                        onChange={handlePasswordConfirmChange}
+                                        endAdornment={
+                                            <InputAdornment position='end'>
+                                                <IconButton
+                                                    onClick={
+                                                        handleClickShowPasswordConfirm
+                                                    }
+                                                >
+                                                    {showPasswordConfirm ? (
+                                                        <VisibilityOff />
+                                                    ) : (
+                                                        <Visibility />
+                                                    )}
+                                                </IconButton>
+                                            </InputAdornment>
+                                        }
+                                        sx={{
+                                            "& .MuiInputBase-input": {
+                                                padding: "6px 8px",
+                                            },
+                                        }}
+                                    />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </Collapse>
-                    <Box sx={{ mt: 4 }}>
+                        </Collapse>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={showBillingAdress}
+                                    onChange={
+                                        handleClickShowBillingAdressSection
+                                    }
+                                />
+                            }
+                            label='Change Billing adress'
+                        />
+                        <Collapse
+                            in={showBillingAdress}
+                            sx={{
+                                marginTop: "12px",
+                            }}
+                        >
+                            <Grid container spacing={2}></Grid>
+                        </Collapse>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={showShippingAddress}
+                                    onChange={
+                                        handleClickShowShippingAdressSection
+                                    }
+                                />
+                            }
+                            label='Change Shipping adress'
+                        />
+                    </Grid>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                            width: "100%",
+                            mt: 4,
+                            gap: 2,
+                        }}
+                    >
+                        <Button
+                            fullWidth
+                            variant='contained'
+                            color='primary'
+                            onClick={() => navigate("/customer/account")}
+                        >
+                            Back
+                        </Button>
                         <Button
                             type='submit'
                             fullWidth

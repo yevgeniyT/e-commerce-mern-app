@@ -12,6 +12,7 @@ import {
     List,
     ClickAwayListener,
     Container,
+    Button,
 } from "@mui/material";
 
 import Popper from "@mui/material/Popper";
@@ -74,7 +75,7 @@ const SerchAndCartBar = () => {
                 <Toolbar>
                     <Box
                         display='flex'
-                        justifyContent='flex-start'
+                        justifyContent='space-around'
                         flexGrow={1}
                     >
                         <img
@@ -83,6 +84,14 @@ const SerchAndCartBar = () => {
                             style={{ width: "150px", height: "auto" }}
                             onClick={() => navigate("/")}
                         />
+                        <Button
+                            variant='contained'
+                            color='info'
+                            style={{ marginLeft: "20px", width: "100px" }}
+                            onClick={() => navigate("/products")}
+                        >
+                            Shop
+                        </Button>
                     </Box>
                     <ClickAwayListener onClickAway={handleClose}>
                         <Box display='flex' flexGrow={3}>

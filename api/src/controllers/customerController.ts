@@ -135,7 +135,6 @@ const loginCustomer = async (req: Request, res: Response) => {
     const customer = await Customer.findOne({ email: email }).select(
       'isAdmin password avatarImage billingAddress shippingAddress'
     )
-    console.log(customer)
 
     if (!customer) {
       return errorHandler(

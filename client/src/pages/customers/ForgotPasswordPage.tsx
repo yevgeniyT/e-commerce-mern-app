@@ -22,14 +22,16 @@ const ForgotPasswordPage: React.FC = () => {
     // Function to handle form submission
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault();
-        dispatch(forgotPassword(email));
+        dispatch(forgotPassword(email)).then(() => {
+            setRequestSent(true);
+        });
     };
     // useEffect to update the requestSent state when the request is successful
-    useEffect(() => {
-        if (success) {
-            setRequestSent(true);
-        }
-    }, [success]);
+    // useEffect(() => {
+    //     if (success) {
+    //         setRequestSent(true);
+    //     }
+    // }, [success]);
     if (loading) {
         return <Loading />;
     }

@@ -3,7 +3,7 @@ import { Box, Button, Container, Grid, Typography } from "@mui/material";
 
 import { useAppDispatch, useAppSelector } from "redux/hooks";
 import Loading from "components/common/Loading";
-import Error from "components/common/Error";
+
 import { ProductType } from "types/productTypes";
 import { addProductToCart } from "features/cart/cartSlice";
 import { toast } from "react-toastify";
@@ -11,9 +11,10 @@ import { toast } from "react-toastify";
 const ProductDetailsPage = () => {
     const dispatch = useAppDispatch();
 
-    const { singleProduct, loading, error } = useAppSelector(
+    const { singleProduct, loading } = useAppSelector(
         (state) => state.productsR
     );
+
     // Get access to cart store. Need to check if product in cart before edding new to prevent double check
     const cart = useAppSelector((state) => state.cartR.cart);
     // used to change images
@@ -29,10 +30,6 @@ const ProductDetailsPage = () => {
 
     if (loading) {
         return <Loading />;
-    }
-
-    if (error) {
-        return <Error />;
     }
 
     // add product to cart, check if product oin cart already before adding
@@ -60,10 +57,11 @@ const ProductDetailsPage = () => {
                     borderColor='divider'
                     borderRadius={1}
                     p={1}
+                    width='100%'
                 >
                     {singleProduct ? (
                         <>
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12} md={4}>
                                 {selectedImage && (
                                     <img
                                         src={selectedImage}
@@ -74,7 +72,11 @@ const ProductDetailsPage = () => {
                                         }}
                                     />
                                 )}
-                                <Box display='flex' justifyContent='center'>
+                                <Box
+                                    display='flex'
+                                    justifyContent='center'
+                                    p={2}
+                                >
                                     {singleProduct.images.map(
                                         (image, index) => (
                                             <img
@@ -85,27 +87,44 @@ const ProductDetailsPage = () => {
                                                     setSelectedImage(image)
                                                 }
                                                 style={{
-                                                    width: "60px",
-                                                    height: "60px",
+                                                    width: "20%",
+                                                    height: "auto",
                                                     objectFit: "cover",
                                                     cursor: "pointer",
+                                                    margin: "1%",
                                                 }}
                                             />
                                         )
                                     )}
                                 </Box>
                             </Grid>
-                            <Grid item xs={12} md={6}>
+                            <Grid
+                                item
+                                xs={12}
+                                md={8}
+                                sx={{
+                                    marginLeft: "32px",
+                                }}
+                            >
                                 <Box>
-                                    <Typography variant='h4'>
+                                    <Typography variant='h4' paragraph>
                                         {singleProduct.name}
                                     </Typography>
-                                    <Typography variant='body1'>
+                                    <Typography variant='body1' paragraph>
                                         {singleProduct.description}
                                     </Typography>
-                                    <Typography variant='h6'>
-                                        {singleProduct.price}$
+                                    <Typography variant='h6' paragraph>
+                                        {singleProduct.price.toLocaleString(
+                                            "de-DE",
+                                            {
+                                                style: "currency",
+                                                currency: "EUR",
+                                            }
+                                        )}
+                                        .
                                     </Typography>
+                                </Box>
+                                <Box>
                                     <Button
                                         variant='contained'
                                         color='primary'

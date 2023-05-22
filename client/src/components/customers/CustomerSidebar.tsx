@@ -16,9 +16,8 @@ import {
     Typography,
     Button,
     Collapse,
-    IconButton,
 } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
+
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import { getCustomerProfile } from "features/customers/customersThunk";
@@ -103,7 +102,7 @@ const CustomerSidebar = () => {
                         >
                             <Button
                                 size='small'
-                                onClick={() => goTo("/admin/account/edit")}
+                                onClick={() => goTo("/customer/account/edit")}
                             >
                                 Edit
                             </Button>
@@ -127,8 +126,31 @@ const CustomerSidebar = () => {
                                     flexDirection: "column",
                                 }}
                             >
-                                <Typography variant='h6' color='text.secondary'>
-                                    {"name"}
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Street:{" "}
+                                    {customerData?.billingAddress.street}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    City: {customerData?.billingAddress.city}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Zip: {customerData?.billingAddress.zip}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Country:{" "}
+                                    {customerData?.billingAddress.country}
                                 </Typography>
                             </CardContent>
                         </Grid>
@@ -166,8 +188,31 @@ const CustomerSidebar = () => {
                                     flexDirection: "column",
                                 }}
                             >
-                                <Typography variant='h6' color='text.secondary'>
-                                    {"name"}
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Street:{" "}
+                                    {customerData?.shippingAddress.street}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    City: {customerData?.shippingAddress.city}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Zip: {customerData?.shippingAddress.zip}
+                                </Typography>
+                                <Typography
+                                    variant='body1'
+                                    color='text.secondary'
+                                >
+                                    Country:{" "}
+                                    {customerData?.shippingAddress.country}
                                 </Typography>
                             </CardContent>
                         </Grid>

@@ -9,6 +9,7 @@ import { PartialProductType, ProductType } from '../@types/productTypes'
 import Product from '../models/productSchema'
 import Customer from '../models/customersSchems'
 import Category from '../models/categorySchema'
+import Order from '../models/ordersSchema'
 
 // 1. Create new Product
 const adminCreateProduct = async (
@@ -65,16 +66,16 @@ const adminCreateProduct = async (
   }
 }
 // 2. Admin Update product
-const adminUpdateProduct = async (
-  req: Request & { files?: Express.Multer.File[] },
-  res: Response
-) => {
+const adminUpdateProduct = async (req: Request, res: Response) => {
   try {
     // 1. Get name, description, price, category, and brand from req.body
     const { name, description, price, category, brand }: ProductType = req.body
 
     // 2. Get the array of images from req.files. I case of empty umage filed an empty array will be stored
-    const images = req.files?.map((file) => file.path) ?? []
+    const images =
+      (req as Request & { files: Express.Multer.File[] }).files?.map(
+        (file) => file.path
+      ) ?? []
 
     // 3. Get id from request params
     const { id } = req.params
@@ -300,6 +301,51 @@ const updateCategory = async (req: Request, res: Response) => {
     return errorHandler(res, 500, 'Error while deleting the category')
   }
 }
+
+// 9. Get all orders
+const getAllOrders = async (req: Request, res: Response) => {
+  try {
+    // Retrieve the page, limit, sortBy, and sortOrder from the query parameters in the request. Set default values if they are not provided.
+    const page = parseInt(req.query.page as string) || 1 // geting page number from request query with default 1
+    const limit = parseInt(req.query.limit as string) || 3
+
+    const totalDocuments = await Order.countDocuments()
+
+    // 1. Fetch all orders from the database
+    const orders = await Order.find({})
+      .populate('customer', 'firstName lastName ')
+      .populate('items.product', 'name images')
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ updatedAt: -1 }) // sort by timestamp
+      .lean()
+
+    if (!orders) {
+      errorHandler(res, 404, 'No orders found')
+    }
+
+    // 2. Send the successful response with fetched orders
+    return successHandler(res, 200, 'Orders fetched successfully', {
+      orders,
+      pagination: {
+        curentPage: page,
+        previousPage: page - 1,
+        nextPage: page + 1,
+        totalNumberOfProducts: totalDocuments,
+        totalPages: Math.ceil(totalDocuments / limit),
+      },
+    })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while fetching all orders')
+  }
+}
 export {
   adminCreateProduct,
   adminUpdateProduct,
@@ -308,4 +354,5 @@ export {
   createCategory,
   deleteCategory,
   updateCategory,
+  getAllOrders,
 }

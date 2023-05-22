@@ -16,7 +16,6 @@ import {
   getFilteredProducts,
   getSingleProduct,
   searchProducts,
-  updateProduct,
 } from '../controllers/productController'
 
 const productRouter = Router()

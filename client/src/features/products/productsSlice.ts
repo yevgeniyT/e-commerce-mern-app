@@ -84,7 +84,6 @@ export const productsSlice = createSlice({
                 state.loading = false;
                 state.success = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
             })
             .addCase(getFilteredProducts.rejected, (state, action) => {
                 state.loading = false;
@@ -110,6 +109,7 @@ export const productsSlice = createSlice({
                 state.singleProduct = product;
                 state.loading = false;
                 state.success = true;
+                state.error = false;
                 state.message = action.payload.message;
                 toast.success(action.payload.message);
             })

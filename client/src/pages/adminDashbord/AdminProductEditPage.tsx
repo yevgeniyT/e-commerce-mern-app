@@ -148,7 +148,6 @@ const AdminProductEditePage: React.FC = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
-                                required
                                 fullWidth
                                 name='name'
                                 label='Name'
@@ -158,7 +157,6 @@ const AdminProductEditePage: React.FC = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                required
                                 fullWidth
                                 multiline // Allows the field to expand vertically
                                 rows={4} // Specifies the number of visible lines
@@ -170,7 +168,6 @@ const AdminProductEditePage: React.FC = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                required
                                 fullWidth
                                 type='number'
                                 name='price'
@@ -181,7 +178,7 @@ const AdminProductEditePage: React.FC = () => {
                         </Grid>
                         <Grid item xs={12}>
                             {/* FormControl is used here to set lable inside input filed and manage it behavior by mooving on hoovering in the left to corner */}
-                            <FormControl fullWidth required>
+                            <FormControl fullWidth>
                                 {/* Neede to show name of lable inside input filed */}
                                 <InputLabel id='category-label'>
                                     Category
@@ -208,7 +205,7 @@ const AdminProductEditePage: React.FC = () => {
                         </Grid>
                         <Grid item xs={12}>
                             {/* FormControl is used here to set lable inside input filed and manage it behavior by mooving on hoovering in the left to corner */}
-                            <FormControl fullWidth required>
+                            <FormControl fullWidth>
                                 {/* Neede to show name of lable inside input filed */}
                                 <InputLabel id='brand-label'>Brand</InputLabel>
                                 <Select
@@ -284,3 +281,5 @@ const AdminProductEditePage: React.FC = () => {
 };
 
 export default AdminProductEditePage;
+
+//TODO Provide custom update of fileds, now all fileds are neddedto have and if the filed is empty it will ipdate db with empty value

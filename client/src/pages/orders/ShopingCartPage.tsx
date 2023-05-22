@@ -167,7 +167,13 @@ const ShoppingCartPage = () => {
                                                     component='th'
                                                     scope='row'
                                                 >
-                                                    <Grid container>
+                                                    <Grid
+                                                        container
+                                                        sx={{
+                                                            display: "flex",
+                                                            alignItems: "center"
+                                                        }}
+                                                    >
                                                         <Grid item xs={2}>
                                                             <img
                                                                 src={
