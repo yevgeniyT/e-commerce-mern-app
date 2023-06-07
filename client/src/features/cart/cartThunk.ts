@@ -6,7 +6,7 @@ interface ErrorResponseData {
     message: string;
 }
 
-const BASE_URL = "http://localhost:8080/api/v1";
+const BASE_URL = "http://localhost:8888/api/v1";
 
 // getClientPaymentToken
 const getClientPaymentToken = createAsyncThunk(

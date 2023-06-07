@@ -5,7 +5,7 @@ interface ErrorResponseData {
     message: string;
 }
 
-const BASE_URL = "http://localhost:8080/api/v1/categories";
+const BASE_URL = "http://localhost:8888/api/v1/categories";
 
 // 1. Get all products
 const getAllCategories = createAsyncThunk(

@@ -13,7 +13,7 @@ interface ResetPasswordData {
 interface ResetPasswordResponse {
     message: string;
 }
-const BASE_URL = "http://localhost:8080/api/v1/customers";
+const BASE_URL = "http://localhost:8888/api/v1/customers";
 
 // 1. Post request to register user to backend
 const createNewCustomer = createAsyncThunk(
