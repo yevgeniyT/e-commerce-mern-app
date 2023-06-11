@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
     // todo check if useRef here make sence
     const hasNavigated = useRef(false);
 
-    const { success, isLoggedIn } = useAppSelector((state) => state.customerR);
+    const { isLoggedIn } = useAppSelector((state) => state.customerR);
 
     const [credentials, setCredentials] = useState({
         email: "",
