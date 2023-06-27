@@ -25,6 +25,7 @@ const createValidationMiddleware = (requiredFields: FieldName[]) => {
     // Check if there is at least one filed that is missed the avatar image will not be saved, if not do this chech, every time we try to run post request, even if we have error of missing field the image will be saved
     if (missingFields.length > 0) {
       // Delete the uploaded file
+      // TODO delete unkink file as it comes from saving localy
       if (req.file) {
         fs.unlink(req.file.path, (err) => {
           if (err) {

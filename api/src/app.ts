@@ -18,6 +18,7 @@ import brandRouter from './routers/brandRouters'
 import adminRouter from './routers/adminRouters'
 import orderRouter from './routers/ordersRouters'
 import paymentRouter from './routers/paymentRouters'
+import { log } from 'console'
 
 // use Application type from express
 const app: Application = express()
@@ -50,9 +51,12 @@ app.use('/api/v1/payment', paymentRouter)
 
 const PORT = dev.app.serverPort
 
-app.listen(PORT, async () => {
-  console.log('Server is OK')
-  await connectDB()
-})
-
-// TODO use express-rate-limit lesson 56. time 10.30
+const start = async () => {
+  try {
+    app.listen(PORT, () => console.log(`Server started on PORT = ${PORT}`))
+    await connectDB()
+  } catch (error) {
+    console.log(error)
+  }
+}
+start()

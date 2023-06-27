@@ -9,6 +9,8 @@ const dev = {
   app: {
     serverPort: process.env.SERVER_PORT || 8081,
     jwtKey: process.env.JWT_SECURE_KEY || '',
+    jwtAccessKey: process.env.JWT_ACESS_KEY || '',
+    jwtRefreshKey: process.env.JWT_REFRESH_KEY || '',
     smtpUsername: process.env.SMTP_USERNAME,
     smtpPassword: process.env.SMTP_PASSWORD,
     clientUrl: process.env.CLIENT_URL,

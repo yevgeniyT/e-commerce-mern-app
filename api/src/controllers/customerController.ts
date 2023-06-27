@@ -131,7 +131,7 @@ const loginCustomer = async (req: Request, res: Response) => {
     // 1. Get email and password
     const { email, password }: BaseCustomer = req.body
 
-    //2 Chek if the user exist already
+    //2 Check if the user exist already
     const customer = await Customer.findOne({ email: email }).select(
       'isAdmin password avatarImage billingAddress shippingAddress'
     )
@@ -156,13 +156,12 @@ const loginCustomer = async (req: Request, res: Response) => {
       return errorHandler(res, 400, 'Incorrect data. Please try again')
     }
 
-    const customerId = customer._id
+    // const customerId = customer._id
 
     // 4. Create an authentication token containing the user's ID and isAdmin value
     const authToken = createAuthToken(customer._id, customer.isAdmin)
 
-    // 5. Reset cookie of there is one for some reason already exists
-
+    // 5. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
     if (req.cookies[authToken]) {
       req.cookies[authToken] = ''
     }
@@ -177,8 +176,8 @@ const loginCustomer = async (req: Request, res: Response) => {
       //This attribute ensures that the cookie is only sent over HTTPS connections, adding an extra layer of security.
       secure: false,
 
-      // sets the cookie to expire in 4 minutes from the time it is created.
-      expires: new Date(Date.now() + 1000 * 60 * 60),
+      // sets the cookie to expire in 9 minutes from the time it is created.
+      expires: new Date(Date.now() + 1000 * 60 * 9),
 
       // Set the SameSite attribute to protect against CSRF attacks
       sameSite: 'lax',

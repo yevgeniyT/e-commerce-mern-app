@@ -22,7 +22,6 @@ const getToken = (
   const token = jwt.sign(payload, dev.app.jwtKey, { expiresIn: '10m' }) //token will be unvalid in to minutes
   return token
 }
-
 const verifyToken = (
   token: string,
   callback: (err: any, decodedData: any) => void
@@ -31,7 +30,6 @@ const verifyToken = (
     callback(err, decodedData)
   })
 }
-
 // Creats token using getToken function above in controller to be used insted on session-based authentification
 const createAuthToken = (customerId: string, isAdmin: boolean): string => {
   // Create a payload containing the user ID and role
@@ -46,4 +44,16 @@ const createAuthToken = (customerId: string, isAdmin: boolean): string => {
   return token
 }
 
+const generateTokens = (payload) => {
+  const accessToken = jwt.sign(payload, dev.app.jwtAccessKey, {
+    expiresIn: '15m',
+  })
+  const refreshToken = jwt.sign(payload, dev.app.jwtRefreshKey, {
+    expiresIn: '30d',
+  })
+  return {
+    accessToken,
+    refreshToken,
+  }
+}
 export { getToken, verifyToken, createAuthToken }
