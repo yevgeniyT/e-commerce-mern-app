@@ -8,11 +8,14 @@ import { errorHandler } from '../helpers/requestsHandler'
 
 const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
   try {
-    // 1. Get the authToken from the cookies
-    const authToken = req.cookies['authToken']
+    // 1. Get the authToken from the Authorization header
+    const authHeader = req.headers.authorization
+    let authToken
 
-    // 2. Check if authToken exists
-    if (!authToken) {
+    // Check if the authHeader is defined and starts with 'Bearer'
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      authToken = authHeader.split(' ')[1] // Extract the token
+    } else {
       return errorHandler(
         res,
         401,

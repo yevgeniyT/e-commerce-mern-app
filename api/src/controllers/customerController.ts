@@ -11,7 +11,7 @@ import {
   CustomerPayload,
   CustomerType,
 } from '../@types/customerType'
-import { createAuthToken, getToken, verifyToken } from '../helpers/tokenHandler'
+import { generateTokens, getToken, verifyToken } from '../helpers/tokenHandler'
 import sendEmailWithNodeMailer from '../util/emailSend'
 import { isStrongPassword } from '../validations/authValidators'
 
@@ -159,35 +159,32 @@ const loginCustomer = async (req: Request, res: Response) => {
     // const customerId = customer._id
 
     // 4. Create an authentication token containing the user's ID and isAdmin value
-    const authToken = createAuthToken(customer._id, customer.isAdmin)
+    const { accessToken, refreshToken } = generateTokens({
+      customerId: customer._id,
+      isAdmin: customer.isAdmin,
+    })
 
     // 5. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
-    if (req.cookies[authToken]) {
-      req.cookies[authToken] = ''
+    if (req.cookies.refreshToken) {
+      req.cookies.refreshToken = ''
     }
-    //todo Create refresh token
     // 6. Set the authToken as an HttpOnly cookie, "authToken" - name of cookie, can be anyname
-    res.cookie('authToken', authToken, {
+    res.cookie('refreshToken', refreshToken, {
       // Set "secure" to true if using HTTPS
       httpOnly: true,
-
       //Setting the path attribute to "/" means that the cookie will be sent with requests to all paths within the domain
       path: '/',
       //This attribute ensures that the cookie is only sent over HTTPS connections, adding an extra layer of security.
       secure: false,
-
-      // sets the cookie to expire in 9 minutes from the time it is created.
-      expires: new Date(Date.now() + 1000 * 60 * 9),
-
+      // sets the cookie to expire in 30 days.
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
       // Set the SameSite attribute to protect against CSRF attacks
       sameSite: 'lax',
     })
-    return successHandler(
-      res,
-      200,
-      'You successfully logged in. Welcome!',
-      customer
-    )
+    return successHandler(res, 200, 'You successfully logged in. Welcome!', {
+      customer,
+      accessToken,
+    })
   } catch (error: unknown) {
     if (typeof error === 'string') {
       console.log('An unknown error occurred.')

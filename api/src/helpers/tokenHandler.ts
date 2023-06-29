@@ -26,25 +26,24 @@ const verifyToken = (
   token: string,
   callback: (err: any, decodedData: any) => void
 ) => {
-  jwt.verify(token, dev.app.jwtKey, (err, decodedData) => {
+  jwt.verify(token, dev.app.jwtAccessKey, (err, decodedData) => {
     callback(err, decodedData)
   })
 }
-// Creats token using getToken function above in controller to be used insted on session-based authentification
-const createAuthToken = (customerId: string, isAdmin: boolean): string => {
-  // Create a payload containing the user ID and role
-  const payload: CustomerPayload = {
-    customerId,
-    isAdmin,
-  }
+// const createAuthToken = (customerId: string, isAdmin: boolean): string => {
+//   // Create a payload containing the user ID and role
+//   const payload: CustomerPayload = {
+//     customerId,
+//     isAdmin,
+//   }
 
-  // Call the getToken function above with the payload and required fields
-  const token = getToken(payload, ['customerId'])
+//   // Call the getToken function above with the payload and required fields
+//   const token = getToken(payload, ['customerId'])
 
-  return token
-}
+//   return token
+// }
 
-const generateTokens = (payload) => {
+const generateTokens = (payload: CustomerPayload) => {
   const accessToken = jwt.sign(payload, dev.app.jwtAccessKey, {
     expiresIn: '15m',
   })
@@ -56,4 +55,4 @@ const generateTokens = (payload) => {
     refreshToken,
   }
 }
-export { getToken, verifyToken, createAuthToken }
+export { getToken, verifyToken, generateTokens }
