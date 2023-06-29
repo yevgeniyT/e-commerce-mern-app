@@ -30,19 +30,6 @@ const verifyToken = (
     callback(err, decodedData)
   })
 }
-// const createAuthToken = (customerId: string, isAdmin: boolean): string => {
-//   // Create a payload containing the user ID and role
-//   const payload: CustomerPayload = {
-//     customerId,
-//     isAdmin,
-//   }
-
-//   // Call the getToken function above with the payload and required fields
-//   const token = getToken(payload, ['customerId'])
-
-//   return token
-// }
-
 const generateTokens = (payload: CustomerPayload) => {
   const accessToken = jwt.sign(payload, dev.app.jwtAccessKey, {
     expiresIn: '15m',

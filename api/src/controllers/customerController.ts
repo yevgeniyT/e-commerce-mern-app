@@ -14,6 +14,7 @@ import {
 import { generateTokens, getToken, verifyToken } from '../helpers/tokenHandler'
 import sendEmailWithNodeMailer from '../util/emailSend'
 import { isStrongPassword } from '../validations/authValidators'
+import RefreshToken from '../models/tokenSchema'
 
 const createCustomer = async (req: Request, res: Response) => {
   try {
@@ -156,15 +157,20 @@ const loginCustomer = async (req: Request, res: Response) => {
       return errorHandler(res, 400, 'Incorrect data. Please try again')
     }
 
-    // const customerId = customer._id
-
     // 4. Create an authentication token containing the user's ID and isAdmin value
     const { accessToken, refreshToken } = generateTokens({
       customerId: customer._id,
       isAdmin: customer.isAdmin,
     })
 
-    // 5. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
+    // 5. Save the refresh token in the database for better security
+    const newRefreshToken = new RefreshToken({
+      token: refreshToken,
+      customer: customer._id,
+    })
+    await newRefreshToken.save()
+
+    // 6. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
     if (req.cookies.refreshToken) {
       req.cookies.refreshToken = ''
     }
