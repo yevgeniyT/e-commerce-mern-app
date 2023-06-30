@@ -162,12 +162,15 @@ const loginCustomer = async (req: Request, res: Response) => {
       customerId: customer._id,
       isAdmin: customer.isAdmin,
     })
+    // Use strategy one user - one token, so delet first any token in DB
+    await RefreshToken.deleteMany({ customer: customer._id })
 
     // 5. Save the refresh token in the database for better security
     const newRefreshToken = new RefreshToken({
       token: refreshToken,
       customer: customer._id,
     })
+
     await newRefreshToken.save()
 
     // 6. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
@@ -395,10 +398,10 @@ const updateCustomerProfile = async (req: Request, res: Response) => {
     })
   }
 }
-const logOutCustomer = (req: Request, res: Response) => {
+const logOutCustomer = async (req: Request, res: Response) => {
   try {
     // Clear the authentication token cookie
-    res.clearCookie('authToken', {
+    res.clearCookie('refreshToken', {
       // Set "secure" to true if using HTTPS
       secure: true,
 
@@ -408,6 +411,14 @@ const logOutCustomer = (req: Request, res: Response) => {
       // Set the SameSite attribute to protect against CSRF attacks
       sameSite: 'lax',
     })
+    // Get the refresh token from the request cookie
+    const { refreshToken } = req.cookies
+
+    // Remove the refresh token from the database
+    if (refreshToken) {
+      await RefreshToken.deleteOne({ token: refreshToken })
+    }
+
     return successHandler(res, 200, 'Customer logged out')
   } catch (error: unknown) {
     if (typeof error === 'string') {

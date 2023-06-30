@@ -18,7 +18,6 @@ import brandRouter from './routers/brandRouters'
 import adminRouter from './routers/adminRouters'
 import orderRouter from './routers/ordersRouters'
 import paymentRouter from './routers/paymentRouters'
-import { log } from 'console'
 
 // use Application type from express
 const app: Application = express()
