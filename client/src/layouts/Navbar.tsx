@@ -18,9 +18,15 @@ import { logOutCustomer } from "features/customers/customersThunk";
 const Navbar: React.FC = () => {
     const dispatch = useAppDispatch();
     const isLoggedIn = useAppSelector((state) => state.customerR.isLoggedIn);
-    const { avatarImage, isAdmin } = useAppSelector(
-        (state) => state.customerR.csutomerShortData
-    );
+
+    const customer = useAppSelector((state) => state.customerR.customer);
+
+    let avatarImage, isAdmin;
+
+    if (customer) {
+        avatarImage = customer.avatarImage;
+        isAdmin = customer.isAdmin;
+    }
 
     const navigate = useNavigate();
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

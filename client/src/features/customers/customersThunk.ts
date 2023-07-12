@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
+import $api from "../../http/index";
 import { UserCredentials, CustomerPayload } from "types/customerType";
 
 interface ErrorResponseData {
@@ -71,15 +72,8 @@ const loginCustomer = createAsyncThunk(
     "customer/loginCustomer",
     async (credentials: UserCredentials) => {
         try {
-            const response = await axios.post(
-                `${BASE_URL}/login`,
-                credentials,
-                {
-                    withCredentials: true,
-                }
-            );
-            console.log(response.data);
-
+            // use custom asios instance for request
+            const response = await $api.post(`/customers/login`, credentials);
             return response.data;
         } catch (error) {
             // use type of error from axios to type error massege from backend
@@ -96,9 +90,7 @@ const loginCustomer = createAsyncThunk(
 // 3.1 Log out customer
 const logOutCustomer = createAsyncThunk("customer/logOutCustomer", async () => {
     try {
-        const response = await axios.get(`${BASE_URL}/logout`, {
-            withCredentials: true, // This ensures that the cookie is sent with the request
-        });
+        const response = await $api.get(`/customers/logout`);
 
         return response.data;
     } catch (error) {
@@ -110,6 +102,22 @@ const logOutCustomer = createAsyncThunk("customer/logOutCustomer", async () => {
             throw new Error(errorData.message);
         }
         throw new Error("Failed to logout");
+    }
+});
+// 3.2 Check authentification (refresh)
+const checkAuth = createAsyncThunk("customer/refresh", async () => {
+    try {
+        const response = await axios.get(`${BASE_URL}/refresh`, {
+            withCredentials: true,
+        });
+        return response.data;
+    } catch (error) {
+        const axiosError = error as AxiosError;
+        if (axiosError.response) {
+            const errorData = axiosError.response.data as ErrorResponseData;
+            throw new Error(errorData.message);
+        }
+        throw new Error("Failed to get refreshToken");
     }
 });
 // 4. Post reqiest to send email to reset password
@@ -190,18 +198,12 @@ const getCustomerProfile = createAsyncThunk(
     "customer/getCustomerProfile",
     async () => {
         try {
-            // use this- { withCredentials: true } to send cookie to backend
-            const response = await axios.get(`${BASE_URL}/profile`, {
-                withCredentials: true,
-            });
-            // console.log(response.data);
+            const response = await $api.get(`/customers/profile`);
             return response.data;
         } catch (error) {
-            // use type of error from axios to type error massege from backend
             const axiosError = error as AxiosError;
             if (axiosError.response) {
                 const errorData = axiosError.response.data as ErrorResponseData;
-                //When an error is thrown in the async thunk, Redux Toolkit automatically triggers the rejected case in the slice. The error object thrown in the thunk is passed to the rejected case through the action.error object.
                 throw new Error(errorData.message);
             }
             throw new Error("Failed to fetch customer profile");
@@ -244,4 +246,5 @@ export {
     setNewPassword,
     updateCustomerProfile,
     logOutCustomer,
+    checkAuth,
 };

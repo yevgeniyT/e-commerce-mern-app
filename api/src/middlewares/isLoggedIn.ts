@@ -2,7 +2,7 @@
 
 // Import necessary modules and types
 import { Request, Response, NextFunction } from 'express'
-import { verifyToken } from '../helpers/tokenHandler'
+import { verifyAuthToken } from '../helpers/tokenHandler'
 import { errorHandler } from '../helpers/requestsHandler'
 // import type to handle TS error with absence of user Type in Request types
 
@@ -24,7 +24,7 @@ const isLoggedIn = (req: Request, res: Response, next: NextFunction) => {
     }
 
     // 3. Verify the authToken
-    verifyToken(authToken, (err, decodedData) => {
+    verifyAuthToken(authToken, (err, decodedData) => {
       if (err) {
         return errorHandler(res, 401, 'Invalid token. Please log in again.')
       }

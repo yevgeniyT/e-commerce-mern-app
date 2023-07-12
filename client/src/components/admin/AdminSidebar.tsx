@@ -29,8 +29,6 @@ const AdminSidebar = () => {
 
     useEffect(() => {
         if (!dispatched.current) {
-            console.log("dispatch action");
-
             dispatch(getCustomerProfile());
             dispatched.current = true;
         }

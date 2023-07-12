@@ -7,6 +7,7 @@ import {
   getCustomerProfile,
   logOutCustomer,
   loginCustomer,
+  refreshToken,
   requestPasswordReset,
   resetPassword,
   updateCustomerProfile,
@@ -32,6 +33,7 @@ customerRouter.post(
 customerRouter.post('/verify-customer', verifyCustomer)
 customerRouter.post('/login', signInValidation, loginCustomer)
 customerRouter.get('/logout', logOutCustomer)
+customerRouter.get('/refresh', refreshToken)
 
 customerRouter
   .route('/profile')

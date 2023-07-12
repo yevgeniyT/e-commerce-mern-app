@@ -25,9 +25,8 @@ const PaymentPage = () => {
     const clientToken = useAppSelector(
         (state) => state.cartR.clientPaymentToken
     );
-    const customer = useAppSelector(
-        (state) => state.customerR.csutomerShortData
-    );
+
+    const customer = useAppSelector((state) => state.customerR.customer);
 
     const [instanse, setInstance] = useState("");
     const [openBillingAdress, setOpenBillingAdress] = useState(false);

@@ -11,7 +11,12 @@ import {
   CustomerPayload,
   CustomerType,
 } from '../@types/customerType'
-import { generateTokens, getToken, verifyToken } from '../helpers/tokenHandler'
+import {
+  generateTokens,
+  getToken,
+  verifyRefreshToken,
+  verifyToken,
+} from '../helpers/tokenHandler'
 import sendEmailWithNodeMailer from '../util/emailSend'
 import { isStrongPassword } from '../validations/authValidators'
 import RefreshToken from '../models/tokenSchema'
@@ -210,6 +215,8 @@ const getCustomerProfile = async (req: Request, res: Response) => {
     // Here we pass id directly without using pair key-value by using findById methon insted of findByOne and data from session
     const customer = await Customer.findById(
       (req.customer as { customerId: string }).customerId
+    ).select(
+      'isAdmin password avatarImage billingAddress shippingAddress email firstName lastName'
     )
 
     if (!customer) {
@@ -219,8 +226,8 @@ const getCustomerProfile = async (req: Request, res: Response) => {
     }
 
     return res.status(200).json({
-      Customer: customer,
-      message: 'Successful operation',
+      customer: customer,
+      message: '',
     })
   } catch (error: unknown) {
     if (typeof error === 'string') {
@@ -431,6 +438,94 @@ const logOutCustomer = async (req: Request, res: Response) => {
     })
   }
 }
+const refreshToken = async (req: Request, res: Response) => {
+  try {
+    // 1. Get the refreshToken from the cookies
+    const refreshTokenFromCookie = req.cookies['refreshToken']
+    // console.log(refreshTokenFromCookie)
+
+    // 2. Check if refreshToken exists
+    if (!refreshToken) {
+      return errorHandler(
+        res,
+        401,
+        'You are not logged in. Please log in to access this resource.'
+      )
+    }
+    // 3. Verify the authToken
+    verifyRefreshToken(refreshTokenFromCookie, async (err, decodedData) => {
+      if (err || !decodedData) {
+        return errorHandler(res, 401, 'Invalid token. Please log in again.')
+      }
+      // 4. Find token in DB
+      const tokenFromDb = await RefreshToken.findOne({
+        token: refreshTokenFromCookie,
+      })
+
+      // 5. Check if the refreshToken is valid and exists
+      if (!decodedData || !tokenFromDb) {
+        return errorHandler(res, 401, 'Token is missing. Please log in again.')
+      }
+
+      // 6. Find customer in DB by id received from refreshToken in order to put them in new tokens
+      const customer = await Customer.findById(decodedData.customerId).select(
+        'isAdmin password avatarImage billingAddress shippingAddress'
+      )
+
+      // 7. Check if customer exists
+      if (!customer) {
+        return errorHandler(res, 401, 'Customer does not exist.')
+      }
+      // 8. Generate new tokens
+      const { accessToken, refreshToken } = generateTokens({
+        customerId: customer._id,
+        isAdmin: customer.isAdmin,
+      })
+
+      // Use strategy one user - one token, so delet first any token in DB
+      await RefreshToken.deleteMany({ customer: customer._id })
+
+      // 5. Save the refresh token in the database for better security
+      const newRefreshToken = new RefreshToken({
+        token: refreshToken,
+        customer: customer._id,
+      })
+
+      await newRefreshToken.save()
+
+      // 6. Reset cookie of there is one for some reason already exists req.cookies[authToken] - name of cookie
+      if (req.cookies.refreshToken) {
+        req.cookies.refreshToken = ''
+      }
+      // 6. Set the authToken as an HttpOnly cookie, "authToken" - name of cookie, can be anyname
+      res.cookie('refreshToken', refreshToken, {
+        // Set "secure" to true if using HTTPS
+        httpOnly: true,
+        //Setting the path attribute to "/" means that the cookie will be sent with requests to all paths within the domain
+        path: '/',
+        //This attribute ensures that the cookie is only sent over HTTPS connections, adding an extra layer of security.
+        secure: false,
+        // sets the cookie to expire in 30 days.
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30),
+        // Set the SameSite attribute to protect against CSRF attacks
+        sameSite: 'lax',
+      })
+      return successHandler(res, 200, '', {
+        customer,
+        accessToken,
+      })
+    })
+  } catch (error: unknown) {
+    // Handle different types of errors
+    if (error instanceof Error) {
+      console.error(error.message)
+    } else {
+      console.error('An unknown error occurred.')
+    }
+    // Send the error response
+    return errorHandler(res, 500, 'Error while refreshing token')
+  }
+}
 export {
   createCustomer,
   verifyCustomer,
@@ -441,6 +536,7 @@ export {
   resetPassword,
   updateCustomerProfile,
   logOutCustomer,
+  refreshToken,
 }
 
 //TODO Update catch block in all controllers like in category controllers

@@ -26,13 +26,31 @@ const verifyToken = (
   token: string,
   callback: (err: any, decodedData: any) => void
 ) => {
+  jwt.verify(token, dev.app.jwtKey, (err, decodedData) => {
+    callback(err, decodedData)
+  })
+}
+
+const verifyAuthToken = (
+  token: string,
+  callback: (err: any, decodedData: any) => void
+) => {
   jwt.verify(token, dev.app.jwtAccessKey, (err, decodedData) => {
     callback(err, decodedData)
   })
 }
+const verifyRefreshToken = (
+  token: string,
+  callback: (err: any, decodedData: any) => void
+) => {
+  jwt.verify(token, dev.app.jwtRefreshKey, (err, decodedData) => {
+    callback(err, decodedData)
+  })
+}
+
 const generateTokens = (payload: CustomerPayload) => {
   const accessToken = jwt.sign(payload, dev.app.jwtAccessKey, {
-    expiresIn: '15m',
+    expiresIn: '15s',
   })
   const refreshToken = jwt.sign(payload, dev.app.jwtRefreshKey, {
     expiresIn: '30d',
@@ -42,4 +60,10 @@ const generateTokens = (payload: CustomerPayload) => {
     refreshToken,
   }
 }
-export { getToken, verifyToken, generateTokens }
+export {
+  getToken,
+  verifyToken,
+  verifyAuthToken,
+  generateTokens,
+  verifyRefreshToken,
+}

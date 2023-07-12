@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { CustomerType } from "../../types/customerType";
 import {
+    checkAuth,
     createNewCustomer,
     forgotPassword,
     getCustomerProfile,
@@ -18,7 +19,6 @@ const initialState = {
     isLoggedIn: false,
     isAdmin: false,
     customer: null as CustomerType | null,
-    csutomerShortData: {} as CustomerType,
     loading: false,
     error: false,
     success: false,
@@ -88,21 +88,23 @@ export const customerSlice = createSlice({
                 state.loading = true;
             })
             .addCase(getCustomerProfile.fulfilled, (state, action) => {
-                state.customer = action.payload.Customer;
+                state.customer = action.payload.customer;
                 state.loading = false;
                 state.error = false;
                 state.success = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
             })
             .addCase(getCustomerProfile.rejected, (state, action) => {
                 state.loading = false;
                 state.error = true;
                 state.success = false;
+                state.isLoggedIn = false;
+                state.isAdmin = false;
                 state.message =
                     action.error.message ||
-                    "Unable to reset password. Please try again.";
+                    "Unable to login. Please try again.";
                 state.customer = null;
+
                 toast.error(action.error.message);
                 console.log(state.message);
             });
@@ -114,17 +116,21 @@ export const customerSlice = createSlice({
                 state.isLoggedIn = false;
             })
             .addCase(loginCustomer.fulfilled, (state, action) => {
-                //TODO update to use state instedof isAdmin
-                if (action.payload.payload.isAdmin) {
+                if (action.payload.payload.customer.isAdmin) {
                     state.isAdmin = true;
                 }
-                state.csutomerShortData = action.payload.payload;
+                state.customer = action.payload.payload.customer;
                 state.loading = false;
                 state.error = false;
                 state.success = true;
                 state.isLoggedIn = true;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
+
+                // Store the access token to local storage
+                const { accessToken } = action.payload.payload;
+                if (accessToken) {
+                    localStorage.setItem("accessToken", accessToken);
+                }
             })
             .addCase(loginCustomer.rejected, (state, action) => {
                 state.loading = false;
@@ -240,7 +246,8 @@ export const customerSlice = createSlice({
                 state.success = true;
                 state.isLoggedIn = false;
                 state.message = action.payload.message;
-                toast.success(action.payload.message);
+                state.customer = null;
+                localStorage.removeItem("accessToken");
             })
             .addCase(logOutCustomer.rejected, (state, action) => {
                 state.loading = false;
@@ -250,6 +257,40 @@ export const customerSlice = createSlice({
                 state.message = action.error.message || "Unable to log out.";
                 toast.error(action.error.message);
                 console.log(state.message);
+            });
+        // 10 Refresh token
+        builder
+            .addCase(checkAuth.pending, (state) => {
+                state.loading = true;
+                state.success = false;
+                state.isLoggedIn = false;
+            })
+            .addCase(checkAuth.fulfilled, (state, action) => {
+                if (action.payload.payload.customer.isAdmin) {
+                    state.isAdmin = true;
+                }
+                state.customer = action.payload.payload.customer;
+                state.loading = false;
+                state.error = false;
+                state.success = true;
+                state.isLoggedIn = true;
+                state.message = action.payload.message;
+
+                // Store the access token to local storage
+                const { accessToken } = action.payload.payload;
+                if (accessToken) {
+                    localStorage.setItem("accessToken", accessToken);
+                }
+            })
+            .addCase(checkAuth.rejected, (state, action) => {
+                state.loading = false;
+                state.error = true;
+                state.success = false;
+                state.isLoggedIn = false;
+                state.message =
+                    action.error.message ||
+                    "Unable to login. Please try again.";
+                toast.error(action.error.message);
             });
     },
 });
